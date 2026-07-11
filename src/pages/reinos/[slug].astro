@@ -1,0 +1,93 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import realms from '../../data/realms.json';
+
+export function getStaticPaths() {
+  return realms.map((realm) => ({
+    params: { slug: realm.slug },
+    props: { realm },
+  }));
+}
+
+const { realm } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const folio = String(realm.order).padStart(2, '0');
+
+const idx = realms.findIndex((r) => r.slug === realm.slug);
+const prev = realms[(idx - 1 + realms.length) % realms.length];
+const next = realms[(idx + 1) % realms.length];
+---
+<BaseLayout title={`${realm.trueName} — Realm of Crests`} description={`${realm.trueName}, “${realm.epithet}”. Guardião: ${realm.guardian}.`}>
+  <article class="realm-page">
+    <div class="wrap">
+      <nav class="breadcrumb rubric" aria-label="Trilha">
+        <a href={`${base}/reinos/`}>← arquivo dos reinos</a>
+      </nav>
+
+      <div class="realm-layout">
+        <figure class="emblem-frame" style="margin: 0;">
+          <img
+            src={`${base}/assets/emblems/emblem_${realm.slug}.png`}
+            alt={`Emblema canônico do ${realm.trueName}`}
+            width="800"
+            height="800"
+            onerror={`this.onerror=null;this.src='${base}/assets/emblems/placeholder.svg'`}
+          />
+          <figcaption class="folio">FOLIO {folio}/19</figcaption>
+        </figure>
+
+        <div>
+          <header class="realm-head">
+            <span class="rubric">reino nº {folio} · canon v3.0.2</span>
+            <h1>{realm.trueName}</h1>
+            <p class="epithet">“{realm.epithet}”</p>
+            <p class="guardian-line">Guardião: {realm.guardian} — {realm.guardianVulgo}</p>
+          </header>
+
+          <dl class="systems">
+            <div>
+              <dt>Essence</dt>
+              <dd>{realm.essence}</dd>
+            </div>
+            <div>
+              <dt>Fervor</dt>
+              <dd>{realm.fervor}</dd>
+            </div>
+            <div>
+              <dt>Gravity</dt>
+              <dd>{realm.gravity}</dd>
+            </div>
+          </dl>
+
+          <div class="layers">
+            <table>
+              <caption>nomenclatura ao longo das eras</caption>
+              <tbody>
+                <tr><td>Nome Verdadeiro</td><td>{realm.trueName}</td></tr>
+                <tr><td>Alcunha Histórica</td><td>{realm.historicalAlias}</td></tr>
+                <tr><td>Eco Territorial</td><td>{realm.territorialEcho}</td></tr>
+                <tr><td>Guardião — Eco Ancestral</td><td>{realm.guardianEcho}</td></tr>
+                <tr><td>Guardião — Vulgo da Multidão</td><td>{realm.guardianVulgo}</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <section class="lore-block">
+            <h2>Geografia &amp; Bioma</h2>
+            <p>{realm.biome}.</p>
+          </section>
+
+          <section class="lore-block">
+            <h2>Templo</h2>
+            <p><span class="temple-name">{realm.temple}</span> — {realm.templeDesc}.</p>
+          </section>
+
+          <nav class="realm-nav" aria-label="Navegação entre reinos">
+            <a href={`${base}/reinos/${prev.slug}/`}>← {prev.realm}</a>
+            <a href={`${base}/reinos/${next.slug}/`}>{next.realm} →</a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </article>
+</BaseLayout>

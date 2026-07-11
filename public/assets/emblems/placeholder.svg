@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#000000"/>
+  <!-- anel externo -->
+  <circle cx="200" cy="200" r="168" fill="none" stroke="#c9a35c" stroke-width="3" opacity="0.5"/>
+  <circle cx="200" cy="200" r="146" fill="none" stroke="#c9a35c" stroke-width="1.5" opacity="0.35"/>
+  <!-- marcadores cardeais -->
+  <g fill="#c9a35c" opacity="0.5">
+    <path d="M200 18 L210 44 L200 38 L190 44 Z"/>
+    <path d="M200 382 L210 356 L200 362 L190 356 Z"/>
+    <path d="M18 200 L44 190 L38 200 L44 210 Z"/>
+    <path d="M382 200 L356 190 L362 200 L356 210 Z"/>
+  </g>
+  <!-- selo em branco: losango vazio -->
+  <path d="M200 120 L256 200 L200 280 L144 200 Z" fill="none" stroke="#c9a35c" stroke-width="2" opacity="0.4"/>
+  <text x="200" y="207" text-anchor="middle" font-family="Georgia, serif" font-size="15" letter-spacing="4" fill="#a99878" opacity="0.8">SELO PENDENTE</text>
+</svg>

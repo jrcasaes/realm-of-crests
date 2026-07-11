@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import OrnamentDivider from '../../components/OrnamentDivider.astro';
+import RealmCard from '../../components/RealmCard.astro';
+import realms from '../../data/realms.json';
+---
+<BaseLayout title="Os Dezenove Reinos — Realm of Crests">
+  <section class="hero" style="padding-block: 4rem 1rem;">
+    <div class="wrap">
+      <span class="rubric">arquivo heráldico</span>
+      <h1 style="font-size: clamp(1.8rem, 4.5vw, 3rem);">Os Dezenove Reinos</h1>
+    </div>
+  </section>
+
+  <OrnamentDivider />
+
+  <section class="realms-section">
+    <div class="wrap">
+      <ul class="realm-grid">
+        {realms.map((realm) => <RealmCard realm={realm} />)}
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const items = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          (entry.target as HTMLElement).style.transitionDelay = `${(i % 6) * 60}ms`;
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.12 }
+  );
+  items.forEach((el) => io.observe(el));
+</script>

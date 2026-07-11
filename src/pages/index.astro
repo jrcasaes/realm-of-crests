@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import OrnamentDivider from '../components/OrnamentDivider.astro';
+import RealmCard from '../components/RealmCard.astro';
+import realms from '../data/realms.json';
+---
+<BaseLayout title="Realm of Crests — O Codex dos Dezenove Reinos">
+  <section class="hero">
+    <div class="wrap">
+      <span class="rubric">codex oficial · canon v3.0.2</span>
+      <h1>REALM <span class="gilt">of</span> CRESTS</h1>
+      <p class="manifesto">
+        Dezenove reinos. Dezenove Guardiões. Cada trono sustentado por uma Emberline
+        que não pode se romper — e cada Guardião moldado pelo Fervor de seu povo,
+        sob o peso da Sovereign Gravity. Este é o arquivo do mundo: abra os folios.
+      </p>
+    </div>
+  </section>
+
+  <OrnamentDivider />
+
+  <section class="realms-section">
+    <div class="wrap">
+      <span class="rubric">os dezenove reinos</span>
+      <ul class="realm-grid">
+        {realms.map((realm) => <RealmCard realm={realm} />)}
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const items = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          (entry.target as HTMLElement).style.transitionDelay = `${(i % 6) * 60}ms`;
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.12 }
+  );
+  items.forEach((el) => io.observe(el));
+</script>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" fill="#0c0a08"/>
+  <!-- escudo -->
+  <path d="M32 8 L52 16 V34 C52 46 43 54 32 58 C21 54 12 46 12 34 V16 Z"
+        fill="none" stroke="#c9a35c" stroke-width="3"/>
+  <!-- estrela cardinal, eco dos medalhões -->
+  <path d="M32 20 L36 32 L32 44 L28 32 Z" fill="#c9a35c"/>
+  <path d="M22 32 L32 29 L42 32 L32 35 Z" fill="#c9a35c" opacity="0.85"/>
+</svg>

@@ -1,0 +1,31 @@
+---
+interface Props {
+  realm: {
+    slug: string;
+    realm: string;
+    epithet: string;
+    guardian: string;
+    order: number;
+  };
+}
+
+const { realm } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const folio = String(realm.order).padStart(2, '0');
+---
+<li class="reveal">
+  <a class="realm-card" href={`${base}/reinos/${realm.slug}/`}>
+    <span class="folio">FOLIO {folio}/19</span>
+    <img
+      src={`${base}/assets/emblems/emblem_${realm.slug}.png`}
+      alt={`Emblema do Reino de ${realm.realm}`}
+      loading="lazy"
+      width="128"
+      height="128"
+      onerror={`this.onerror=null;this.src='${base}/assets/emblems/placeholder.svg'`}
+    />
+    <h3>{realm.realm}</h3>
+    <p class="epithet">“{realm.epithet}”</p>
+    <p class="guardian-line">{realm.guardian}</p>
+  </a>
+</li>

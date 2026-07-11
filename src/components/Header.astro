@@ -1,0 +1,14 @@
+---
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const path = Astro.url.pathname;
+const isRealms = path.includes('/reinos');
+---
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href={`${base}/`}>REALM OF CRESTS</a>
+    <nav class="site-nav" aria-label="Navegação principal">
+      <a href={`${base}/`} aria-current={!isRealms ? 'page' : undefined}>Manifesto</a>
+      <a href={`${base}/reinos/`} aria-current={isRealms ? 'page' : undefined}>Os Dezenove Reinos</a>
+    </nav>
+  </div>
+</header>

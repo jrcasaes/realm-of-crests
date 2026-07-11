@@ -1,0 +1,51 @@
+<canvas class="embers" aria-hidden="true"></canvas>
+
+<script>
+  const canvas = document.querySelector<HTMLCanvasElement>('.embers');
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (canvas && !reduced) {
+    const ctx = canvas.getContext('2d')!;
+    let w = 0;
+    let h = 0;
+
+    const resize = () => {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    };
+    resize();
+    window.addEventListener('resize', resize);
+
+    const COUNT = 26;
+    const embers = Array.from({ length: COUNT }, () => spawn(true));
+
+    function spawn(anywhere = false) {
+      return {
+        x: Math.random() * w,
+        y: anywhere ? Math.random() * h : h + 10,
+        r: 0.6 + Math.random() * 1.6,
+        vy: 0.15 + Math.random() * 0.45,
+        vx: (Math.random() - 0.5) * 0.18,
+        a: 0.12 + Math.random() * 0.3,
+        flicker: Math.random() * Math.PI * 2,
+      };
+    }
+
+    function frame(t: number) {
+      ctx.clearRect(0, 0, w, h);
+      for (let i = 0; i < embers.length; i++) {
+        const e = embers[i];
+        e.y -= e.vy;
+        e.x += e.vx + Math.sin(t / 1400 + e.flicker) * 0.12;
+        if (e.y < -12) embers[i] = spawn();
+        const glow = e.a * (0.7 + 0.3 * Math.sin(t / 300 + e.flicker));
+        ctx.beginPath();
+        ctx.arc(e.x, e.y, e.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 122, 61, ${glow.toFixed(3)})`;
+        ctx.fill();
+      }
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+</script>
