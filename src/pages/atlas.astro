@@ -1,0 +1,138 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import OrnamentDivider from '../components/OrnamentDivider.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<BaseLayout title="Atlas do Continente — Realm of Crests" description="O Mapa Canônico do Continente de Realm of Crests: os dezenove Reinos, biomas, o Solo Ancestral, os Caminhos Sagrados e as Zonas de Colapso.">
+  <div class="page-head">
+    <span class="rubric">cartografia canônica · v1.0</span>
+    <h1>ATLAS DO CONTINENTE</h1>
+    <p class="lede">Dezenove Reinos sobre um único continente — costas, biomas, o Solo Ancestral, os Caminhos Sagrados e as cicatrizes que a Ruína deixou na terra.</p>
+  </div>
+
+  <OrnamentDivider />
+
+  <div class="wrap">
+    <div class="atlas-frame">
+      <span class="atlas-corner tl"></span><span class="atlas-corner tr"></span>
+      <span class="atlas-corner bl"></span><span class="atlas-corner br"></span>
+      <div class="atlas-viewport" id="viewport">
+        <img
+          id="mapa"
+          src={`${base}/assets/maps/map_continent.webp`}
+          alt="Mapa Canônico do Continente de Realm of Crests, com os dezenove Reinos, biomas, Caminhos Sagrados e Zonas de Colapso"
+          width="1536"
+          height="1024"
+          draggable="false"
+        />
+        <div class="atlas-controls">
+          <button id="zin" aria-label="Aproximar">+</button>
+          <button id="zout" aria-label="Afastar">−</button>
+          <button id="zreset" aria-label="Restaurar" title="Restaurar">◻</button>
+        </div>
+        <div class="atlas-hint" id="hint">ARRASTE PARA NAVEGAR · ROLE PARA APROXIMAR</div>
+      </div>
+      <div class="atlas-caption">
+        <span>MAPA CANÔNICO DO CONTINENTE · v1.0</span>
+        <span>ESCALA NARRATIVA — DISTÂNCIAS NO REGISTRO DE ROTAS</span>
+      </div>
+    </div>
+
+    <div class="legend">
+      <div class="ancestral">
+        <h3>SOLO ANCESTRAL</h3>
+        <p>O chão onde a memória do continente é mais antiga que qualquer trono — origem comum que nenhum Reino reivindica sozinho.</p>
+      </div>
+      <div class="sacred">
+        <h3>CAMINHOS SAGRADOS</h3>
+        <p>As vias consagradas que ligam os Reinos. Reduzem o custo da travessia — mas nunca eliminam a distância.</p>
+      </div>
+      <div class="collapse">
+        <h3>ZONAS DE COLAPSO</h3>
+        <p>Cicatrizes deixadas pela Ruína sobre a terra. Regiões onde a travessia se torna lenta, hostil — e, por vezes, impraticável.</p>
+      </div>
+    </div>
+
+    <div class="law" style="margin-inline: auto;">
+      <span class="tag">REGRA DE GOVERNANÇA CARTOGRÁFICA</span>
+      <p>Distância canônica é sempre medida por rota, não em linha reta.</p>
+    </div>
+
+    <p class="source-line rubric" style="text-align: center;">fontes: mapa canônico do continente v1.0 · índice de mapas, escala e rotas v1.1 — revisão canônica: 2026-07-11</p>
+  </div>
+</BaseLayout>
+
+<script>
+  const vp = document.getElementById('viewport') as HTMLElement;
+  const img = document.getElementById('mapa') as HTMLImageElement;
+  const hint = document.getElementById('hint') as HTMLElement;
+  let scale = 1, tx = 0, ty = 0;
+  const MIN = 1, MAX = 3;
+  const hiSrc = img.src.replace('map_continent.webp', 'map_continent_2x.webp');
+  let hiLoaded = false;
+  function loadHi() {
+    if (hiLoaded) return;
+    hiLoaded = true;
+    const pre = new Image();
+    pre.onload = () => { img.src = hiSrc; };
+    pre.src = hiSrc;
+  }
+
+  function clamp() {
+    const r = vp.getBoundingClientRect();
+    const w = r.width * scale, h = img.clientHeight * scale;
+    tx = Math.min(0, Math.max(r.width - w, tx));
+    ty = Math.min(0, Math.max(Math.min(r.height, img.clientHeight) - h, ty));
+    if (scale === 1) { tx = 0; ty = 0; }
+  }
+  function apply() {
+    clamp();
+    img.style.transform = `translate(${tx}px,${ty}px) scale(${scale})`;
+  }
+  function zoomAt(cx: number, cy: number, factor: number) {
+    const r = vp.getBoundingClientRect();
+    const x = cx - r.left, y = cy - r.top;
+    const ns = Math.min(MAX, Math.max(MIN, scale * factor));
+    tx = x - (x - tx) * (ns / scale);
+    ty = y - (y - ty) * (ns / scale);
+    scale = ns;
+    if (scale > 1.05) loadHi();
+    apply();
+    hint.classList.add('hide');
+  }
+
+  vp.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    zoomAt(e.clientX, e.clientY, e.deltaY < 0 ? 1.18 : 1 / 1.18);
+  }, { passive: false });
+
+  let dragging = false, lx = 0, ly = 0;
+  vp.addEventListener('pointerdown', (e) => {
+    dragging = true; lx = e.clientX; ly = e.clientY;
+    vp.classList.add('grabbing'); vp.setPointerCapture(e.pointerId);
+    hint.classList.add('hide');
+  });
+  vp.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    tx += e.clientX - lx; ty += e.clientY - ly;
+    lx = e.clientX; ly = e.clientY;
+    apply();
+  });
+  vp.addEventListener('pointerup', () => { dragging = false; vp.classList.remove('grabbing'); });
+  vp.addEventListener('pointercancel', () => { dragging = false; vp.classList.remove('grabbing'); });
+
+  document.getElementById('zin')!.addEventListener('click', () => {
+    const r = vp.getBoundingClientRect();
+    zoomAt(r.left + r.width / 2, r.top + r.height / 2, 1.35);
+  });
+  document.getElementById('zout')!.addEventListener('click', () => {
+    const r = vp.getBoundingClientRect();
+    zoomAt(r.left + r.width / 2, r.top + r.height / 2, 1 / 1.35);
+  });
+  document.getElementById('zreset')!.addEventListener('click', () => {
+    scale = 1; tx = 0; ty = 0; apply();
+  });
+
+  setTimeout(() => hint.classList.add('hide'), 5000);
+</script>
