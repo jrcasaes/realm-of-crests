@@ -10,9 +10,11 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   <section class="hero-banner">
     <img
       src={`${base}/assets/heroes/hero_victoria.webp`}
-      alt="O Chamado de Victória — Nego, o Predador Ancestral, diante da Fortaleza do Desfiladeiro"
-      width="1916"
-      height="821"
+      srcset={`${base}/assets/heroes/hero_victoria.webp 1688w, ${base}/assets/heroes/hero_victoria_2x.webp 3376w`}
+      sizes="100vw"
+      alt="O Desfiladeiro de Victória — o Obelisco de basalto aceso em brasas âmbar diante da Fortaleza escavada no cânion"
+      width="3376"
+      height="1440"
       fetchpriority="high"
     />
     <div class="hero-inner">
@@ -24,7 +26,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         sob o peso da Sovereign Gravity. Este é o arquivo do mundo: abra os folios.
       </p>
     </div>
-    <span class="hero-credit">O CHAMADO DE VICTÓRIA · v1.0 · APROVADO</span>
+    <span class="hero-credit">VICTÓRIA · HERO v2.0 · APROVADO</span>
   </section>
 
   <OrnamentDivider />
