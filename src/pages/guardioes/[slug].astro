@@ -1,0 +1,81 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import OrnamentDivider from '../../components/OrnamentDivider.astro';
+import guardians from '../../data/guardians.json';
+
+export function getStaticPaths() {
+  return guardians.map((g) => ({ params: { slug: g.slug }, props: { guardian: g } }));
+}
+
+const { guardian: g } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<BaseLayout title={`${g.name} — Guardiões — Realm of Crests`} description={`${g.name}, “${g.epithet}” — Guardião de ${g.realmName}.`}>
+  <div class="page-head">
+    <span class="rubric">guardião de {g.realmName.toLowerCase()}</span>
+    <h1>{g.name.toUpperCase()}</h1>
+    <p class="epithet" style="margin-top:.7rem; font-size:1.3rem; font-style:italic; color:var(--gold);">“{g.epithet}”</p>
+  </div>
+
+  <OrnamentDivider />
+
+  <div class="wrap">
+    <div class="char-layout">
+      <div>
+        <figure class="portrait-frame" style="margin:0;">
+          {g.portrait
+            ? <img src={`${base}/assets/guardians/${g.portrait}`} alt={`${g.name}, Guardião de ${g.realmName}`} width="1448" height="1086" />
+            : <div class="portrait-pending">
+                <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="36" cy="26" r="12" stroke="currentColor" stroke-width="2"/><path d="M14 62 C14 48 24 42 36 42 C48 42 58 48 58 62" stroke="currentColor" stroke-width="2"/></svg>
+                <span>RETRATO PENDENTE</span>
+              </div>
+          }
+          <figcaption class="folio">{g.portraitLabel}</figcaption>
+        </figure>
+        <table class="identity-table">
+          <tbody>
+            <tr><td>Eco Ancestral</td><td>{g.ecoAncestral}</td></tr>
+            <tr><td>Título Soberano</td><td>{g.epithet}</td></tr>
+            <tr><td>Vulgo da Multidão</td><td>{g.vulgo}</td></tr>
+            <tr><td>Eco das Batalhas</td><td>{g.battleEcho}</td></tr>
+            <tr><td>Reino</td><td>{g.realmName} — {g.realmEcho}</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div>
+        <div class="law" style="margin-top:0;">
+          <span class="tag">{g.lawTag}</span>
+          <p>{g.lawText}</p>
+        </div>
+
+        {g.sections.map((s) => (
+          <section class="char-section">
+            <h2>{s.title}</h2>
+            <p>{s.text}</p>
+          </section>
+        ))}
+
+        {g.traits.length > 0 && (
+          <div class="traits">
+            {g.traits.map((t) => <span>{t}</span>)}
+          </div>
+        )}
+
+        {g.symbols.length > 0 && (
+          <section class="char-section">
+            <h2>GEOMETRIA SAGRADA</h2>
+            <dl class="symbols">
+              {g.symbols.map((s) => (
+                <div><dt>{s.name}</dt><dd>{s.meaning}</dd></div>
+              ))}
+            </dl>
+          </section>
+        )}
+
+        <a class="realm-link" href={`${base}/reinos/${g.realmSlug}/`}>→ folio do reino de {g.realmName.toLowerCase()}</a>
+        <p class="source-line rubric">fontes: {g.sourceRefs.join(' · ')} — revisão canônica: {g.lastCanonReview}</p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

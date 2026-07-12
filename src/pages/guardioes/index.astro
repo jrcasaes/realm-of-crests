@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import OrnamentDivider from '../../components/OrnamentDivider.astro';
+import guardians from '../../data/guardians.json';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<BaseLayout title="Guardiões — Realm of Crests" description="Os Guardiões do Realm of Crests: as manifestações soberanas dos dezenove Reinos.">
+  <div class="page-head">
+    <span class="rubric">a galeria soberana</span>
+    <h1>GUARDIÕES</h1>
+    <p class="lede">Cada Reino manifesta um Guardião — não um campeão que o representa, mas a própria soberania feita carne, peso e memória.</p>
+  </div>
+
+  <OrnamentDivider />
+
+  <section class="realms-section">
+    <div class="wrap">
+      <div class="guardian-grid">
+        {guardians.map((g) => (
+          <a class="guardian-card" href={`${base}/guardioes/${g.slug}/`}>
+            {g.portrait
+              ? <img src={`${base}/assets/guardians/${g.portrait}`} alt={`${g.name}, Guardião de ${g.realmName}`} loading="lazy" />
+              : <div class="pending">RETRATO PENDENTE</div>
+            }
+            <div class="info">
+              <h3>{g.name.toUpperCase()}</h3>
+              <p class="epithet">“{g.epithet}”</p>
+              <p class="realm">Guardião de {g.realmName}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+      <p class="source-line rubric" style="text-align:center;">os demais folios da galeria aguardam seus visual locks canônicos</p>
+    </div>
+  </section>
+</BaseLayout>

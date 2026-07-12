@@ -1,0 +1,78 @@
+[
+  {
+    "slug": "nego",
+    "name": "Nego",
+    "realmSlug": "victoria",
+    "realmName": "Victória",
+    "realmEcho": "O Domínio do Leão",
+    "epithet": "O Predador Ancestral",
+    "ecoAncestral": "Kael’Thar",
+    "vulgo": "O Último Leão de Guerra",
+    "battleEcho": "O Fogo que Não Apaga",
+    "portrait": "guardian_nego.webp",
+    "portraitLabel": "VISUAL LOCK v1.0 · CANON",
+    "lawTag": "REGRA ABSOLUTA",
+    "lawText": "Nego não existe para vencer. Ele existe para sustentar.",
+    "sections": [
+      {
+        "title": "O GUARDIÃO",
+        "text": "Nego é a manifestação viva da soberania ancestral do Reino de Victória. Ele não representa o Reino; ele é o Reino — manifestado em carne, vontade, peso, memória e continuidade. Sua força não é agressão: é pressão contida. Ele é o ponto que impede uma casa inteira de cair."
+      },
+      {
+        "title": "CÓDIGO SOBERANO",
+        "text": "Território acima de ego. Violência sem necessidade é fraqueza. A memória deve ser preservada mesmo quando dói. A Ruína nunca deve ser ignorada. E Nego jamais abandona um Temple vivo."
+      },
+      {
+        "title": "PRESENÇA",
+        "text": "Um leão soberano de dois metros e trinta, com armadura de basalto negro fundida ao corpo como pedra de cânion. A juba desce em dreadlocks de mogno escuro, marcados por argolas de ouro envelhecido — cada uma um ciclo vivido, um peso histórico. Nos punhos, fissuras de brasa incandescente pulsam contidas: o Fervor de Victória sob disciplina. Os olhos âmbar leem o solo como quem lê memória."
+      }
+    ],
+    "traits": ["disciplinado", "silencioso", "territorial", "observador", "dominante"],
+    "symbols": [
+      { "name": "Brasa", "meaning": "Continuidade e memória" },
+      { "name": "Cânion", "meaning": "Ancoragem e profundidade" },
+      { "name": "Fissura", "meaning": "Potencial e perigo" },
+      { "name": "Juba", "meaning": "Identidade soberana" },
+      { "name": "Âmbar", "meaning": "Legado vivo" }
+    ],
+    "sourceRefs": ["nego-dossier-v1", "lore-master-v3.0.2", "guardians-dossier-v2.3"],
+    "canonStatus": "CANON",
+    "spoilerLevel": 0,
+    "publicApproved": true,
+    "lastCanonReview": "2026-07-12",
+    "notes": "Conteúdo restrito ao autorizado pelo PARTIAL: objetivo de longo prazo, função na saga e detalhes do cofre retidos por firewall. Retrato: Visual Lock Completo v1.0."
+  },
+  {
+    "slug": "kalen",
+    "name": "Kalen",
+    "realmSlug": "bahea",
+    "realmName": "Bahea",
+    "realmEcho": "O Domínio da Retribuição",
+    "epithet": "A Coroa Não Resolvida",
+    "ecoAncestral": "Kraken",
+    "vulgo": "O Vingador das Marés",
+    "battleEcho": "O Arauto de Aço",
+    "portrait": null,
+    "portraitLabel": "AGUARDANDO VISUAL LOCK",
+    "lawTag": "FRASE-GUIA",
+    "lawText": "Kalen não é um rei-guerreiro marítimo. Ele é o defensor que se recusa a deixar Bahea ruir.",
+    "sections": [
+      {
+        "title": "A MARCA SOBERANA",
+        "text": "Acima de sua cabeça flutua a Coroa Não Resolvida: três arcos de aço antigo, incompletos e separados, corroídos pelo sal — uma estrutura soberana incapaz de concluir o próprio fechamento. É a Marca de Kalen: contenção falha, dívida que se recusa a desaparecer. No antebraço esquerdo, marcas de contagem em grupos de cinco registram essa dívida, entalhe por entalhe."
+      },
+      {
+        "title": "O GUARDIÃO",
+        "text": "Um defensor humanoide de escala soberana, vestido em aço branco-cinza rachado pela pressão que contém. Os tecidos de Bahea — azul-aço, branco-cinza e vermelho escuro — desgastam-se sob sal e vento, presos ao corpo como memória, não como cerimônia. Ele permanece onde a estrutura falha: ancorado contra o vento, ouvindo o aço reclamar, recusando-se a sair do lugar."
+      }
+    ],
+    "traits": ["vigilante", "contido", "analítico", "ancorado"],
+    "symbols": [],
+    "sourceRefs": ["kalen-visual-lock-v1", "lore-master-v3.0.2", "guardians-dossier-v2.3"],
+    "canonStatus": "CANON",
+    "spoilerLevel": 0,
+    "publicApproved": true,
+    "lastCanonReview": "2026-07-12",
+    "notes": "Sem retrato: o Visual Lock v1.0 fixa invariantes de produção, não aprova imagem. Camada de matriz externa integralmente retida (CC-25)."
+  }
+]

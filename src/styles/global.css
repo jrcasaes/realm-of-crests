@@ -594,3 +594,53 @@ section.chapter { padding-block: 1.2rem 2.6rem; }
 .legend .ancestral h3 { color: var(--gold); }
 .legend .collapse h3 { color: var(--crimson); }
 .legend p { margin: .6rem 0 0; font-size: .92rem; color: var(--parchment-dim); }
+
+/* ── Hero da home — O Chamado de Victória ─────────────────────── */
+
+.hero-banner { position: relative; min-height: 72vh; display: flex; align-items: flex-end; overflow: hidden; border-bottom: 1px solid var(--edge); }
+.hero-banner > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
+.hero-banner::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(12,10,8,.55) 0%, rgba(12,10,8,.15) 38%, rgba(12,10,8,.55) 72%, var(--ink) 100%); }
+.hero-inner { position: relative; z-index: 2; width: min(1120px, calc(100% - 3rem)); margin: 0 auto; padding-bottom: 4.5rem; text-align: center; }
+.hero-inner .rubric { display: block; margin-bottom: 1.4rem; color: var(--gold); opacity: .9; }
+.hero-inner h1 { font-size: clamp(2.4rem, 7vw, 4.6rem); font-weight: 700; letter-spacing: .12em; color: var(--parchment); text-shadow: 0 2px 30px rgba(0,0,0,.85), 0 0 60px rgba(201,163,92,.25); }
+.hero-inner h1 .gilt { color: var(--gold); }
+.hero-inner .manifesto { max-width: 62ch; margin: 1.6rem auto 0; font-size: 1.15rem; font-style: italic; color: var(--parchment); text-shadow: 0 1px 14px rgba(0,0,0,.9); }
+.hero-credit { position: absolute; bottom: .7rem; right: 1rem; z-index: 2; font-family: var(--font-display); font-size: .6rem; letter-spacing: .22em; color: var(--parchment-dim); opacity: .8; }
+
+/* ── Páginas de Guardião ──────────────────────────────────────── */
+
+.char-layout { display: grid; grid-template-columns: minmax(280px, 430px) 1fr; gap: clamp(2rem, 5vw, 4rem); align-items: start; padding-bottom: 3rem; }
+@media (max-width: 840px) { .char-layout { grid-template-columns: 1fr; } }
+.portrait-frame { position: relative; background: radial-gradient(circle at 50% 35%, #221a12 0%, var(--ink) 78%); border: 1px solid var(--edge); padding: 14px; }
+.portrait-frame::before { content: ""; position: absolute; inset: 6px; border: 1px solid rgba(201,163,92,.18); pointer-events: none; z-index: 2; }
+.portrait-frame img { display: block; width: 100%; height: auto; }
+.portrait-frame .folio { position: absolute; bottom: .7rem; right: .9rem; z-index: 2; font-family: var(--font-display); font-size: .62rem; letter-spacing: .2em; color: var(--parchment-faint); background: rgba(12,10,8,.6); padding: .2rem .5rem; }
+.portrait-pending { aspect-ratio: 3 / 4; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; color: var(--parchment-faint); }
+.portrait-pending svg { opacity: .5; }
+.portrait-pending span { font-family: var(--font-display); font-size: .72rem; letter-spacing: .3em; }
+.identity-table { width: 100%; border-collapse: collapse; font-size: .95rem; margin-top: 1.4rem; }
+.identity-table td { padding: .55rem .2rem; border-bottom: 1px solid var(--edge); vertical-align: baseline; }
+.identity-table td:first-child { width: 44%; color: var(--parchment-dim); font-variant: small-caps; letter-spacing: .08em; font-size: .84rem; padding-right: 1rem; }
+.char-section { margin-top: 2.4rem; }
+.char-section h2 { font-size: 1rem; letter-spacing: .2em; margin-bottom: .8rem; }
+.char-section p { max-width: var(--measure); color: var(--parchment-dim); font-size: 1.03rem; }
+.char-section p strong { color: var(--parchment); font-weight: 500; }
+.traits { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .4rem; }
+.traits span { border: 1px solid var(--edge); background: var(--codex); padding: .35rem .85rem; font-variant: small-caps; letter-spacing: .16em; font-size: .78rem; color: var(--parchment-dim); }
+.symbols { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; background: var(--edge); border: 1px solid var(--edge); margin-top: 1rem; }
+.symbols div { background: var(--codex); padding: .9rem 1rem; }
+.symbols dt { font-variant: small-caps; letter-spacing: .2em; font-size: .72rem; color: var(--gold); margin-bottom: .3rem; }
+.symbols dd { margin: 0; font-size: .88rem; color: var(--parchment-dim); }
+.realm-link { display: inline-block; margin-top: 2rem; border: 1px solid rgba(201,163,92,.4); padding: .7rem 1.4rem; font-variant: small-caps; letter-spacing: .2em; font-size: .85rem; }
+
+/* Cards do índice de Guardiões */
+.guardian-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.4rem; }
+.guardian-card { display: block; position: relative; border: 1px solid var(--edge); background: linear-gradient(160deg, var(--codex-raised), var(--codex) 70%); overflow: hidden; transition: border-color .35s ease, transform .35s ease; }
+.guardian-card::before { content: ""; position: absolute; inset: 7px; border: 1px solid rgba(201,163,92,.14); pointer-events: none; z-index: 2; }
+.guardian-card:hover { border-color: rgba(201,163,92,.55); transform: translateY(-4px); }
+.guardian-card img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; object-position: center 20%; }
+.guardian-card .pending { aspect-ratio: 4 / 3; display: flex; align-items: center; justify-content: center; color: var(--parchment-faint); font-family: var(--font-display); font-size: .7rem; letter-spacing: .28em; }
+.guardian-card .info { padding: 1.1rem 1.2rem 1.2rem; text-align: center; }
+.guardian-card h3 { font-size: 1.05rem; letter-spacing: .12em; color: var(--parchment); }
+.guardian-card .epithet { margin: .3rem 0 0; font-style: italic; font-size: .9rem; color: var(--parchment-dim); }
+.guardian-card .realm { margin: .5rem 0 0; font-variant: small-caps; letter-spacing: .2em; font-size: .74rem; color: var(--gold); opacity: .85; }
