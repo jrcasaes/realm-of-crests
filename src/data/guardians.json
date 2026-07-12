@@ -27,20 +27,45 @@
         "text": "Um leão soberano de dois metros e trinta, com armadura de basalto negro fundida ao corpo como pedra de cânion. A juba desce em dreadlocks de mogno escuro, marcados por argolas de ouro envelhecido — cada uma um ciclo vivido, um peso histórico. Nos punhos, fissuras de brasa incandescente pulsam contidas: o Fervor de Victória sob disciplina. Os olhos âmbar leem o solo como quem lê memória."
       }
     ],
-    "traits": ["disciplinado", "silencioso", "territorial", "observador", "dominante"],
-    "symbols": [
-      { "name": "Brasa", "meaning": "Continuidade e memória" },
-      { "name": "Cânion", "meaning": "Ancoragem e profundidade" },
-      { "name": "Fissura", "meaning": "Potencial e perigo" },
-      { "name": "Juba", "meaning": "Identidade soberana" },
-      { "name": "Âmbar", "meaning": "Legado vivo" }
+    "traits": [
+      "disciplinado",
+      "silencioso",
+      "territorial",
+      "observador",
+      "dominante"
     ],
-    "sourceRefs": ["nego-dossier-v1", "lore-master-v3.0.2", "guardians-dossier-v2.3"],
+    "symbols": [
+      {
+        "name": "Brasa",
+        "meaning": "Continuidade e memória"
+      },
+      {
+        "name": "Cânion",
+        "meaning": "Ancoragem e profundidade"
+      },
+      {
+        "name": "Fissura",
+        "meaning": "Potencial e perigo"
+      },
+      {
+        "name": "Juba",
+        "meaning": "Identidade soberana"
+      },
+      {
+        "name": "Âmbar",
+        "meaning": "Legado vivo"
+      }
+    ],
+    "sourceRefs": [
+      "nego-dossier-v1",
+      "lore-master-v3.0.2",
+      "guardians-dossier-v2.3"
+    ],
     "canonStatus": "CANON",
     "spoilerLevel": 0,
     "publicApproved": true,
     "lastCanonReview": "2026-07-12",
-    "notes": "Conteúdo restrito ao autorizado pelo PARTIAL: objetivo de longo prazo, função na saga e detalhes do cofre retidos por firewall. Retrato: Visual Lock Completo v1.0."
+    "notes": "Conteúdo restrito ao autorizado para publicação; camadas internas retidas conforme diretriz editorial. Retrato: Visual Lock Completo v1.0."
   },
   {
     "slug": "kalen",
@@ -66,13 +91,22 @@
         "text": "Um defensor humanoide de escala soberana, vestido em aço branco-cinza rachado pela pressão que contém. Os tecidos de Bahea — azul-aço, branco-cinza e vermelho escuro — desgastam-se sob sal e vento, presos ao corpo como memória, não como cerimônia. Ele permanece onde a estrutura falha: ancorado contra o vento, ouvindo o aço reclamar, recusando-se a sair do lugar."
       }
     ],
-    "traits": ["vigilante", "contido", "analítico", "ancorado"],
+    "traits": [
+      "vigilante",
+      "contido",
+      "analítico",
+      "ancorado"
+    ],
     "symbols": [],
-    "sourceRefs": ["kalen-visual-lock-v1", "lore-master-v3.0.2", "guardians-dossier-v2.3"],
+    "sourceRefs": [
+      "kalen-visual-lock-v1",
+      "lore-master-v3.0.2",
+      "guardians-dossier-v2.3"
+    ],
     "canonStatus": "CANON",
     "spoilerLevel": 0,
     "publicApproved": true,
     "lastCanonReview": "2026-07-12",
-    "notes": "Sem retrato: o Visual Lock v1.0 fixa invariantes de produção, não aprova imagem. Camada de matriz externa integralmente retida (CC-25)."
+    "notes": "Sem retrato: o Visual Lock v1.0 fixa invariantes de produção, não aprova imagem. Camadas internas retidas conforme diretriz editorial."
   }
 ]
