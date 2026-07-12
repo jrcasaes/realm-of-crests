@@ -463,3 +463,20 @@ main { position: relative; z-index: 1; }
   z-index: 0;
   pointer-events: none;
 }
+
+/* Leitura canônica do Brasão (CC-26) — legenda sob a moldura */
+.crest-reading {
+  margin: 1.1rem 0 0;
+  font-size: 0.95rem;
+  font-style: italic;
+  color: var(--parchment-dim);
+  border-left: 2px solid rgba(201, 163, 92, 0.35);
+  padding-left: 0.9rem;
+}
+
+/* Linha de fontes canônicas */
+.source-line {
+  margin-top: 2.4rem;
+  font-size: 0.68rem;
+  opacity: 0.75;
+}

@@ -28,13 +28,15 @@ const next = realms[(idx + 1) % realms.length];
         <figure class="emblem-frame" style="margin: 0;">
           <img
             src={`${base}/assets/emblems/emblem_${realm.slug}.webp`}
-            alt={`Emblema canônico do ${realm.trueName}`}
+            alt={`Brasão canônico do ${realm.trueName}`}
             width="800"
             height="800"
             onerror={`this.onerror=null;this.src='${base}/assets/emblems/placeholder.svg'`}
           />
           <figcaption class="folio">FOLIO {folio}/19</figcaption>
         </figure>
+
+        <p class="crest-reading"><span class="rubric" style="display:block; margin-bottom:0.5rem;">leitura canônica do brasão · cc-26</span>{realm.crestReading}</p>
 
         <div>
           <header class="realm-head">
@@ -68,6 +70,7 @@ const next = realms[(idx + 1) % realms.length];
                 <tr><td>Eco Territorial</td><td>{realm.territorialEcho}</td></tr>
                 <tr><td>Guardião — Eco Ancestral</td><td>{realm.guardianEcho}</td></tr>
                 <tr><td>Guardião — Vulgo da Multidão</td><td>{realm.guardianVulgo}</td></tr>
+                <tr><td>Guardião — Eco das Batalhas</td><td>{realm.battleEcho}</td></tr>
               </tbody>
             </table>
           </div>
@@ -81,6 +84,8 @@ const next = realms[(idx + 1) % realms.length];
             <h2>Templo</h2>
             <p><span class="temple-name">{realm.temple}</span> — {realm.templeDesc}.</p>
           </section>
+
+          <p class="source-line rubric">fontes: dossiê dos guardiões v2.3 · lore master v3.0.2 · cc-26 — revisão canônica: {realm.lastCanonReview}</p>
 
           <nav class="realm-nav" aria-label="Navegação entre reinos">
             <a href={`${base}/reinos/${prev.slug}/`}>← {prev.realm}</a>
