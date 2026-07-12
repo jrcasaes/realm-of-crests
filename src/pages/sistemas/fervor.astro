@@ -1,0 +1,135 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SystemsRail from '../../components/SystemsRail.astro';
+import OrnamentDivider from '../../components/OrnamentDivider.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<BaseLayout title="Fervor — Sistemas — Realm of Crests" description="Fervor: a energia operacional do Realm of Crests. Natureza, os sete tipos, saturação, corrupção e o Legacy Fervor.">
+  <SystemsRail />
+
+  <div class="page-head">
+    <span class="rubric">lore master book ii · full lock</span>
+    <h1>FERVOR</h1>
+    <p class="lede">O sangue invisível da colisão e da soberania. A força que transforma emoção em existência. Sem Fervor, o universo permanece imóvel.</p>
+  </div>
+
+  <OrnamentDivider />
+
+  <div class="wrap">
+
+    <section class="chapter">
+      <h2>I — A Natureza do Fervor</h2>
+      <div class="prose">
+        <p>Antes do Fervor existia apenas potencial. As Essências podiam sentir ecos, mas não podiam se mover, despertar ou lutar. Foi a <strong>Devoção do Povo</strong> que criou o primeiro fluxo — a primeira energia capaz de atravessar o Realm of Crests.</p>
+        <p>O Fervor nasce de duas fontes conectadas: a <strong>Living Devotion</strong>, o clamor do Povo vivo e presente, e a <strong>Dead Memory</strong>, os ecos de gerações passadas e glórias preservadas — que continuam alimentando o Reino mesmo após a morte. A memória amplifica a emoção. Sempre.</p>
+      </div>
+      <div class="flow" role="img" aria-label="Cadeia do Fervor">
+        <span>O Povo</span><i>→</i><span>Memória</span><i>→</i><span>Temple</span><i>→</i><span>Essence</span><i>→</i><span>Guardian</span>
+      </div>
+      <div class="law">
+        <span class="tag">LEI ABSOLUTA</span>
+        <p>A Devoção nunca morre totalmente enquanto houver memória.</p>
+      </div>
+    </section>
+
+    <section class="chapter">
+      <h2>II — Os Sete Tipos</h2>
+      <div class="prose">
+        <p>O Fervor nunca foi uniforme. Alguns Reinos sustentam sua existência na fé; outros, na raiva, no luto ou na vingança. Essas variações moldam a guerra, o Guardião e o próprio Reino.</p>
+      </div>
+      <div class="types">
+        <article class="type-card" style="--accent:#d9c27a">
+          <h3>FAITH</h3><span class="pt">fé</span>
+          <p>Estabilidade, persistência, disciplina.</p>
+          <p class="sig">Assinatura: luz interna suave e constante sob a pele ou armadura.</p>
+        </article>
+        <article class="type-card" style="--accent:#c1452e">
+          <h3>RAGE</h3><span class="pt">raiva</span>
+          <p>Explosão, violência, pressão.</p>
+          <p class="sig">Assinatura: brasas e fissuras incandescentes nas articulações, calor visível.</p>
+        </article>
+        <article class="type-card" style="--accent:#e8b45a">
+          <h3>HOPE</h3><span class="pt">esperança</span>
+          <p>Ascensão, resistência.</p>
+          <p class="sig">Assinatura: partículas ascendentes, como brasas flutuando para cima.</p>
+        </article>
+        <article class="type-card" style="--accent:#6f7d8c">
+          <h3>GRIEF</h3><span class="pt">luto</span>
+          <p>Peso, dor, memória profunda.</p>
+          <p class="sig">Assinatura: textura pesada e fosca; marcas como lágrimas cristalizadas.</p>
+        </article>
+        <article class="type-card" style="--accent:#7a1f1f">
+          <h3>VENGEANCE</h3><span class="pt">vingança</span>
+          <p>Obsessão, retorno, correção histórica.</p>
+          <p class="sig">Assinatura: marcações geométricas em vermelho-escuro ao longo do corpo.</p>
+        </article>
+        <article class="type-card" style="--accent:#b98e3f">
+          <span class="patch">PATCH V1</span>
+          <h3>PRIDE</h3><span class="pt">orgulho</span>
+          <p>Variante de Faith voltada à dinastia e ao orgulho próprio. Disciplina aristocrática, recusa à submissão.</p>
+          <p class="sig">Assinatura: postura alongada, silhueta de coroa ou crista.</p>
+        </article>
+        <article class="type-card" style="--accent:#9aa27a">
+          <span class="patch">PATCH V1</span>
+          <h3>UNITY</h3><span class="pt">unidade</span>
+          <p>Variante de Faith voltada à coesão do Povo como massa única. Sacrifício compartilhado.</p>
+          <p class="sig">Assinatura: padrões trançados conectando os membros, como tecido coletivo.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="chapter">
+      <h2>III — Saturação</h2>
+      <div class="prose">
+        <p>O Fervor não cresce infinitamente sem consequência. Existe um ponto em que o fluxo deixa de ser combustível e se torna pressão absoluta: a <strong>Saturation</strong>.</p>
+      </div>
+      <div class="duality">
+        <div class="true">
+          <h3>TRUE SATURATION</h3>
+          <p>Convergência do excesso de Fervor com o instinto absoluto de defender o Reino, o Temple e a Emberline. Aumento brutal de poder, ascensão, expansão de manifestação.</p>
+          <p><em>«A Saturação Verdadeira é o único caminho legítimo para a ascensão soberana.»</em></p>
+        </div>
+        <div class="wild">
+          <h3>WILD SATURATION</h3>
+          <p>Excesso sem eixo de proteção. Colapso emocional, instabilidade, corrupção. Pride corrompido vira tirania; Unity corrompido vira conformidade cega.</p>
+          <p><em>«A Saturação Selvagem sempre cobra mais do que entrega.»</em></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter">
+      <h2>IV — Corrupção</h2>
+      <div class="prose">
+        <p>Nem todo Fervor permanece puro. Toda corrupção começa com a <strong>Distortion</strong>: a Esperança vira obsessão, a Fé vira fanatismo, o Luto vira desespero, a Raiva vira consumo.</p>
+      </div>
+      <div class="ruin-note">
+        <span class="tag">REGISTRO DE RUÍNA</span>
+        <p>Quando a corrupção atinge massa crítica, nasce a <strong>Ruína</strong> — a ameaça anti-estrutural do Realm, a força que apodrece o que o Fervor sustenta. Guardiões consumidos pela corrupção do próprio Fervor continuam lutando, mas deformados e instáveis: são manifestações corrompidas, nunca Essências corrompidas.</p>
+      </div>
+      <div class="law">
+        <span class="tag">LEI ABSOLUTA</span>
+        <p>A Ruína nasce do excesso sem equilíbrio, onde o Fervor apodrece.</p>
+      </div>
+    </section>
+
+    <section class="chapter">
+      <h2>V — Transferência &amp; Legacy Fervor</h2>
+      <div class="prose">
+        <p>O Fervor circula: por sacrifícios, invasões e heranças — e roubá-lo nunca é neutro; sempre deixa cicatriz. Ele é herdado não pelo sangue, mas pela <strong>linha da memória contínua</strong>: cantos de devoção, traumas, Colisões épicas. Os Temples atuam como <strong>Legacy Reservoirs</strong>, preservando energia ancestral nas pedras da Arena. Temples nunca estão vazios.</p>
+        <p>E existe um Fervor raro, o mais puro e profundo de todos: o <strong>Legacy Fervor</strong>, nascido da convergência perfeita entre memória, identidade, Emberline e pertencimento. Máxima pureza, resistência brutal à Ruína.</p>
+      </div>
+      <div class="law">
+        <span class="tag">LEI ABSOLUTA</span>
+        <p>Legacy Fervor não pode ser fabricado. Só herdado.</p>
+      </div>
+
+      <p class="source-line rubric">fonte: lore master canon v3.0.2 · livro ii — fervor · full lock — revisão canônica: 2026-07-11</p>
+
+      <nav class="realm-nav" aria-label="Navegação entre sistemas">
+        <a href={`${base}/sistemas/`}>← sistemas</a>
+        <a href={`${base}/sistemas/gravity/`}>sovereign gravity →</a>
+      </nav>
+    </section>
+  </div>
+</BaseLayout>

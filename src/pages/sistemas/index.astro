@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import OrnamentDivider from '../../components/OrnamentDivider.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<BaseLayout title="Sistemas — Realm of Crests" description="Os sistemas soberanos do Realm of Crests: Fervor, Sovereign Gravity e os Estados de Ascensão.">
+  <div class="page-head">
+    <span class="rubric">o arquivo dos sistemas</span>
+    <h1>SISTEMAS SOBERANOS</h1>
+    <p class="lede">Três forças regem toda soberania no Realm of Crests: a energia que a move, o peso que a cobra e os estágios pelos quais ela desperta.</p>
+  </div>
+
+  <OrnamentDivider />
+
+  <section class="realms-section">
+    <div class="wrap">
+      <div class="systems-hub">
+        <a class="hub-card" href={`${base}/sistemas/fervor/`}>
+          <h2>FERVOR</h2>
+          <p>O sangue invisível da colisão e da soberania. A Devoção do Povo transformada em energia — sete tipos, leis de saturação e o raro Legacy Fervor.</p>
+          <span class="rubric">lore master · livro ii</span>
+        </a>
+        <a class="hub-card" href={`${base}/sistemas/gravity/`}>
+          <h2>SOVEREIGN GRAVITY</h2>
+          <p>O peso de conter um Reino inteiro dentro de si. Toda ascensão tem custo — e o custo tem três feições: Constructive, Catalytic e Corrosive.</p>
+          <span class="rubric">lore master · canon v3.0.2</span>
+        </a>
+        <a class="hub-card" href={`${base}/sistemas/ascensao/`}>
+          <h2>ASCENSÃO</h2>
+          <p>Base Form, Ignition, Rupture State. Três estágios fixos, uma lei absoluta — e, além do limite, apenas anomalia.</p>
+          <span class="rubric">lore master · estados de ascensão</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,78 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SystemsRail from '../../components/SystemsRail.astro';
+import OrnamentDivider from '../../components/OrnamentDivider.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<BaseLayout title="Ascensão — Sistemas — Realm of Crests" description="Os Estados de Ascensão do Realm of Crests: Base Form, Ignition e Rupture State — e o que existe além do limite.">
+  <SystemsRail />
+
+  <div class="page-head">
+    <span class="rubric">lore master canon v3.0.2 · estados de ascensão · full lock</span>
+    <h1>ASCENSÃO</h1>
+    <p class="lede">A ascensão soberana segue caminhos fixos até um limite natural. E qualquer coisa além deles não é progressão — é anomalia.</p>
+  </div>
+
+  <OrnamentDivider />
+
+  <div class="wrap">
+
+    <section class="chapter">
+      <h2>I — Os Três Estados Fixos</h2>
+      <div class="stages">
+        <div class="stage">
+          <span class="num">ESTADO I</span>
+          <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="28" cy="28" r="22" stroke="currentColor" stroke-width="2"/>
+            <circle cx="28" cy="28" r="5" fill="currentColor" opacity="0.85"/>
+          </svg>
+          <h3>BASE FORM</h3>
+          <p>O equilíbrio soberano inicial. Máxima estabilidade — a soberania em repouso, inteira e contida.</p>
+        </div>
+        <div class="stage">
+          <span class="num">ESTADO II</span>
+          <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="28" cy="28" r="22" stroke="currentColor" stroke-width="2"/>
+            <path d="M28 6 L26 20 L30 26 L27 34" stroke="currentColor" stroke-width="1.6" opacity="0.9"/>
+            <circle cx="28" cy="28" r="5" fill="currentColor"/>
+          </svg>
+          <h3>IGNITION</h3>
+          <p>A primeira desestabilização. O primeiro despertar expansivo — o fardo começa a queimar visível.</p>
+        </div>
+        <div class="stage">
+          <span class="num">ESTADO III</span>
+          <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="28" cy="28" r="22" stroke="currentColor" stroke-width="2"/>
+            <path d="M28 6 L25 18 L31 25 L26 33 L30 42" stroke="currentColor" stroke-width="1.6"/>
+            <path d="M8 24 L18 27 M48 22 L38 27 M12 40 L21 34 M45 40 L36 34" stroke="currentColor" stroke-width="1.3" opacity="0.8"/>
+            <circle cx="28" cy="28" r="5" fill="currentColor"/>
+          </svg>
+          <h3>RUPTURE STATE</h3>
+          <p>O último estado fixo e o limite natural da contenção — uma soberania sobrecarregada, de alto custo. O ponto mais perigoso: não é apenas poder, é aproximação real do abismo.</p>
+        </div>
+      </div>
+      <div class="law">
+        <span class="tag">LEI ABSOLUTA</span>
+        <p>Toda progressão é fixa. Toda transcendência é anômala.</p>
+      </div>
+    </section>
+
+    <section class="chapter">
+      <h2>II — Além do Limite</h2>
+      <div class="prose">
+        <p>A maioria dos Guardiões para no limite de Rupture. O que existe além dos três estados fixos não pertence à progressão — pertence ao território do anômalo, e o cânone reconhece dois nomes:</p>
+        <p><strong>Forbidden Ascensions</strong> — estados raros e não-lineares que rompem a regra da evolução.</p>
+        <p><strong>Primordial Alignment</strong> — não uma forma seguinte, mas um eixo separado e não-linear da soberania.</p>
+        <p>Sobre ambos, o arquivo público registra apenas a existência. O restante permanece interditado.</p>
+      </div>
+
+      <p class="source-line rubric">fonte: lore master canon v3.0.2 · seções vii–viii · full lock — revisão canônica: 2026-07-11</p>
+
+      <nav class="realm-nav" aria-label="Navegação entre sistemas">
+        <a href={`${base}/sistemas/gravity/`}>← sovereign gravity</a>
+        <a href={`${base}/sistemas/`}>sistemas ↑</a>
+      </nav>
+    </section>
+  </div>
+</BaseLayout>

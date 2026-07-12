@@ -480,3 +480,85 @@ main { position: relative; z-index: 1; }
   font-size: 0.68rem;
   opacity: 0.75;
 }
+
+/* ── Seção de sistemas ─────────────────────────────────────────── */
+
+.systems-rail { border-bottom: 1px solid var(--edge); background: rgba(23,19,15,.5); }
+.systems-rail .wrap { display: flex; gap: 0; padding: 0; }
+.systems-rail a { flex: 1; text-align: center; padding: .85rem .5rem; font-family: var(--font-display);
+  font-size: .78rem; letter-spacing: .22em; color: var(--parchment-faint); border-right: 1px solid var(--edge); }
+.systems-rail a:first-child { border-left: 1px solid var(--edge); }
+.systems-rail a[aria-current] { color: var(--gold); background: linear-gradient(180deg, rgba(201,163,92,.08), transparent); }
+
+.page-head { padding-block: 4rem 2rem; text-align: center; }
+.page-head .rubric { display: block; margin-bottom: 1.2rem; color: var(--gold); opacity: .8; }
+.page-head h1 { font-size: clamp(2rem, 5.5vw, 3.4rem); color: var(--parchment); }
+.page-head .lede { max-width: var(--measure); margin: 1.6rem auto 0; font-size: 1.15rem; font-style: italic; color: var(--parchment-dim); }
+
+section.chapter { padding-block: 1.2rem 2.6rem; }
+.chapter h2 { font-size: 1.15rem; letter-spacing: .2em; margin-bottom: 1.1rem; }
+.chapter .prose { max-width: var(--measure); color: var(--parchment-dim); font-size: 1.05rem; }
+.chapter .prose strong { color: var(--parchment); font-weight: 500; }
+
+.flow { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; margin: 1.6rem 0 .4rem;
+  font-family: var(--font-display); font-size: .82rem; letter-spacing: .14em; color: var(--parchment); }
+.flow span { border: 1px solid var(--edge); background: var(--codex); padding: .45rem .9rem; }
+.flow i { color: var(--gold); font-style: normal; }
+
+.law { position: relative; max-width: 46ch; margin: 1.8rem 0 0; padding: 1.1rem 1.4rem 1.1rem 1.7rem;
+  border: 1px solid rgba(201,163,92,.4); background: linear-gradient(160deg, var(--codex-raised), var(--codex)); }
+.law::before { content: ""; position: absolute; inset: 5px; border: 1px solid rgba(201,163,92,.15); pointer-events: none; }
+.law .tag { display: block; font-family: var(--font-display); font-size: .62rem; letter-spacing: .3em; color: var(--gold); opacity: .8; margin-bottom: .45rem; }
+.law p { margin: 0; font-style: italic; font-size: 1.08rem; color: var(--parchment); }
+
+.types { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.2rem; margin-top: 1.8rem; }
+.type-card { position: relative; border: 1px solid var(--edge); background: linear-gradient(160deg, var(--codex-raised), var(--codex) 70%); padding: 1.3rem 1.2rem 1.15rem; overflow: hidden; }
+.type-card::before { content: ""; position: absolute; inset: 6px; border: 1px solid rgba(201,163,92,.12); pointer-events: none; }
+.type-card::after { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--accent, var(--gold)); opacity: .75; }
+.type-card h3 { font-size: .95rem; letter-spacing: .16em; color: var(--parchment); }
+.type-card .pt { font-variant: small-caps; letter-spacing: .2em; font-size: .72rem; color: var(--gold); opacity: .85; }
+.type-card p { margin: .6rem 0 0; font-size: .92rem; color: var(--parchment-dim); }
+.type-card .sig { margin-top: .55rem; font-size: .8rem; font-style: italic; color: var(--parchment-faint); }
+.type-card .patch { position: absolute; top: .6rem; right: .7rem; font-family: var(--font-display); font-size: .58rem; letter-spacing: .18em; color: var(--parchment-faint); }
+
+.duality { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--edge); border: 1px solid var(--edge); margin-top: 1.8rem; }
+@media (max-width: 700px) { .duality { grid-template-columns: 1fr; } }
+.duality > div { background: var(--codex); padding: 1.4rem 1.3rem; }
+.duality h3 { font-size: .92rem; letter-spacing: .18em; }
+.duality .true h3 { color: var(--amber); }
+.duality .wild h3 { color: var(--crimson); }
+.duality p { margin: .7rem 0 0; font-size: .95rem; color: var(--parchment-dim); }
+.duality .wild { background: linear-gradient(160deg, #1a1210, var(--codex)); }
+
+.ruin-note { border-left: 3px solid var(--crimson); background: linear-gradient(90deg, rgba(142,35,35,.12), transparent 70%);
+  padding: 1rem 1.2rem; margin-top: 1.6rem; max-width: var(--measure); }
+.ruin-note .tag { font-family: var(--font-display); font-size: .62rem; letter-spacing: .3em; color: var(--crimson); display: block; margin-bottom: .4rem; }
+.ruin-note p { margin: 0; font-size: .98rem; color: var(--parchment-dim); }
+
+/* Estágios de ascensão */
+.stages { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.2rem; margin-top: 1.8rem; }
+.stage { border: 1px solid var(--edge); background: linear-gradient(160deg, var(--codex-raised), var(--codex) 70%); padding: 1.5rem 1.3rem; text-align: center; position: relative; }
+.stage::before { content: ""; position: absolute; inset: 6px; border: 1px solid rgba(201,163,92,.12); pointer-events: none; }
+.stage svg { display: block; margin: 0 auto .9rem; color: var(--gold); }
+.stage h3 { font-size: .95rem; letter-spacing: .18em; color: var(--parchment); }
+.stage .num { display: block; font-family: var(--font-display); font-size: .62rem; letter-spacing: .3em; color: var(--parchment-faint); margin-bottom: .5rem; }
+.stage p { margin: .7rem 0 0; font-size: .92rem; color: var(--parchment-dim); }
+
+/* Grade de modificadores de Gravity */
+.gravity-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1px; background: var(--edge); border: 1px solid var(--edge); margin-top: 1.8rem; }
+.gravity-grid > div { background: var(--codex); padding: 1.4rem 1.3rem; }
+.gravity-grid h3 { font-size: .92rem; letter-spacing: .18em; }
+.gravity-grid .constructive h3 { color: var(--parchment); }
+.gravity-grid .catalytic h3 { color: var(--amber); }
+.gravity-grid .corrosive h3 { color: var(--crimson); }
+.gravity-grid p { margin: .7rem 0 0; font-size: .93rem; color: var(--parchment-dim); }
+.gravity-grid .visual { margin-top: .8rem; font-size: .8rem; font-style: italic; color: var(--parchment-faint); }
+
+/* Cards do hub de sistemas */
+.systems-hub { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.4rem; margin-top: .5rem; }
+.hub-card { display: block; border: 1px solid var(--edge); background: linear-gradient(160deg, var(--codex-raised), var(--codex) 70%); padding: 1.8rem 1.5rem; position: relative; transition: border-color .35s ease, transform .35s ease; }
+.hub-card::before { content: ""; position: absolute; inset: 7px; border: 1px solid rgba(201,163,92,.14); pointer-events: none; }
+.hub-card:hover { border-color: rgba(201,163,92,.55); transform: translateY(-4px); }
+.hub-card h2 { font-size: 1.05rem; letter-spacing: .18em; }
+.hub-card p { margin: .8rem 0 0; font-size: .95rem; color: var(--parchment-dim); }
+.hub-card .rubric { display: block; margin-top: 1.1rem; font-size: .68rem; }

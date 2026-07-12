@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SystemsRail from '../../components/SystemsRail.astro';
+import OrnamentDivider from '../../components/OrnamentDivider.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<BaseLayout title="Sovereign Gravity — Sistemas — Realm of Crests" description="Sovereign Gravity: o peso de conter um Reino inteiro dentro de si, e seus três modificadores — Constructive, Catalytic e Corrosive.">
+  <SystemsRail />
+
+  <div class="page-head">
+    <span class="rubric">lore master canon v3.0.2 · patch v2</span>
+    <h1>SOVEREIGN GRAVITY</h1>
+    <p class="lede">Todo Guardião contém, dentro de si mesmo, o peso da própria história do Reino. Esse peso tem nome — e tem custo.</p>
+  </div>
+
+  <OrnamentDivider />
+
+  <div class="wrap">
+
+    <section class="chapter">
+      <h2>I — A Natureza do Fardo</h2>
+      <div class="prose">
+        <p>A Sovereign Gravity não é um poder que o Guardião empunha: é o peso que ele <strong>contém</strong>. Cada Colisão vencida, cada ciclo preservado, cada geração carregada torna a soberania mais densa — e quanto maior a Gravity, mais próximo o Guardião está do próprio colapso. Toda ascensão carrega essa consciência.</p>
+        <p>O fardo não é neutro diante da Ruína: o peso que fortalece um Guardião é também o que o expõe. Fardos extremos são faróis para a corrupção.</p>
+      </div>
+      <div class="law">
+        <span class="tag">LEI ABSOLUTA DOS GUARDIÕES</span>
+        <p>Toda ascensão, inevitavelmente, exige o peso de sustentar um Reino inteiro dentro de si.</p>
+      </div>
+    </section>
+
+    <section class="chapter">
+      <h2>II — Os Três Modificadores</h2>
+      <div class="prose">
+        <p>A Gravity de cada Guardião se manifesta em uma de três feições — visíveis no corpo, na armadura e no próprio Brasão do Reino. A afinidade de cada um dos dezenove está registrada em sua ficha soberana.</p>
+      </div>
+      <div class="gravity-grid">
+        <div class="constructive">
+          <h3>CONSTRUCTIVE</h3>
+          <p>O peso que edifica. Soberania estável, contida, acumulada sem fratura.</p>
+          <p class="visual">Legenda visual: linhas limpas, simetria, material sólido e estável — pedra e metal.</p>
+        </div>
+        <div class="catalytic">
+          <h3>CATALYTIC</h3>
+          <p>O peso que acende. Soberania em expansão, energia liberada sob controle.</p>
+          <p class="visual">Legenda visual: rachaduras com luz saindo de forma controlada; partículas em movimento ascendente.</p>
+        </div>
+        <div class="corrosive">
+          <h3>CORROSIVE</h3>
+          <p>O peso que consome. Soberania sob erosão — a abertura por onde a Ruína encontra caminho.</p>
+          <p class="visual">Legenda visual: rachaduras escuras, textura sangrando sombra ou fumaça, assimetria crescente.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter">
+      <h2>III — Gravity nos Dezenove</h2>
+      <div class="prose">
+        <p>Nenhuma afinidade é permanente. Guardiões transitam entre feições conforme o Fervor de seu Povo, o estado de seu Temple e o peso de sua Emberline — uma Gravity Constructive pode entrar em erosão; uma Catalytic pode se estabilizar. A afinidade atual de cada Guardião está registrada na ficha de seu Reino, no <a href={`${base}/reinos/`}>arquivo dos dezenove</a>.</p>
+      </div>
+
+      <p class="source-line rubric">fonte: lore master canon v3.0.2 · legenda visual de gravity (patch v2) — revisão canônica: 2026-07-11</p>
+
+      <nav class="realm-nav" aria-label="Navegação entre sistemas">
+        <a href={`${base}/sistemas/fervor/`}>← fervor</a>
+        <a href={`${base}/sistemas/ascensao/`}>ascensão →</a>
+      </nav>
+    </section>
+  </div>
+</BaseLayout>
