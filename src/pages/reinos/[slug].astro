@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import realms from '../../data/realms.json';
+import { fervorSignature } from '../../lib/fervor.js';
 
 export function getStaticPaths() {
   return realms.map((realm) => ({
@@ -12,13 +13,14 @@ export function getStaticPaths() {
 const { realm } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const folio = String(realm.order).padStart(2, '0');
+const fv = fervorSignature(realm.fervor);
 
 const idx = realms.findIndex((r) => r.slug === realm.slug);
 const prev = realms[(idx - 1 + realms.length) % realms.length];
 const next = realms[(idx + 1) % realms.length];
 ---
 <BaseLayout title={`${realm.trueName} — Realm of Crests`} description={`${realm.trueName}, “${realm.epithet}”. Guardião: ${realm.guardian}.`}>
-  <article class="realm-page">
+  <article class="realm-page" style={`--fv: ${fv.color}; --fv-soft: ${fv.soft};`}>
     <div class="wrap">
       <nav class="breadcrumb rubric" aria-label="Trilha">
         <a href={`${base}/reinos/`}>← arquivo dos reinos</a>
@@ -31,6 +33,7 @@ const next = realms[(idx + 1) % realms.length];
             alt={`Brasão canônico do ${realm.trueName}`}
             width="800"
             height="800"
+            transition:name={`emblem-${realm.slug}`}
             onerror={`this.onerror=null;this.src='${base}/assets/emblems/placeholder.svg'`}
           />
           <figcaption class="folio">FOLIO {folio}/19</figcaption>

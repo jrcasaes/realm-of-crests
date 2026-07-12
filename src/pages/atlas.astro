@@ -64,11 +64,22 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 </BaseLayout>
 
 <script>
+  function initAtlas() {
   const vp = document.getElementById('viewport') as HTMLElement;
+  if ((vp as any).dataset.bound) return; (vp as any).dataset.bound = '1';
   const img = document.getElementById('mapa') as HTMLImageElement;
   const hint = document.getElementById('hint') as HTMLElement;
   let scale = 1, tx = 0, ty = 0;
-  const MIN = 1, MAX = 4;
+  const MIN = 1, MAX = 3;
+  const hiSrc = img.src.replace('map_continent.webp', 'map_continent_2x.webp');
+  let hiLoaded = false;
+  function loadHi() {
+    if (hiLoaded) return;
+    hiLoaded = true;
+    const pre = new Image();
+    pre.onload = () => { img.src = hiSrc; };
+    pre.src = hiSrc;
+  }
 
   function clamp() {
     const r = vp.getBoundingClientRect();
@@ -88,6 +99,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     tx = x - (x - tx) * (ns / scale);
     ty = y - (y - ty) * (ns / scale);
     scale = ns;
+    if (scale > 1.05) loadHi();
     apply();
     hint.classList.add('hide');
   }
@@ -125,4 +137,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   });
 
   setTimeout(() => hint.classList.add('hide'), 5000);
+  }
+  document.addEventListener('astro:page-load', () => {
+    if (document.getElementById('viewport')) initAtlas();
+  });
 </script>

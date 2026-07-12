@@ -24,18 +24,22 @@ import realms from '../../data/realms.json';
 </BaseLayout>
 
 <script>
-  const items = document.querySelectorAll('.reveal');
-  const io = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry, i) => {
-        if (entry.isIntersecting) {
-          (entry.target as HTMLElement).style.transitionDelay = `${(i % 6) * 60}ms`;
-          entry.target.classList.add('is-visible');
-          io.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.12 }
-  );
-  items.forEach((el) => io.observe(el));
+  function bindReveal() {
+    const items = document.querySelectorAll('.reveal:not(.is-visible)');
+    if (!items.length) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry, i) => {
+          if (entry.isIntersecting) {
+            (entry.target as HTMLElement).style.transitionDelay = `${(i % 6) * 60}ms`;
+            entry.target.classList.add('is-visible');
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+    items.forEach((el) => io.observe(el));
+  }
+  document.addEventListener('astro:page-load', bindReveal);
 </script>
