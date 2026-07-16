@@ -1,0 +1,50 @@
+{
+  "_comment": "Ponteiro de governanca. Este repositorio NAO hospeda copia do registry: o master vive no Drive e muda com frequencia. Nenhum codigo do site consome este arquivo; ele existe para rastreabilidade humana e de IA.",
+  "project": "Realm of Crests",
+  "siteCreatesCanon": false,
+  "authority": {
+    "registry": {
+      "title": "roc-source-registry (master operacional)",
+      "version_at_sync": "1.2.6",
+      "location": "Google Drive / 00_Governanca_e_Indices",
+      "note": "Sempre consultar a versao vigente no Drive; este campo registra apenas a sincronizacao mais recente."
+    },
+    "authorityMatrix": {
+      "title": "RoC_Matriz_de_Autoridade_v1.0_APROVADA",
+      "driveId": "14aqyDOHUi4AhTQ39LpfMCbl0XQAIUYfXrrS1iMgAE9M"
+    },
+    "loreMaster": {
+      "title": "REALM_OF_CRESTS_LORE_MASTER_CANON",
+      "version_at_sync": "3.0.4",
+      "driveId": "1Dg3tUKCY9Np5-mVxlU8zDsJlsO0QWkjZ",
+      "mutability": "CONSTITUTIONAL_FROZEN_BY_VERSION"
+    },
+    "activeSources": {
+      "title": "RoC_Fontes_Ativas_para_Producao",
+      "version_at_sync": "1.2.5"
+    },
+    "statusPolicy": {
+      "title": "RoC_Politica_de_Status_Rotulacao_e_Retencao",
+      "version_at_sync": "1.2"
+    }
+  },
+  "contentCompliance": {
+    "cc28c": {
+      "rule": "Camadas de identidade com referencia ao mundo real sao proibidas em conteudo canonico ativo (filtro CC-25).",
+      "appliedTo": "src/data/realms.json",
+      "removedLayers": [
+        "corintia.guardianEcho",
+        "palesterra.guardianVulgo",
+        "cruzaria.territorialEcho",
+        "galicia.guardianVulgo",
+        "coritba.battleEcho",
+        "coritba.historicalAlias",
+        "coritba.territorialEcho"
+      ],
+      "note": "Nenhuma camada substituta foi criada. As lacunas de Coritba, Corintia e Palesterra estao registradas na CC-28 e aguardam decisao autoral."
+    },
+    "cc22": "Kalen e o nome ativo; Kraken e o Eco Ancestral.",
+    "cc24b": "Templo de Santia: A Catedral das Mares."
+  },
+  "lastSync": "2026-07-16"
+}

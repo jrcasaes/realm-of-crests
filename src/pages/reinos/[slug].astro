@@ -46,7 +46,7 @@ const next = realms[(idx + 1) % realms.length];
             <span class="rubric">reino nº {folio} · canon v3.0.2</span>
             <h1>{realm.trueName}</h1>
             <p class="epithet">“{realm.epithet}”</p>
-            <p class="guardian-line">Guardião: {realm.guardian} — {realm.guardianVulgo}</p>
+            <p class="guardian-line">Guardião: {realm.guardian}{realm.guardianVulgo ? ` — ${realm.guardianVulgo}` : ''}</p>
           </header>
 
           <dl class="systems">
@@ -69,11 +69,11 @@ const next = realms[(idx + 1) % realms.length];
               <caption>nomenclatura ao longo das eras</caption>
               <tbody>
                 <tr><td>Nome Verdadeiro</td><td>{realm.trueName}</td></tr>
-                <tr><td>Alcunha Histórica</td><td>{realm.historicalAlias}</td></tr>
-                <tr><td>Eco Territorial</td><td>{realm.territorialEcho}</td></tr>
-                <tr><td>Guardião — Eco Ancestral</td><td>{realm.guardianEcho}</td></tr>
-                <tr><td>Guardião — Vulgo da Multidão</td><td>{realm.guardianVulgo}</td></tr>
-                <tr><td>Guardião — Eco das Batalhas</td><td>{realm.battleEcho}</td></tr>
+                {realm.historicalAlias && <tr><td>Alcunha Histórica</td><td>{realm.historicalAlias}</td></tr>}
+                {realm.territorialEcho && <tr><td>Eco Territorial</td><td>{realm.territorialEcho}</td></tr>}
+                {realm.guardianEcho && <tr><td>Guardião — Eco Ancestral</td><td>{realm.guardianEcho}</td></tr>}
+                {realm.guardianVulgo && <tr><td>Guardião — Vulgo da Multidão</td><td>{realm.guardianVulgo}</td></tr>}
+                {realm.battleEcho && <tr><td>Guardião — Eco das Batalhas</td><td>{realm.battleEcho}</td></tr>}
               </tbody>
             </table>
           </div>
