@@ -1,0 +1,84 @@
+{
+  "project": "Realm of Crests",
+  "artifact": "site-operational-package",
+  "manifestVersion": "1.2.9",
+  "generatedDate": "2026-07-17",
+  "status": "DERIVED_OPERATIONAL_ACTIVE",
+  "createsCanon": false,
+  "authority": {
+    "loreMaster": "REALM_OF_CRESTS_LORE_MASTER_CANON_v3.0.5.docx",
+    "dossier": "RoC_Dossie_Canonico_Guardioes_19_v2.5.docx",
+    "storyBible": "Realm_of_Crests_Story_Bible_Master_v2_1_CC28C_APPROVED.html",
+    "registry": "roc-source-registry.v1.2.9.json",
+    "activeSourcesView": "RoC_Fontes_Ativas_para_Producao_v1.2.9",
+    "masterIndexView": "RoC_Indice_Mestre_do_Drive_v1.2.9"
+  },
+  "supportingSources": [
+    {
+      "source": "nego-dossier-v1",
+      "status": "SUPPORTING_ACTIVE_SCOPED",
+      "scope": [
+        "nego",
+        "victoria",
+        "character-visual-direction"
+      ],
+      "constitutionalAuthority": false
+    }
+  ],
+  "cc28c": {
+    "status": "INCORPORATED_AND_REQUIRED",
+    "realms": 19,
+    "santiaTemple": "A Catedral das Marés",
+    "prohibitedActiveLayers": [
+      "Gavião",
+      "O Alvinegro",
+      "O Porco Imperial",
+      "A Toca Azul",
+      "O Domínio do Coxa",
+      "O Vale do Alto da Glória"
+    ],
+    "verification": "PASS"
+  },
+  "cc30": {
+    "status": "INCORPORATED_AND_REQUIRED",
+    "closedGapNotes": 3,
+    "canonicalLayers": {
+      "Coritba.historicalAlias": "O Ermo dos Pinheiros",
+      "Coritba.territorialEcho": "O Domínio das Raízes",
+      "Coríntia.guardianEcho": "O Primeiro Juramento",
+      "Palesterra.guardianVulgo": "O Senhor das Presas"
+    },
+    "verification": "PASS"
+  },
+  "c09": {
+    "canonicalSpelling": "Vaskor",
+    "prohibitedVariant": "Vaskos",
+    "verification": "PASS"
+  },
+  "glyphRasterFullLock": {
+    "scope": "RASTER_8X5_ONLY",
+    "families": 8,
+    "materialsPerFamily": 5,
+    "activeAssets": 40,
+    "verification": "PASS_40_OF_40",
+    "vectorMastersStatus": "PENDING_NOT_INFERRED",
+    "note": "PNG não substitui master SVG; masters SVG e monocromáticos permanecem pendentes."
+  },
+  "siteData": {
+    "file": "realms.json",
+    "realmCount": 19,
+    "uniqueSlugCount": 19,
+    "verification": "PASS"
+  },
+  "legacyClosure": {
+    "folderName": "HISTORICO__REALM_OF_CRESTS_LEGADO_AUDITADO_MIGRADO_2026-07-03",
+    "duplicatesVerified": 48,
+    "uniqueItems": 0,
+    "deletions": 0
+  },
+  "deployment": {
+    "drivePackage": "SYNCHRONIZED_AND_VALIDATED_REGISTRY_1.2.9",
+    "github": "DEPLOYED_PENDING_PUBLIC_VERIFICATION"
+  },
+  "publicMetadata": "SANITIZED_NO_PRIVATE_DRIVE_IDS"
+}
