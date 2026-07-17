@@ -1,21 +1,25 @@
 # Realm of Crests — Site Oficial
 
 Site estático em **Astro** com estética **Dark Codex**, publicado via **GitHub Pages**.
-Conteúdo rastreável ao **LORE_MASTER_CANON v3.0.2**.
+Conteúdo rastreável ao **LORE_MASTER_CANON v3.0.5**, ao **Dossiê Canônico dos 19 Guardiões v2.5**, à **Story Bible v2.1 CC-28C APPROVED** e ao **roc-source-registry v1.2.9**. As decisões CC-28C e CC-30 já estão incorporadas nessas fontes ativas.
+
+Status: derivado operacional. O site não cria cânone. A correção **CC-28C** é obrigatória em `src/data/realms.json`: as seis camadas transferidas ao Apêndice Não Canônico não podem aparecer como dados canônicos ativos. O `nego-dossier-v1` permanece fonte de apoio com escopo restrito a Nego, Victória e direção visual de personagem; não possui autoridade constitucional.
+
+Pacote sincronizado sob o registry **v1.2.9** em **2026-07-17**. O FULL LOCK VISUAL dos glifos é restrito à matriz raster 8 × 5, com PASS 40/40; PNG não substitui master SVG, e os masters SVG/monocromáticos permanecem pendentes. Verificação CC-28C: `Gavião`, `O Alvinegro`, `O Porco Imperial`, `A Toca Azul`, `O Domínio do Coxa` e `O Vale do Alto da Glória` não aparecem como camadas canônicas ativas; **A Catedral das Marés** permanece o Templo vigente de Santia. A decisão CC-30 está incorporada no cânone ativo e fixa no site `O Ermo dos Pinheiros`, `O Domínio das Raízes`, `O Primeiro Juramento` e `O Senhor das Presas`.
 
 ---
 
 ## O que já está pronto
 
 - Página inicial com manifesto e grade dos 19 reinos (revelação de arquivo ao rolar)
-- Página individual de cada reino: emblema, Essence/Fervor/Gravity, nomenclatura em camadas, bioma e templo — tudo extraído do cânone v3.0.2
+- Página individual de cada reino: emblema, Essence/Fervor/Gravity, nomenclatura em camadas, bioma e templo — tudo reconciliado com o cânone v3.0.5 e o registry v1.2.9
 - Emblemas pendentes aparecem como "Selo Pendente" automaticamente; basta soltar o PNG na pasta certa para substituir (ver `public/assets/emblems/_CONVENCAO.md`)
 - Deploy automático: todo push na branch `main` publica o site sozinho
 
 ## Estrutura
 
 ```
-src/data/realms.json      ← dados canônicos dos 19 reinos (fonte: canon v3.0.2)
+src/data/realms.json      ← dados dos 19 reinos (fontes: Lore Master v3.0.5 + Dossiê v2.5 + Story Bible v2.1; decisões CC-28C/CC-30 incorporadas)
 src/pages/                ← páginas (index, /reinos, /reinos/[slug])
 src/styles/global.css     ← todo o design (CSS puro, tokens no :root)
 public/assets/emblems/    ← PNGs dos emblemas (veja _CONVENCAO.md)
