@@ -1,8 +1,24 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import OrnamentDivider from '../components/OrnamentDivider.astro';
+import realms from '../data/realms.json';
+import atlasHotspots from '../data/atlas-hotspots.json';
+import { guardianRoster } from '../lib/guardians.js';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const realmsBySlug = new Map(realms.map((realm) => [realm.slug, realm]));
+const guardiansByRealm = new Map(guardianRoster.map((guardian) => [guardian.realmSlug, guardian]));
+const atlasEntries = atlasHotspots.map((hotspot) => {
+  const realm = realmsBySlug.get(hotspot.realmSlug);
+  const guardian = guardiansByRealm.get(hotspot.realmSlug);
+
+  if (!realm || !guardian) {
+    throw new Error(`Atlas sem dados para o reino: ${hotspot.realmSlug}`);
+  }
+
+  return { ...hotspot, realm, guardian };
+});
+const initialEntry = atlasEntries[0];
 ---
 <BaseLayout title="Atlas do Continente — Realm of Crests" description="O Mapa Canônico do Continente de Realm of Crests: os dezenove Reinos, biomas, o Solo Ancestral, os Caminhos Sagrados e as Zonas de Colapso.">
   <div class="page-head">
@@ -18,21 +34,63 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       <span class="atlas-corner tl"></span><span class="atlas-corner tr"></span>
       <span class="atlas-corner bl"></span><span class="atlas-corner br"></span>
       <div class="atlas-viewport" id="viewport">
-        <img
-          id="mapa"
-          src={`${base}/assets/maps/map_continent.webp`}
-          alt="Mapa Canônico do Continente de Realm of Crests, com os dezenove Reinos, biomas, Caminhos Sagrados e Zonas de Colapso"
-          width="1536"
-          height="1024"
-          draggable="false"
-        />
+        <div class="atlas-map" id="atlas-map">
+          <img
+            id="mapa"
+            src={`${base}/assets/maps/map_continent.webp`}
+            alt="Mapa Canônico do Continente de Realm of Crests, com os dezenove Reinos, biomas, Caminhos Sagrados e Zonas de Colapso"
+            width="1536"
+            height="1024"
+            draggable="false"
+          />
+          <nav class="atlas-hotspots" aria-label="Reinos no mapa canônico">
+            {atlasEntries.map(({ mapNumber, x, y, realm, guardian }) => (
+              <a
+                class="atlas-hotspot"
+                href={`${base}/reinos/${realm.slug}/`}
+                style={`--atlas-x:${x}%;--atlas-y:${y}%;`}
+                aria-label={`Reino ${String(mapNumber).padStart(2, '0')}: ${realm.realm}. Abrir fólio do reino.`}
+                data-map-number={String(mapNumber).padStart(2, '0')}
+                data-realm={realm.realm}
+                data-guardian={guardian.name}
+                data-epithet={guardian.epithet}
+                data-essence={realm.essence}
+                data-realm-href={`${base}/reinos/${realm.slug}/`}
+                data-guardian-href={`${base}/guardioes/${guardian.slug}/`}
+              >
+                <span class="sr-only">{realm.realm}</span>
+              </a>
+            ))}
+          </nav>
+        </div>
         <div class="atlas-controls">
           <button id="zin" aria-label="Aproximar">+</button>
           <button id="zout" aria-label="Afastar">−</button>
           <button id="zreset" aria-label="Restaurar" title="Restaurar">◻</button>
         </div>
-        <div class="atlas-hint" id="hint">ARRASTE PARA NAVEGAR · ROLE PARA APROXIMAR</div>
+        <div class="atlas-hint" id="hint">PASSE PELOS REINOS · CLIQUE PARA ABRIR · ROLE PARA APROXIMAR</div>
       </div>
+      <section class="atlas-inspector" id="atlas-inspector" aria-live="polite">
+        <div class="atlas-inspector-heading">
+          <span class="rubric" id="atlas-number">{`reino ${String(initialEntry.mapNumber).padStart(2, '0')}`}</span>
+          <h2 id="atlas-realm">{initialEntry.realm.realm}</h2>
+          <p id="atlas-epithet">“{initialEntry.guardian.epithet}”</p>
+        </div>
+        <dl>
+          <div>
+            <dt>Guardião</dt>
+            <dd id="atlas-guardian">{initialEntry.guardian.name}</dd>
+          </div>
+          <div>
+            <dt>Essência</dt>
+            <dd id="atlas-essence">{initialEntry.realm.essence}</dd>
+          </div>
+        </dl>
+        <div class="atlas-inspector-actions">
+          <a id="atlas-realm-link" href={`${base}/reinos/${initialEntry.realm.slug}/`}>Abrir Reino</a>
+          <a id="atlas-guardian-link" href={`${base}/guardioes/${initialEntry.guardian.slug}/`}>Ver Guardião</a>
+        </div>
+      </section>
       <div class="atlas-caption">
         <span>MAPA CANÔNICO DO CONTINENTE · v1.0</span>
         <span>ESCALA NARRATIVA — DISTÂNCIAS NO REGISTRO DE ROTAS</span>
@@ -68,7 +126,16 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   const vp = document.getElementById('viewport') as HTMLElement;
   if ((vp as any).dataset.bound) return; (vp as any).dataset.bound = '1';
   const img = document.getElementById('mapa') as HTMLImageElement;
+  const map = document.getElementById('atlas-map') as HTMLElement;
   const hint = document.getElementById('hint') as HTMLElement;
+  const hotspots = Array.from(document.querySelectorAll<HTMLAnchorElement>('.atlas-hotspot'));
+  const number = document.getElementById('atlas-number') as HTMLElement;
+  const realmName = document.getElementById('atlas-realm') as HTMLElement;
+  const guardianName = document.getElementById('atlas-guardian') as HTMLElement;
+  const epithet = document.getElementById('atlas-epithet') as HTMLElement;
+  const essence = document.getElementById('atlas-essence') as HTMLElement;
+  const realmLink = document.getElementById('atlas-realm-link') as HTMLAnchorElement;
+  const guardianLink = document.getElementById('atlas-guardian-link') as HTMLAnchorElement;
   let scale = 1, tx = 0, ty = 0;
   const MIN = 1, MAX = 3;
   const hiSrc = img.src.replace('map_continent.webp', 'map_continent_2x.webp');
@@ -83,15 +150,33 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
   function clamp() {
     const r = vp.getBoundingClientRect();
-    const w = r.width * scale, h = img.clientHeight * scale;
+    const w = map.clientWidth * scale, h = map.clientHeight * scale;
     tx = Math.min(0, Math.max(r.width - w, tx));
-    ty = Math.min(0, Math.max(Math.min(r.height, img.clientHeight) - h, ty));
+    ty = Math.min(0, Math.max(Math.min(r.height, map.clientHeight) - h, ty));
     if (scale === 1) { tx = 0; ty = 0; }
   }
   function apply() {
     clamp();
-    img.style.transform = `translate(${tx}px,${ty}px) scale(${scale})`;
+    map.style.transform = `translate(${tx}px,${ty}px) scale(${scale})`;
   }
+
+  function selectRealm(hotspot: HTMLAnchorElement) {
+    hotspots.forEach((item) => item.classList.toggle('active', item === hotspot));
+    number.textContent = `reino ${hotspot.dataset.mapNumber}`;
+    realmName.textContent = hotspot.dataset.realm ?? '';
+    guardianName.textContent = hotspot.dataset.guardian ?? '';
+    epithet.textContent = `“${hotspot.dataset.epithet ?? ''}”`;
+    essence.textContent = hotspot.dataset.essence ?? '';
+    realmLink.href = hotspot.dataset.realmHref ?? hotspot.href;
+    guardianLink.href = hotspot.dataset.guardianHref ?? '#';
+    hint.classList.add('hide');
+  }
+
+  hotspots.forEach((hotspot, index) => {
+    if (index === 0) hotspot.classList.add('active');
+    hotspot.addEventListener('pointerenter', () => selectRealm(hotspot));
+    hotspot.addEventListener('focus', () => selectRealm(hotspot));
+  });
   function zoomAt(cx: number, cy: number, factor: number) {
     const r = vp.getBoundingClientRect();
     const x = cx - r.left, y = cy - r.top;
@@ -111,6 +196,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
   let dragging = false, lx = 0, ly = 0;
   vp.addEventListener('pointerdown', (e) => {
+    if ((e.target as HTMLElement).closest('a, button')) return;
     dragging = true; lx = e.clientX; ly = e.clientY;
     vp.classList.add('grabbing'); vp.setPointerCapture(e.pointerId);
     hint.classList.add('hide');

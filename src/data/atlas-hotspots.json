@@ -1,0 +1,21 @@
+[
+  { "mapNumber": 1, "realmSlug": "remigia", "x": 37.8, "y": 10.1 },
+  { "mapNumber": 2, "realmSlug": "victoria", "x": 70.9, "y": 10.1 },
+  { "mapNumber": 3, "realmSlug": "bahea", "x": 83.7, "y": 15.8 },
+  { "mapNumber": 4, "realmSlug": "rubrum", "x": 74.5, "y": 27.4 },
+  { "mapNumber": 5, "realmSlug": "vaskor", "x": 78.8, "y": 39.6 },
+  { "mapNumber": 6, "realmSlug": "botafia", "x": 83.8, "y": 32.8 },
+  { "mapNumber": 7, "realmSlug": "flumen", "x": 66.3, "y": 39.6 },
+  { "mapNumber": 8, "realmSlug": "cruzaria", "x": 47.5, "y": 37.2 },
+  { "mapNumber": 9, "realmSlug": "galicia", "x": 34.5, "y": 26.6 },
+  { "mapNumber": 10, "realmSlug": "corintia", "x": 28.6, "y": 39.5 },
+  { "mapNumber": 11, "realmSlug": "palesterra", "x": 36.0, "y": 39.5 },
+  { "mapNumber": 12, "realmSlug": "san-paolo", "x": 32.3, "y": 48.9 },
+  { "mapNumber": 13, "realmSlug": "santia", "x": 25.2, "y": 49.7 },
+  { "mapNumber": 14, "realmSlug": "mirasol", "x": 31.7, "y": 55.7 },
+  { "mapNumber": 15, "realmSlug": "coritba", "x": 34.5, "y": 70.1 },
+  { "mapNumber": 16, "realmSlug": "athletia", "x": 63.1, "y": 70.1 },
+  { "mapNumber": 17, "realmSlug": "chapeco", "x": 50.1, "y": 76.7 },
+  { "mapNumber": 18, "realmSlug": "gremio", "x": 35.2, "y": 86.9 },
+  { "mapNumber": 19, "realmSlug": "colorado", "x": 61.7, "y": 86.9 }
+]
