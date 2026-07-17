@@ -78,7 +78,16 @@
   },
   "deployment": {
     "drivePackage": "SYNCHRONIZED_AND_VALIDATED_REGISTRY_1.2.9",
-    "github": "DEPLOYED_PENDING_PUBLIC_VERIFICATION"
+    "github": "PUBLIC_VERIFIED"
   },
-  "publicMetadata": "SANITIZED_NO_PRIVATE_DRIVE_IDS"
+  "publicMetadata": "SANITIZED_NO_PRIVATE_DRIVE_IDS",
+  "publicVerification": {
+    "url": "https://jrcasaes.github.io/realm-of-crests/",
+    "httpStatus": 200,
+    "realmRoutes": 19,
+    "cc28cForbiddenHits": 0,
+    "canonVersion": "3.0.5",
+    "dossierVersion": "2.5",
+    "verifiedDate": "2026-07-17"
+  }
 }
