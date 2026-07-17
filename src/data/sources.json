@@ -5,23 +5,21 @@
   "authority": {
     "registry": {
       "title": "roc-source-registry (master operacional)",
-      "version_at_sync": "1.2.7",
+      "version_at_sync": "1.2.9",
       "location": "Google Drive / 00_Governanca_e_Indices",
       "note": "Sempre consultar a versao vigente no Drive; este campo registra apenas a sincronizacao mais recente."
     },
     "authorityMatrix": {
-      "title": "RoC_Matriz_de_Autoridade_v1.0_APROVADA",
-      "driveId": "14aqyDOHUi4AhTQ39LpfMCbl0XQAIUYfXrrS1iMgAE9M"
+      "title": "RoC_Matriz_de_Autoridade_v1.0_APROVADA"
     },
     "loreMaster": {
       "title": "REALM_OF_CRESTS_LORE_MASTER_CANON",
-      "version_at_sync": "3.0.4",
-      "driveId": "1Dg3tUKCY9Np5-mVxlU8zDsJlsO0QWkjZ",
+      "version_at_sync": "3.0.5",
       "mutability": "CONSTITUTIONAL_FROZEN_BY_VERSION"
     },
     "activeSources": {
       "title": "RoC_Fontes_Ativas_para_Producao",
-      "version_at_sync": "1.2.6"
+      "version_at_sync": "1.2.9"
     },
     "statusPolicy": {
       "title": "RoC_Politica_de_Status_Rotulacao_e_Retencao",
@@ -29,13 +27,17 @@
     },
     "masterIndex": {
       "title": "RoC_Indice_Mestre_do_Drive",
-      "version_at_sync": "1.2.6"
+      "version_at_sync": "1.2.9"
     },
     "guardiansDossier": {
       "title": "RoC_Dossie_Canonico_Guardioes_19",
-      "version_at_sync": "2.4",
-      "driveId": "1CTZpLZVeGUwrkXgz188EoZYdgYwOJYyQ",
+      "version_at_sync": "2.5",
       "note": "Ficha operacional; nao cria lei."
+    },
+    "storyBible": {
+      "title": "Realm_of_Crests_Story_Bible_Master_v2_1_CC28C_APPROVED",
+      "version_at_sync": "2.1",
+      "mutability": "DERIVED_REFERENCE_CC28C"
     }
   },
   "contentCompliance": {
@@ -51,10 +53,18 @@
         "coritba.historicalAlias",
         "coritba.territorialEcho"
       ],
-      "note": "Camadas substitutas canonizadas pela CC-30 (16/07/2026); as tres Notas de Lacuna estao encerradas."
+      "note": "Camadas substitutas canonizadas pela CC-30 (16/07/2026); as tres Notas de Lacuna estao encerradas.",
+      "prohibitedActiveLayerValues": [
+        "Gavião",
+        "O Alvinegro",
+        "O Porco Imperial",
+        "A Toca Azul",
+        "O Domínio do Coxa",
+        "O Vale do Alto da Glória"
+      ]
     },
     "cc22": "Kalen e o nome ativo; Kraken e o Eco Ancestral.",
-    "cc24b": "Templo de Santia: A Catedral das Mares.",
+    "cc24b": "Templo de Santia: A Catedral das Marés.",
     "cc30": {
       "rule": "Camadas substitutas canonizadas por decisao autoral registrada em 16/07/2026.",
       "appliedTo": "src/data/realms.json",
@@ -63,9 +73,17 @@
         "coritba.territorialEcho": "O Dominio das Raizes",
         "corintia.guardianEcho": "O Primeiro Juramento",
         "palesterra.guardianVulgo": "O Senhor das Presas"
-      },
-      "canonCallDriveId": "1duMCAsYGpmuz-jPgne711Bf5z1b4ueje1wBEfDzvO58"
+      }
     }
   },
-  "lastSync": "2026-07-17"
+  "lastSync": "2026-07-17",
+  "glyphRasterFullLock": {
+    "scope": "RASTER_8X5_ONLY",
+    "families": 8,
+    "materialsPerFamily": 5,
+    "activeAssets": 40,
+    "verification": "PASS_40_OF_40",
+    "vectorMastersStatus": "PENDING_NOT_INFERRED",
+    "note": "PNG não substitui master SVG; masters SVG e monocromáticos permanecem pendentes."
+  }
 }
