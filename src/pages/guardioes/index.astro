@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import OrnamentDivider from '../../components/OrnamentDivider.astro';
-import guardians from '../../data/guardians.json';
+import { guardianRoster } from '../../lib/guardians.js';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
@@ -17,7 +17,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   <section class="realms-section">
     <div class="wrap">
       <div class="guardian-grid">
-        {guardians.map((g) => (
+        {guardianRoster.map((g) => (
           <a class="guardian-card" href={`${base}/guardioes/${g.slug}/`}>
             {g.portrait
               ? <img src={`${base}/assets/guardians/${g.portrait}`} alt={`${g.name}, Guardião de ${g.realmName}`} loading="lazy" />
@@ -31,7 +31,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           </a>
         ))}
       </div>
-      <p class="source-line rubric" style="text-align:center;">os demais folios da galeria aguardam seus visual locks canônicos</p>
+      <p class="source-line rubric" style="text-align:center;">19 retratos web derivados dos masters preservados · rmv v0.1</p>
     </div>
   </section>
 </BaseLayout>

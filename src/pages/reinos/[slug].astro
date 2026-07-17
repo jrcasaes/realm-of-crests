@@ -15,6 +15,7 @@ const { realm } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const folio = String(realm.order).padStart(2, '0');
 const fv = fervorSignature(realm.fervor);
+const guardianSlug = realm.guardian.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 
 const idx = realms.findIndex((r) => r.slug === realm.slug);
 const prev = realms[(idx - 1 + realms.length) % realms.length];
@@ -47,7 +48,7 @@ const next = realms[(idx + 1) % realms.length];
             <span class="rubric">reino nº {folio} · {canonLabel}</span>
             <h1>{realm.trueName}</h1>
             <p class="epithet">“{realm.epithet}”</p>
-            <p class="guardian-line">Guardião: {realm.guardian}{realm.guardianVulgo ? ` — ${realm.guardianVulgo}` : ''}</p>
+            <p class="guardian-line">Guardião: <a href={`${base}/guardioes/${guardianSlug}/`}>{realm.guardian}</a>{realm.guardianVulgo ? ` — ${realm.guardianVulgo}` : ''}</p>
           </header>
 
           <dl class="systems">
