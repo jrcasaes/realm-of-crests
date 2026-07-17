@@ -126,6 +126,7 @@
     "trueName": "Reino de Coríntia",
     "guardian": "Hawks",
     "epithet": "O Sentinela do Pacto",
+    "guardianEcho": "O Primeiro Juramento",
     "guardianVulgo": "O Guardião da Multidão",
     "battleEcho": "O Elmo do Povo",
     "historicalAlias": "O Vale do Povo",
@@ -145,8 +146,8 @@
     "canonStatus": "CANON",
     "spoilerLevel": 0,
     "publicApproved": true,
-    "lastCanonReview": "2026-07-11",
-    "notes": "Sincronizado com Dossiê v2.3 (formas editoriais PT-BR) e CC-26 (leitura canônica do Brasão)."
+    "lastCanonReview": "2026-07-16",
+    "notes": "Sincronizado com Dossiê v2.3 (formas editoriais PT-BR) e CC-26 (leitura canônica do Brasão). Camadas substitutas canonizadas pela CC-30 (16/07/2026); Notas de Lacuna da CC-28 encerradas."
   },
   {
     "slug": "palesterra",
@@ -156,6 +157,7 @@
     "guardian": "Tuskar",
     "epithet": "A Besta da Dinastia",
     "guardianEcho": "O Patriarca",
+    "guardianVulgo": "O Senhor das Presas",
     "battleEcho": "O Rei Esmeralda",
     "historicalAlias": "O Domínio Esmeralda",
     "territorialEcho": "O Trono Verde",
@@ -174,8 +176,8 @@
     "canonStatus": "CANON",
     "spoilerLevel": 0,
     "publicApproved": true,
-    "lastCanonReview": "2026-07-11",
-    "notes": "Sincronizado com Dossiê v2.3 (formas editoriais PT-BR) e CC-26 (leitura canônica do Brasão)."
+    "lastCanonReview": "2026-07-16",
+    "notes": "Sincronizado com Dossiê v2.3 (formas editoriais PT-BR) e CC-26 (leitura canônica do Brasão). Camadas substitutas canonizadas pela CC-30 (16/07/2026); Notas de Lacuna da CC-28 encerradas."
   },
   {
     "slug": "san-paolo",
@@ -439,8 +441,10 @@
     "canonStatus": "CANON",
     "spoilerLevel": 0,
     "publicApproved": true,
-    "lastCanonReview": "2026-07-11",
-    "notes": "Sincronizado com Dossiê v2.3 (formas editoriais PT-BR) e CC-26 (leitura canônica do Brasão)."
+    "lastCanonReview": "2026-07-16",
+    "notes": "Sincronizado com Dossiê v2.3 (formas editoriais PT-BR) e CC-26 (leitura canônica do Brasão). Camadas substitutas canonizadas pela CC-30 (16/07/2026); Notas de Lacuna da CC-28 encerradas.",
+    "historicalAlias": "O Ermo dos Pinheiros",
+    "territorialEcho": "O Domínio das Raízes"
   },
   {
     "slug": "athletia",

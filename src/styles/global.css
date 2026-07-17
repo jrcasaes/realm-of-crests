@@ -191,11 +191,19 @@ main { position: relative; z-index: 1; }
   list-style: none;
   margin: 0;
   padding: 0;
+  align-items: stretch;
+}
+
+/* o item do grid estica; o card precisa preencher a célula inteira */
+.realm-grid > li {
+  display: flex;
 }
 
 .realm-card {
   position: relative;
-  display: block;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
   background: linear-gradient(160deg, var(--codex-raised), var(--codex) 70%);
   border: 1px solid var(--edge);
   border-radius: var(--radius);
@@ -261,7 +269,10 @@ main { position: relative; z-index: 1; }
 }
 
 .realm-card .guardian-line {
+  /* ancora no rodapé: epítetos de 1 ou 2 linhas mantêm a fileira alinhada */
   margin: 0.55rem 0 0;
+  padding-top: 0.55rem;
+  margin-top: auto;
   font-variant: small-caps;
   letter-spacing: 0.2em;
   font-size: 0.74rem;

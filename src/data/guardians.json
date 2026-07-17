@@ -58,8 +58,8 @@
     ],
     "sourceRefs": [
       "nego-dossier-v1",
-      "lore-master-v3.0.2",
-      "guardians-dossier-v2.3"
+      "lore-master-v3.0.4",
+      "guardians-dossier-v2.4"
     ],
     "canonStatus": "CANON",
     "spoilerLevel": 0,
@@ -100,8 +100,8 @@
     "symbols": [],
     "sourceRefs": [
       "kalen-visual-lock-v1",
-      "lore-master-v3.0.2",
-      "guardians-dossier-v2.3"
+      "lore-master-v3.0.4",
+      "guardians-dossier-v2.4"
     ],
     "canonStatus": "CANON",
     "spoilerLevel": 0,

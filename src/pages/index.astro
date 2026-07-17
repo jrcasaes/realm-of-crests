@@ -1,4 +1,5 @@
 ---
+import { canonLabel } from '../lib/canon.js';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import OrnamentDivider from '../components/OrnamentDivider.astro';
 import RealmCard from '../components/RealmCard.astro';
@@ -18,7 +19,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       fetchpriority="high"
     />
     <div class="hero-inner">
-      <span class="rubric">codex oficial · canon v3.0.2</span>
+      <span class="rubric">codex oficial · {canonLabel}</span>
       <h1>REALM <span class="gilt">of</span> CRESTS</h1>
       <p class="manifesto">
         Dezenove reinos. Dezenove Guardiões. Cada trono sustentado por uma Emberline

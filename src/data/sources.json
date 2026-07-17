@@ -5,7 +5,7 @@
   "authority": {
     "registry": {
       "title": "roc-source-registry (master operacional)",
-      "version_at_sync": "1.2.6",
+      "version_at_sync": "1.2.7",
       "location": "Google Drive / 00_Governanca_e_Indices",
       "note": "Sempre consultar a versao vigente no Drive; este campo registra apenas a sincronizacao mais recente."
     },
@@ -21,11 +21,21 @@
     },
     "activeSources": {
       "title": "RoC_Fontes_Ativas_para_Producao",
-      "version_at_sync": "1.2.5"
+      "version_at_sync": "1.2.6"
     },
     "statusPolicy": {
       "title": "RoC_Politica_de_Status_Rotulacao_e_Retencao",
       "version_at_sync": "1.2"
+    },
+    "masterIndex": {
+      "title": "RoC_Indice_Mestre_do_Drive",
+      "version_at_sync": "1.2.6"
+    },
+    "guardiansDossier": {
+      "title": "RoC_Dossie_Canonico_Guardioes_19",
+      "version_at_sync": "2.4",
+      "driveId": "1CTZpLZVeGUwrkXgz188EoZYdgYwOJYyQ",
+      "note": "Ficha operacional; nao cria lei."
     }
   },
   "contentCompliance": {
@@ -41,10 +51,21 @@
         "coritba.historicalAlias",
         "coritba.territorialEcho"
       ],
-      "note": "Nenhuma camada substituta foi criada. As lacunas de Coritba, Corintia e Palesterra estao registradas na CC-28 e aguardam decisao autoral."
+      "note": "Camadas substitutas canonizadas pela CC-30 (16/07/2026); as tres Notas de Lacuna estao encerradas."
     },
     "cc22": "Kalen e o nome ativo; Kraken e o Eco Ancestral.",
-    "cc24b": "Templo de Santia: A Catedral das Mares."
+    "cc24b": "Templo de Santia: A Catedral das Mares.",
+    "cc30": {
+      "rule": "Camadas substitutas canonizadas por decisao autoral registrada em 16/07/2026.",
+      "appliedTo": "src/data/realms.json",
+      "addedLayers": {
+        "coritba.historicalAlias": "O Ermo dos Pinheiros",
+        "coritba.territorialEcho": "O Dominio das Raizes",
+        "corintia.guardianEcho": "O Primeiro Juramento",
+        "palesterra.guardianVulgo": "O Senhor das Presas"
+      },
+      "canonCallDriveId": "1duMCAsYGpmuz-jPgne711Bf5z1b4ueje1wBEfDzvO58"
+    }
   },
-  "lastSync": "2026-07-16"
+  "lastSync": "2026-07-17"
 }

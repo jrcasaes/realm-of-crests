@@ -1,4 +1,5 @@
 ---
+import { canonLabel, loreMasterLabel, dossierLabel } from '../../lib/canon.js';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import realms from '../../data/realms.json';
 import { fervorSignature } from '../../lib/fervor.js';
@@ -43,7 +44,7 @@ const next = realms[(idx + 1) % realms.length];
 
         <div>
           <header class="realm-head">
-            <span class="rubric">reino nº {folio} · canon v3.0.2</span>
+            <span class="rubric">reino nº {folio} · {canonLabel}</span>
             <h1>{realm.trueName}</h1>
             <p class="epithet">“{realm.epithet}”</p>
             <p class="guardian-line">Guardião: {realm.guardian}{realm.guardianVulgo ? ` — ${realm.guardianVulgo}` : ''}</p>
@@ -88,7 +89,7 @@ const next = realms[(idx + 1) % realms.length];
             <p><span class="temple-name">{realm.temple}</span> — {realm.templeDesc}.</p>
           </section>
 
-          <p class="source-line rubric">fontes: dossiê dos guardiões v2.3 · lore master v3.0.2 · cc-26 — revisão canônica: {realm.lastCanonReview}</p>
+          <p class="source-line rubric">{`fontes: ${dossierLabel} · ${loreMasterLabel} · cc-26 — revisão canônica: ${realm.lastCanonReview}`}</p>
 
           <nav class="realm-nav" aria-label="Navegação entre reinos">
             <a href={`${base}/reinos/${prev.slug}/`}>← {prev.realm}</a>

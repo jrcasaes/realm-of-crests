@@ -1,4 +1,5 @@
 ---
+import { loreMasterLabel } from '../../lib/canon.js';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SystemsRail from '../../components/SystemsRail.astro';
 import OrnamentDivider from '../../components/OrnamentDivider.astro';
@@ -9,7 +10,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   <SystemsRail />
 
   <div class="page-head">
-    <span class="rubric">lore master canon v3.0.2 · estados de ascensão · full lock</span>
+    <span class="rubric">{`${loreMasterLabel} · estados de ascensão · full lock`}</span>
     <h1>ASCENSÃO</h1>
     <p class="lede">A ascensão soberana segue caminhos fixos até um limite natural. E qualquer coisa além deles não é progressão — é anomalia.</p>
   </div>
@@ -67,7 +68,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         <p>Sobre ambos, o arquivo público registra apenas a existência. O restante permanece interditado.</p>
       </div>
 
-      <p class="source-line rubric">fonte: lore master canon v3.0.2 · seções vii–viii · full lock — revisão canônica: 2026-07-11</p>
+      <p class="source-line rubric">{`fonte: ${loreMasterLabel} · seções vii–viii · full lock — revisão canônica: 2026-07-11`}</p>
 
       <nav class="realm-nav" aria-label="Navegação entre sistemas">
         <a href={`${base}/sistemas/gravity/`}>← sovereign gravity</a>

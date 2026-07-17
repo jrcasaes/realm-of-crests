@@ -1,4 +1,5 @@
 ---
+import { loreMasterLabel } from '../../lib/canon.js';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SystemsRail from '../../components/SystemsRail.astro';
 import OrnamentDivider from '../../components/OrnamentDivider.astro';
@@ -9,7 +10,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   <SystemsRail />
 
   <div class="page-head">
-    <span class="rubric">lore master canon v3.0.2 · patch v2</span>
+    <span class="rubric">{`${loreMasterLabel} · patch v2`}</span>
     <h1>SOVEREIGN GRAVITY</h1>
     <p class="lede">Todo Guardião contém, dentro de si mesmo, o peso da própria história do Reino. Esse peso tem nome — e tem custo.</p>
   </div>
@@ -60,7 +61,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         <p>Nenhuma afinidade é permanente. Guardiões transitam entre feições conforme o Fervor de seu Povo, o estado de seu Temple e o peso de sua Emberline — uma Gravity Constructive pode entrar em erosão; uma Catalytic pode se estabilizar. A afinidade atual de cada Guardião está registrada na ficha de seu Reino, no <a href={`${base}/reinos/`}>arquivo dos dezenove</a>.</p>
       </div>
 
-      <p class="source-line rubric">fonte: lore master canon v3.0.2 · legenda visual de gravity (patch v2) — revisão canônica: 2026-07-11</p>
+      <p class="source-line rubric">{`fonte: ${loreMasterLabel} · legenda visual de gravity (patch v2) — revisão canônica: 2026-07-11`}</p>
 
       <nav class="realm-nav" aria-label="Navegação entre sistemas">
         <a href={`${base}/sistemas/fervor/`}>← fervor</a>

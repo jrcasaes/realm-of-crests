@@ -1,5 +1,5 @@
 // Fervor reativo — mapa canônico: tipo dominante → assinatura visual.
-// Fonte das cores: legenda visual dos sete tipos (Lore Master v3.0.2, Livro II).
+// Fonte das cores: legenda visual dos sete tipos (Lore Master v3.0.4, Livro II).
 // O tipo dominante é extraído do campo `fervor` do realms.json ("Fervor de X (dominante) / ...").
 
 const FERVOR_SIGNATURES = {
