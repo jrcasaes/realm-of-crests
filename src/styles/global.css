@@ -650,6 +650,7 @@ section.chapter { padding-block: 1.2rem 2.6rem; }
 .guardian-card::before { content: ""; position: absolute; inset: 7px; border: 1px solid rgba(201,163,92,.14); pointer-events: none; z-index: 2; }
 .guardian-card:hover { border-color: rgba(201,163,92,.55); transform: translateY(-4px); }
 .guardian-card img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; object-position: center 20%; }
+.guardian-card img.portrait-vertical { object-fit: contain; object-position: center; background: var(--ink); }
 .guardian-card .pending { aspect-ratio: 4 / 3; display: flex; align-items: center; justify-content: center; color: var(--parchment-faint); font-family: var(--font-display); font-size: .7rem; letter-spacing: .28em; }
 .guardian-card .info { padding: 1.1rem 1.2rem 1.2rem; text-align: center; }
 .guardian-card h3 { font-size: 1.05rem; letter-spacing: .12em; color: var(--parchment); }

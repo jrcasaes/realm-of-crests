@@ -20,7 +20,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         {guardianRoster.map((g) => (
           <a class="guardian-card" href={`${base}/guardioes/${g.slug}/`}>
             {g.portrait
-              ? <img src={`${base}/assets/guardians/${g.portrait}`} alt={`${g.name}, Guardião de ${g.realmName}`} loading="lazy" />
+              ? <img
+                  class:list={{ 'portrait-vertical': g.portraitHeight > g.portraitWidth }}
+                  src={`${base}/assets/guardians/${g.portrait}`}
+                  alt={`${g.name}, Guardião de ${g.realmName}`}
+                  loading="lazy"
+                />
               : <div class="pending">RETRATO PENDENTE</div>
             }
             <div class="info">
