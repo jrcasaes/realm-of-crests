@@ -1,6 +1,7 @@
 ---
 import { canonLabel, loreMasterLabel, dossierLabel } from '../../lib/canon.js';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import RealmPanorama from '../../components/RealmPanorama.astro';
 import realms from '../../data/realms.json';
 import { fervorSignature } from '../../lib/fervor.js';
 
@@ -25,8 +26,10 @@ const next = realms[(idx + 1) % realms.length];
   <article class="realm-page" style={`--fv: ${fv.color}; --fv-soft: ${fv.soft};`}>
     <div class="wrap">
       <nav class="breadcrumb rubric" aria-label="Trilha">
-        <a href={`${base}/reinos/`}>← arquivo dos reinos</a>
+        <a href={`${base}/reinos/#reino-${realm.slug}`}>← atlas soberano</a>
       </nav>
+
+      <RealmPanorama realm={realm} />
 
       <div class="realm-layout">
         <figure class="emblem-frame" style="margin: 0;">

@@ -2,6 +2,8 @@
   {
     "slug": "victoria",
     "order": 1,
+    "panoramaAsset": "RoC_Site_Reino_Victoria_Panorama_Desktop_v1.0_APROVADO_SITE.png",
+    "visualHotspots": [{"label":"Núcleo soberano","x":19,"y":26},{"label":"Fortaleza do Desfiladeiro","x":63,"y":35},{"label":"Obelisco territorial","x":62,"y":66}],
     "realm": "Victória",
     "trueName": "Reino de Victória",
     "guardian": "Nego",
@@ -32,6 +34,8 @@
   {
     "slug": "bahea",
     "order": 2,
+    "panoramaAsset": "RoC_Site_Reino_Bahea_Panorama_Desktop_v1.0_APROVADO_SITE.png",
+    "visualHotspots": [{"label":"Núcleo soberano","x":38,"y":34},{"label":"Fonte de Aço","x":81,"y":54},{"label":"Obelisco territorial","x":90,"y":25}],
     "realm": "Bahea",
     "trueName": "Reino de Bahea",
     "guardian": "Kalen",
@@ -62,6 +66,8 @@
   {
     "slug": "rubrum",
     "order": 3,
+    "panoramaAsset": "RoC_Site_Imperio_Rubrum_Panorama_Desktop_v1.0_APROVADO_SITE.png",
+    "visualHotspots": [{"label":"Núcleo soberano","x":49,"y":67},{"label":"Ninho Colossal","x":56,"y":18},{"label":"Obelisco territorial","x":4,"y":58}],
     "realm": "Império de Rubrum",
     "trueName": "Império de Rubrum",
     "guardian": "Vulture",
@@ -92,6 +98,8 @@
   {
     "slug": "vaskor",
     "order": 4,
+    "panoramaAsset": "RoC_Site_Reino_Vaskor_Panorama_Desktop_v1.0_APROVADO_SITE.png",
+    "visualHotspots": [{"label":"Núcleo soberano","x":67,"y":27},{"label":"Fortaleza da Colina","x":16,"y":29},{"label":"Farol-obelisco","x":94,"y":24}],
     "realm": "Vaskor",
     "trueName": "Reino de Vaskor",
     "guardian": "Admiral",
@@ -122,6 +130,8 @@
   {
     "slug": "corintia",
     "order": 5,
+    "panoramaAsset": "RoC_Site_Reino_Corintia_Panorama_Desktop_v1.0_APROVADO_SITE.png",
+    "visualHotspots": [{"label":"Núcleo soberano","x":59,"y":51},{"label":"Altar da Multidão","x":49,"y":72},{"label":"Obelisco dos nomes","x":19,"y":31}],
     "realm": "Coríntia",
     "trueName": "Reino de Coríntia",
     "guardian": "Hawks",
@@ -152,6 +162,8 @@
   {
     "slug": "palesterra",
     "order": 6,
+    "panoramaAsset": "RoC_Site_Reino_Palesterra_Panorama_Desktop_v1.0_APROVADO_SITE.png",
+    "visualHotspots": [{"label":"Núcleo soberano","x":29,"y":47},{"label":"Palácio Esmeralda","x":73,"y":37},{"label":"Obelisco vegetal","x":56,"y":58}],
     "realm": "Palesterra",
     "trueName": "Reino de Palesterra",
     "guardian": "Tuskar",
@@ -182,6 +194,8 @@
   {
     "slug": "san-paolo",
     "order": 7,
+    "panoramaAsset": "RoC_Site_Reino_San_Paolo_Panorama_Desktop_v1.0_APROVADO_SITE.png",
+    "visualHotspots": [{"label":"Núcleo soberano","x":53,"y":55},{"label":"Santuário do Cume","x":75,"y":16},{"label":"Obelisco territorial","x":18,"y":29}],
     "realm": "San Paolo",
     "trueName": "Reino de San Paolo",
     "guardian": "Paollo",
@@ -212,6 +226,8 @@
   {
     "slug": "santia",
     "order": 8,
+    "panoramaAsset": "RoC_Site_Reino_Santia_Panorama_Desktop_v1.0_APROVADO_SITE.png",
+    "visualHotspots": [{"label":"Núcleo soberano","x":34,"y":53},{"label":"Catedral das Marés","x":71,"y":51},{"label":"Obelisco territorial","x":91,"y":31}],
     "realm": "Santia",
     "trueName": "Reino de Santia",
     "guardian": "Villa",
@@ -242,6 +258,8 @@
   {
     "slug": "cruzaria",
     "order": 9,
+    "panoramaAsset": "RoC_Site_Reino_Cruzaria_Panorama_Desktop_v1.0_APROVADO_SITE.png",
+    "visualHotspots": [{"label":"Núcleo soberano","x":42,"y":36},{"label":"Toca Estelar","x":48,"y":66},{"label":"Obelisco estelar","x":92,"y":51}],
     "realm": "Cruzária",
     "trueName": "Reino de Cruzária",
     "guardian": "Fox",
@@ -271,6 +289,8 @@
   {
     "slug": "galicia",
     "order": 10,
+    "panoramaAsset": "RoC_Site_Reino_Galicia_Panorama_Desktop_v1.0_APROVADO_SITE.png",
+    "visualHotspots": [{"label":"Núcleo soberano","x":45,"y":52},{"label":"Arena de Ferro","x":57,"y":47},{"label":"Obelisco de ferro","x":21,"y":48}],
     "realm": "Galícia",
     "trueName": "Reino de Galícia",
     "guardian": "Gallus",
@@ -300,6 +320,8 @@
   {
     "slug": "gremio",
     "order": 11,
+    "panoramaAsset": "RoC_Site_Reino_Gremio_Panorama_Desktop_v1.0_APROVADO_SITE.png",
+    "visualHotspots": [{"label":"Núcleo soberano","x":49,"y":59},{"label":"Monumento Glacial","x":61,"y":39},{"label":"Obelisco de gelo","x":16,"y":24}],
     "realm": "Gremio",
     "trueName": "Reino de Gremio",
     "guardian": "Valen",
@@ -330,6 +352,8 @@
   {
     "slug": "colorado",
     "order": 12,
+    "panoramaAsset": "RoC_Site_Reino_Colorado_Panorama_Desktop_v1.0_APROVADO_SITE.png",
+    "visualHotspots": [{"label":"Núcleo soberano","x":29,"y":37},{"label":"Gigante da Margem","x":73,"y":36},{"label":"Obelisco carmesim","x":88,"y":55}],
     "realm": "Colorado",
     "trueName": "Reino de Colorado",
     "guardian": "Saciros",
@@ -360,6 +384,8 @@
   {
     "slug": "botafia",
     "order": 13,
+    "panoramaAsset": "RoC_Site_Reino_Botafia_Panorama_Desktop_v1.0_APROVADO_SITE.png",
+    "visualHotspots": [{"label":"Núcleo soberano","x":55,"y":69},{"label":"Altar da Estrela","x":56,"y":37},{"label":"Obelisco do ápice","x":57,"y":16}],
     "realm": "Botáfia",
     "trueName": "Reino de Botáfia",
     "guardian": "Bira",
@@ -390,6 +416,8 @@
   {
     "slug": "flumen",
     "order": 14,
+    "panoramaAsset": "RoC_Site_Reino_Flumen_Panorama_Desktop_v1.0_APROVADO_SITE.png",
+    "visualHotspots": [{"label":"Núcleo soberano","x":42,"y":53},{"label":"Palácio Nobre","x":78,"y":17},{"label":"Obelisco territorial","x":58,"y":62}],
     "realm": "Flúmen",
     "trueName": "Reino de Flúmen",
     "guardian": "Florius",
@@ -420,6 +448,8 @@
   {
     "slug": "coritba",
     "order": 15,
+    "panoramaAsset": "RoC_Site_Reino_Coritba_Panorama_Desktop_v1.0_APROVADO_SITE.png",
+    "visualHotspots": [{"label":"Núcleo soberano","x":44,"y":68},{"label":"Biblioteca Eterna","x":63,"y":43},{"label":"Obelisco petrificado","x":30,"y":60}],
     "realm": "Coritba",
     "trueName": "Reino de Coritba",
     "guardian": "Eldric",
@@ -449,6 +479,8 @@
   {
     "slug": "athletia",
     "order": 16,
+    "panoramaAsset": "RoC_Site_Reino_Athletia_Panorama_Desktop_v1.0_APROVADO_SITE.png",
+    "visualHotspots": [{"label":"Núcleo soberano","x":38,"y":67},{"label":"Caldeira Selada","x":50,"y":61},{"label":"Obelisco de vento","x":18,"y":23}],
     "realm": "Athlétia",
     "trueName": "Reino de Athlétia",
     "guardian": "Tempest",
@@ -479,6 +511,8 @@
   {
     "slug": "chapeco",
     "order": 17,
+    "panoramaAsset": "RoC_Site_Reino_Chapeco_Panorama_Desktop_v1.0_APROVADO_SITE.png",
+    "visualHotspots": [{"label":"Núcleo soberano","x":40,"y":29},{"label":"Arena da Flecha","x":59,"y":45},{"label":"Obelisco vivo","x":79,"y":54}],
     "realm": "Chapeco",
     "trueName": "Reino de Chapeco",
     "guardian": "Condá",
@@ -509,6 +543,8 @@
   {
     "slug": "remigia",
     "order": 18,
+    "panoramaAsset": "RoC_Site_Reino_Remigia_Panorama_Desktop_v1.0_APROVADO_SITE.png",
+    "visualHotspots": [{"label":"Núcleo soberano","x":46,"y":27},{"label":"Altar das Águas","x":64,"y":57},{"label":"Obelisco das marés","x":75,"y":54}],
     "realm": "Remígia",
     "trueName": "Reino de Remígia",
     "guardian": "Malino",
@@ -539,6 +575,8 @@
   {
     "slug": "mirasol",
     "order": 19,
+    "panoramaAsset": "RoC_Site_Reino_Mirasol_Panorama_Desktop_v1.0_APROVADO_SITE.png",
+    "visualHotspots": [{"label":"Núcleo soberano","x":31,"y":51},{"label":"Templo Maior","x":59,"y":42},{"label":"Obelisco-lente","x":57,"y":34}],
     "realm": "Mirasol",
     "trueName": "Reino de Mirasol",
     "guardian": "Solari",

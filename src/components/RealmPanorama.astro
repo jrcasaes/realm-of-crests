@@ -1,0 +1,115 @@
+---
+interface Props {
+  realm: {
+    slug: string;
+    order: number;
+    trueName: string;
+    guardian: string;
+    biome: string;
+    temple: string;
+    templeDesc: string;
+    panoramaAsset: string;
+    visualHotspots: Array<{
+      label: string;
+      x: number;
+      y: number;
+    }>;
+  };
+}
+
+const { realm } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const folio = String(realm.order).padStart(2, '0');
+const panelId = `panorama-reading-${realm.slug}`;
+---
+
+<section class="realm-panorama" aria-labelledby={`panorama-title-${realm.slug}`}>
+  <figure class="realm-panorama-frame">
+    <img
+      src={`${base}/assets/realms/${realm.panoramaAsset}`}
+      alt={`Panorama editorial habitado de ${realm.trueName}`}
+      width="1915"
+      height="821"
+      fetchpriority="high"
+    />
+    <div class="realm-panorama-wash" aria-hidden="true"></div>
+    <div class="panorama-hotspots" aria-label="Pontos de leitura da paisagem">
+      {realm.visualHotspots.map((hotspot, index) => (
+        <button
+          class={`panorama-hotspot${hotspot.x > 70 ? ' label-left' : ''}`}
+          type="button"
+          style={`--hotspot-x: ${hotspot.x}%; --hotspot-y: ${hotspot.y}%;`}
+          aria-label={hotspot.label}
+          aria-pressed="false"
+        >
+          <span>{index + 1}</span>
+          <em>{hotspot.label}</em>
+        </button>
+      ))}
+    </div>
+    <div class="realm-panorama-topline">
+      <span>INTERPRETAÇÃO EDITORIAL</span>
+      <span>FOLIO {folio}/19 · DESKTOP</span>
+    </div>
+    <figcaption class="realm-panorama-caption">
+      <span class="rubric">atlas soberano · paisagem habitada</span>
+      <h2 id={`panorama-title-${realm.slug}`}>{realm.trueName}</h2>
+      <p>{realm.temple}</p>
+    </figcaption>
+    <button
+      class="panorama-reading-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls={panelId}
+    >
+      <span aria-hidden="true">＋</span>
+      Ler a paisagem
+    </button>
+  </figure>
+
+  <div class="panorama-reading" id={panelId} hidden>
+    <div>
+      <span class="rubric">território</span>
+      <p>{realm.biome}.</p>
+    </div>
+    <div>
+      <span class="rubric">âncora ritual</span>
+      <p><strong>{realm.temple}</strong> — {realm.templeDesc}.</p>
+    </div>
+    <div>
+      <span class="rubric">autoridade visual</span>
+      <p>Evocação aprovada para o site. O cânone permanece nos registros textuais.</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  function bindPanoramaReading() {
+    document.querySelectorAll<HTMLButtonElement>('.panorama-reading-toggle:not([data-bound])').forEach((button) => {
+      button.dataset.bound = '1';
+      const panel = document.getElementById(button.getAttribute('aria-controls') || '');
+      if (!panel) return;
+
+      button.addEventListener('click', () => {
+        const expanded = button.getAttribute('aria-expanded') === 'true';
+        button.setAttribute('aria-expanded', String(!expanded));
+        panel.hidden = expanded;
+        const icon = button.querySelector('span');
+        if (icon) icon.textContent = expanded ? '＋' : '−';
+      });
+    });
+
+    document.querySelectorAll<HTMLButtonElement>('.panorama-hotspot:not([data-bound])').forEach((hotspot) => {
+      hotspot.dataset.bound = '1';
+      hotspot.addEventListener('click', () => {
+        const wasActive = hotspot.getAttribute('aria-pressed') === 'true';
+        hotspot.closest('.panorama-hotspots')?.querySelectorAll<HTMLButtonElement>('.panorama-hotspot').forEach((item) => {
+          item.setAttribute('aria-pressed', 'false');
+        });
+        hotspot.setAttribute('aria-pressed', String(!wasActive));
+      });
+    });
+  }
+
+  document.addEventListener('astro:page-load', bindPanoramaReading);
+</script>

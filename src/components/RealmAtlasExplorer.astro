@@ -1,0 +1,188 @@
+---
+import realms from '../data/realms.json';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const first = realms[0];
+const guardianSlug = (name: string) =>
+  name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+---
+
+<section class="sovereign-atlas" id="atlas-soberano" aria-label="Atlas visual dos dezenove Reinos">
+  <div class="realm-selector-shell">
+    <header class="realm-selector-head">
+      <span class="rubric">índice territorial</span>
+      <strong><span id="realm-progress">01</span> / 19</strong>
+    </header>
+
+    <div class="realm-selector" role="listbox" aria-label="Escolha um Reino" tabindex="0">
+      {realms.map((realm, index) => (
+        <button
+          class="realm-selector-item"
+          type="button"
+          role="option"
+          aria-selected={index === 0 ? 'true' : 'false'}
+          data-index={index}
+          data-slug={realm.slug}
+          data-realm={realm.realm}
+          data-true-name={realm.trueName}
+          data-guardian={realm.guardian}
+          data-guardian-slug={guardianSlug(realm.guardian)}
+          data-epithet={realm.epithet}
+          data-temple={realm.temple}
+          data-biome={realm.biome}
+          data-panorama={realm.panoramaAsset}
+        >
+          <img
+            src={`${base}/assets/emblems/emblem_${realm.slug}.webp`}
+            alt=""
+            width="44"
+            height="44"
+            loading="lazy"
+            onerror={`this.onerror=null;this.src='${base}/assets/emblems/placeholder.svg'`}
+          />
+          <span>
+            <small>{String(realm.order).padStart(2, '0')}</small>
+            <strong>{realm.realm}</strong>
+            <em>{realm.guardian}</em>
+          </span>
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <div class="realm-stage" aria-live="polite">
+    <figure class="realm-stage-frame">
+      <img
+        id="realm-stage-image"
+        src={`${base}/assets/realms/${first.panoramaAsset}`}
+        alt={`Panorama editorial habitado de ${first.trueName}`}
+        width="1915"
+        height="821"
+        fetchpriority="high"
+      />
+      <div class="realm-stage-wash" aria-hidden="true"></div>
+      <div class="realm-stage-status">
+        <span>INTERPRETAÇÃO EDITORIAL</span>
+        <span>APROVADO PARA O SITE · DESKTOP</span>
+      </div>
+      <figcaption>
+        <span class="rubric">reino habitado · folio <b id="realm-folio">01</b></span>
+        <h2 id="realm-stage-title">{first.trueName}</h2>
+        <p id="realm-stage-epithet">“{first.epithet}”</p>
+      </figcaption>
+      <div class="realm-stage-controls" aria-label="Navegação sequencial">
+        <button type="button" id="realm-prev" aria-label="Reino anterior">←</button>
+        <button type="button" id="realm-next" aria-label="Próximo Reino">→</button>
+      </div>
+    </figure>
+
+    <div class="realm-stage-ledger">
+      <div>
+        <span class="rubric">guardião</span>
+        <strong id="realm-guardian">{first.guardian}</strong>
+      </div>
+      <div>
+        <span class="rubric">âncora ritual</span>
+        <strong id="realm-temple">{first.temple}</strong>
+      </div>
+      <p id="realm-biome">{first.biome}.</p>
+      <div class="realm-stage-actions">
+        <a id="realm-dossier-link" href={`${base}/reinos/${first.slug}/`}>Abrir dossiê</a>
+        <a id="realm-guardian-link" href={`${base}/guardioes/${guardianSlug(first.guardian)}/`}>Ver Guardião</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<p class="sovereign-atlas-note rubric">
+  use a lista ou as setas do teclado para percorrer os reinos · os panoramas evocam o mundo; o texto preserva o cânone
+</p>
+
+<script define:vars={{ base }}>
+  function bindSovereignAtlas() {
+    const atlas = document.getElementById('atlas-soberano');
+    if (!atlas || atlas.dataset.bound) return;
+    atlas.dataset.bound = '1';
+
+    const choices = Array.from(atlas.querySelectorAll('.realm-selector-item'));
+    const list = atlas.querySelector('.realm-selector');
+    const stage = atlas.querySelector('.realm-stage');
+    const image = document.getElementById('realm-stage-image');
+    const progress = document.getElementById('realm-progress');
+    const folio = document.getElementById('realm-folio');
+    const title = document.getElementById('realm-stage-title');
+    const epithet = document.getElementById('realm-stage-epithet');
+    const guardian = document.getElementById('realm-guardian');
+    const temple = document.getElementById('realm-temple');
+    const biome = document.getElementById('realm-biome');
+    const dossierLink = document.getElementById('realm-dossier-link');
+    const guardianLink = document.getElementById('realm-guardian-link');
+    let current = 0;
+    let request = 0;
+
+    function preload(index) {
+      const choice = choices[(index + choices.length) % choices.length];
+      const panorama = choice?.dataset.panorama;
+      if (!panorama) return;
+      const img = new Image();
+      img.src = `${base}/assets/realms/${panorama}`;
+    }
+
+    function select(index, updateHash = true) {
+      current = (index + choices.length) % choices.length;
+      const choice = choices[current];
+      const data = choice.dataset;
+      const token = ++request;
+      const nextSrc = `${base}/assets/realms/${data.panorama}`;
+
+      choices.forEach((item, itemIndex) => {
+        item.setAttribute('aria-selected', String(itemIndex === current));
+      });
+      choice.scrollIntoView({ block: 'nearest' });
+      progress.textContent = String(current + 1).padStart(2, '0');
+      folio.textContent = String(current + 1).padStart(2, '0');
+      title.textContent = data.trueName || '';
+      epithet.textContent = `“${data.epithet || ''}”`;
+      guardian.textContent = data.guardian || '';
+      temple.textContent = data.temple || '';
+      biome.textContent = `${data.biome || ''}.`;
+      dossierLink.href = `${base}/reinos/${data.slug}/`;
+      guardianLink.href = `${base}/guardioes/${data.guardianSlug}/`;
+
+      stage.classList.add('is-loading');
+      const incoming = new Image();
+      incoming.onload = () => {
+        if (token !== request) return;
+        image.src = nextSrc;
+        image.alt = `Panorama editorial habitado de ${data.trueName}`;
+        requestAnimationFrame(() => stage.classList.remove('is-loading'));
+        preload(current + 1);
+      };
+      incoming.onerror = () => {
+        if (token === request) stage.classList.remove('is-loading');
+      };
+      incoming.src = nextSrc;
+
+      if (updateHash) history.replaceState(null, '', `#reino-${data.slug}`);
+    }
+
+    choices.forEach((choice, index) => choice.addEventListener('click', () => select(index)));
+    document.getElementById('realm-prev')?.addEventListener('click', () => select(current - 1));
+    document.getElementById('realm-next')?.addEventListener('click', () => select(current + 1));
+    list?.addEventListener('keydown', (event) => {
+      if (!['ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft', 'Home', 'End'].includes(event.key)) return;
+      event.preventDefault();
+      if (event.key === 'Home') select(0);
+      else if (event.key === 'End') select(choices.length - 1);
+      else if (event.key === 'ArrowDown' || event.key === 'ArrowRight') select(current + 1);
+      else select(current - 1);
+    });
+
+    const slug = location.hash.replace('#reino-', '');
+    const fromHash = choices.findIndex((choice) => choice.dataset.slug === slug);
+    if (fromHash >= 0) select(fromHash, false);
+    else preload(1);
+  }
+
+  document.addEventListener('astro:page-load', bindSovereignAtlas);
+</script>

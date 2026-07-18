@@ -100,6 +100,11 @@ a:focus-visible, button:focus-visible {
   margin-inline: auto;
 }
 
+.wide-wrap {
+  width: min(1500px, calc(100% - 4rem));
+  margin-inline: auto;
+}
+
 main { position: relative; z-index: 1; }
 
 /* ── Cabeçalho ─────────────────────────────────────────────────── */
@@ -298,6 +303,243 @@ main { position: relative; z-index: 1; }
 
 .realm-page .breadcrumb {
   margin-bottom: 2.4rem;
+}
+
+.realm-panorama {
+  margin-bottom: clamp(3rem, 6vw, 5rem);
+}
+
+.realm-panorama-frame {
+  position: relative;
+  aspect-ratio: 1915 / 821;
+  margin: 0;
+  overflow: hidden;
+  background: #050403;
+  border: 1px solid rgba(201, 163, 92, 0.42);
+  box-shadow: 0 30px 70px -38px #000;
+}
+
+.realm-panorama-frame::before,
+.realm-stage-frame::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  z-index: 3;
+  border: 1px solid rgba(230, 217, 184, 0.16);
+  pointer-events: none;
+}
+
+.realm-panorama-frame > img,
+.realm-stage-frame > img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.realm-panorama-wash,
+.realm-stage-wash {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(5, 4, 3, 0.48), transparent 24%, transparent 54%, rgba(5, 4, 3, 0.9) 100%),
+    linear-gradient(90deg, rgba(5, 4, 3, 0.4), transparent 42%);
+}
+
+.panorama-hotspots {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.panorama-hotspot {
+  position: absolute;
+  left: var(--hotspot-x);
+  top: var(--hotspot-y);
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(230, 217, 184, 0.82);
+  border-radius: 50%;
+  background: rgba(12, 10, 8, 0.78);
+  color: var(--parchment);
+  cursor: pointer;
+  pointer-events: auto;
+  box-shadow: 0 0 0 5px rgba(12, 10, 8, 0.22), 0 2px 12px #000;
+  backdrop-filter: blur(5px);
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.panorama-hotspot::before {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  border: 1px solid rgba(201, 163, 92, 0.22);
+  border-radius: 50%;
+}
+
+.panorama-hotspot > span {
+  font-family: var(--font-display);
+  font-size: 0.62rem;
+  color: var(--gold);
+}
+
+.panorama-hotspot > em {
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 50%;
+  width: max-content;
+  max-width: 220px;
+  padding: 0.42rem 0.62rem;
+  transform: translateY(-50%) translateX(-5px);
+  border: 1px solid rgba(201, 163, 92, 0.42);
+  background: rgba(12, 10, 8, 0.9);
+  color: var(--parchment);
+  font-family: var(--font-display);
+  font-size: 0.58rem;
+  font-style: normal;
+  letter-spacing: 0.14em;
+  line-height: 1.25;
+  opacity: 0;
+  pointer-events: none;
+  text-align: left;
+  text-transform: uppercase;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.panorama-hotspot.label-left > em {
+  left: auto;
+  right: calc(100% + 12px);
+  transform: translateY(-50%) translateX(5px);
+  text-align: right;
+}
+
+.panorama-hotspot:hover,
+.panorama-hotspot:focus-visible,
+.panorama-hotspot[aria-pressed="true"] {
+  transform: translate(-50%, -50%) scale(1.08);
+  border-color: var(--gold);
+  background: rgba(44, 36, 25, 0.94);
+}
+
+.panorama-hotspot:hover > em,
+.panorama-hotspot:focus-visible > em,
+.panorama-hotspot[aria-pressed="true"] > em {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+.realm-panorama-topline,
+.realm-stage-status {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.45rem;
+  right: 1.45rem;
+  z-index: 4;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-family: var(--font-display);
+  font-size: 0.58rem;
+  letter-spacing: 0.24em;
+  color: rgba(230, 217, 184, 0.78);
+  text-shadow: 0 1px 8px #000;
+}
+
+.realm-panorama-caption {
+  position: absolute;
+  left: clamp(1.5rem, 4vw, 3.2rem);
+  bottom: clamp(1.45rem, 4vw, 2.8rem);
+  z-index: 4;
+  max-width: 62%;
+}
+
+.realm-panorama-caption .rubric,
+.realm-stage-frame figcaption .rubric {
+  display: block;
+  color: var(--gold);
+  opacity: 0.9;
+}
+
+.realm-panorama-caption h2 {
+  margin-top: 0.5rem;
+  color: var(--parchment);
+  font-size: clamp(1.55rem, 3.3vw, 2.75rem);
+  text-shadow: 0 3px 24px #000;
+}
+
+.realm-panorama-caption p {
+  margin: 0.45rem 0 0;
+  color: var(--parchment-dim);
+  font-style: italic;
+  font-size: 1.05rem;
+  text-shadow: 0 2px 12px #000;
+}
+
+.panorama-reading-toggle {
+  position: absolute;
+  right: 1.5rem;
+  bottom: 1.55rem;
+  z-index: 5;
+  min-width: 170px;
+  padding: 0.72rem 1rem;
+  border: 1px solid rgba(201, 163, 92, 0.5);
+  background: rgba(12, 10, 8, 0.82);
+  color: var(--parchment);
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: 0.64rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  backdrop-filter: blur(8px);
+}
+
+.panorama-reading-toggle span {
+  margin-right: 0.45rem;
+  color: var(--gold);
+}
+
+.panorama-reading-toggle:hover {
+  border-color: var(--gold);
+  color: var(--amber);
+}
+
+.panorama-reading {
+  display: grid;
+  grid-template-columns: 1.15fr 1.15fr 0.8fr;
+  gap: 1px;
+  border: 1px solid var(--edge);
+  border-top: 0;
+  background: var(--edge);
+}
+
+.panorama-reading[hidden] { display: none; }
+
+.panorama-reading > div {
+  padding: 1.2rem 1.3rem;
+  background: var(--codex);
+}
+
+.panorama-reading .rubric {
+  display: block;
+  margin-bottom: 0.45rem;
+  color: var(--gold);
+}
+
+.panorama-reading p {
+  margin: 0;
+  color: var(--parchment-dim);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.panorama-reading strong {
+  color: var(--parchment);
+  font-weight: 500;
 }
 
 .realm-layout {
@@ -665,6 +907,308 @@ section.chapter { padding-block: 1.2rem 2.6rem; }
 .legend .ancestral h3 { color: var(--gold); }
 .legend .collapse h3 { color: var(--crimson); }
 .legend p { margin: .6rem 0 0; font-size: .92rem; color: var(--parchment-dim); }
+
+/* ── Atlas Soberano dos Reinos — experiência desktop ───────────── */
+
+.sovereign-page-head {
+  padding-bottom: 0.5rem;
+}
+
+.sovereign-page-head .lede {
+  max-width: 72ch;
+}
+
+.sovereign-atlas-wrap {
+  padding-bottom: 6rem;
+}
+
+.sovereign-atlas {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 1px;
+  border: 1px solid rgba(201, 163, 92, 0.42);
+  background: var(--edge);
+  box-shadow: 0 36px 90px -50px #000;
+}
+
+.realm-selector-shell {
+  min-width: 0;
+  background: var(--codex);
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.realm-selector-head {
+  min-height: 76px;
+  padding: 1rem 1.1rem;
+  border-bottom: 1px solid var(--edge);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.realm-selector-head .rubric {
+  color: var(--gold);
+  letter-spacing: 0.22em;
+}
+
+.realm-selector-head > strong {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  color: var(--parchment-faint);
+  white-space: nowrap;
+}
+
+.realm-selector {
+  max-height: 700px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-color: var(--edge) var(--ink);
+  scrollbar-width: thin;
+}
+
+.realm-selector-item {
+  width: 100%;
+  min-height: 68px;
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 0.85rem;
+  align-items: center;
+  padding: 0.62rem 0.9rem;
+  border: 0;
+  border-bottom: 1px solid var(--edge);
+  background: transparent;
+  color: var(--parchment-dim);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.realm-selector-item:hover {
+  background: rgba(201, 163, 92, 0.055);
+}
+
+.realm-selector-item[aria-selected="true"] {
+  color: var(--parchment);
+  background:
+    linear-gradient(90deg, rgba(201, 163, 92, 0.15), rgba(201, 163, 92, 0.025) 70%),
+    var(--codex-raised);
+  box-shadow: inset 3px 0 var(--gold);
+}
+
+.realm-selector-item img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  mix-blend-mode: screen;
+  opacity: 0.76;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.realm-selector-item[aria-selected="true"] img {
+  opacity: 1;
+  transform: scale(1.06);
+}
+
+.realm-selector-item > span {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 2.3rem 1fr;
+  align-items: baseline;
+}
+
+.realm-selector-item small {
+  grid-row: 1 / span 2;
+  align-self: center;
+  font-family: var(--font-display);
+  font-size: 0.58rem;
+  letter-spacing: 0.16em;
+  color: var(--parchment-faint);
+}
+
+.realm-selector-item strong {
+  overflow: hidden;
+  color: inherit;
+  font-family: var(--font-display);
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.realm-selector-item em {
+  overflow: hidden;
+  color: var(--parchment-faint);
+  font-family: var(--font-body);
+  font-size: 0.76rem;
+  font-style: italic;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.realm-stage {
+  min-width: 0;
+  background: var(--ink);
+}
+
+.realm-stage-frame {
+  position: relative;
+  aspect-ratio: 1915 / 821;
+  margin: 0;
+  overflow: hidden;
+  background: #050403;
+}
+
+.realm-stage-frame > img {
+  transition: opacity 0.28s ease, transform 0.8s ease;
+}
+
+.realm-stage.is-loading .realm-stage-frame > img {
+  opacity: 0.34;
+  transform: scale(1.006);
+}
+
+.realm-stage-status {
+  top: 1rem;
+  left: 1.2rem;
+  right: 1.2rem;
+}
+
+.realm-stage-frame figcaption {
+  position: absolute;
+  left: clamp(1.5rem, 3vw, 3rem);
+  bottom: clamp(1.4rem, 3.5vw, 2.8rem);
+  z-index: 4;
+  max-width: 68%;
+}
+
+.realm-stage-frame figcaption h2 {
+  margin-top: 0.45rem;
+  color: var(--parchment);
+  font-size: clamp(1.6rem, 3.5vw, 3.25rem);
+  letter-spacing: 0.08em;
+  text-shadow: 0 3px 28px #000;
+}
+
+.realm-stage-frame figcaption p {
+  margin: 0.42rem 0 0;
+  color: var(--gold);
+  font-size: clamp(0.95rem, 1.4vw, 1.2rem);
+  font-style: italic;
+  text-shadow: 0 2px 14px #000;
+}
+
+.realm-stage-controls {
+  position: absolute;
+  right: 1.25rem;
+  bottom: 1.4rem;
+  z-index: 5;
+  display: flex;
+  gap: 0.45rem;
+}
+
+.realm-stage-controls button {
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(201, 163, 92, 0.48);
+  background: rgba(12, 10, 8, 0.82);
+  color: var(--gold);
+  cursor: pointer;
+  font-size: 1.05rem;
+  backdrop-filter: blur(8px);
+}
+
+.realm-stage-controls button:hover {
+  border-color: var(--gold);
+  color: var(--parchment);
+}
+
+.realm-stage-ledger {
+  min-height: 176px;
+  display: grid;
+  grid-template-columns: minmax(150px, 0.8fr) minmax(190px, 1fr) minmax(300px, 1.7fr) auto;
+  gap: 1px;
+  background: var(--edge);
+  border-top: 1px solid var(--edge);
+}
+
+.realm-stage-ledger > div,
+.realm-stage-ledger > p {
+  margin: 0;
+  padding: 1.15rem 1.25rem;
+  background: var(--codex);
+}
+
+.realm-stage-ledger .rubric {
+  display: block;
+  margin-bottom: 0.45rem;
+  color: var(--gold);
+}
+
+.realm-stage-ledger strong {
+  color: var(--parchment);
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+}
+
+.realm-stage-ledger > p {
+  color: var(--parchment-dim);
+  font-size: 0.9rem;
+  line-height: 1.42;
+}
+
+.realm-stage-actions {
+  min-width: 165px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.realm-stage-actions a {
+  padding: 0.55rem 0.75rem;
+  border: 1px solid rgba(201, 163, 92, 0.38);
+  color: var(--gold);
+  font-family: var(--font-display);
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.realm-stage-actions a:hover {
+  border-color: var(--gold);
+  color: var(--parchment);
+}
+
+.sovereign-atlas-note {
+  margin: 1rem 0 0;
+  text-align: center;
+  font-size: 0.66rem;
+}
+
+@media (max-width: 1180px) {
+  .wide-wrap { width: min(1120px, calc(100% - 3rem)); }
+  .sovereign-atlas { grid-template-columns: 240px minmax(0, 1fr); }
+  .realm-stage-ledger { grid-template-columns: 1fr 1fr; }
+  .realm-stage-ledger > p { grid-column: 1 / 2; }
+  .realm-stage-actions { grid-column: 2 / 3; grid-row: 2; }
+}
+
+@media (max-width: 820px) {
+  .panorama-reading { grid-template-columns: 1fr; }
+  .panorama-reading-toggle { right: 1rem; bottom: 1rem; }
+  .realm-panorama-caption { max-width: 58%; }
+  .sovereign-atlas { grid-template-columns: 1fr; }
+  .realm-selector-shell { display: block; }
+  .realm-selector { display: flex; max-height: none; overflow-x: auto; }
+  .realm-selector-item { min-width: 190px; border-right: 1px solid var(--edge); }
+}
 
 /* ── Hero da home — O Chamado de Victória ─────────────────────── */
 
