@@ -24,9 +24,33 @@ const NORMALIZE = {
   'esperança': 'esperanca',
 };
 
+const SLUGS = {
+  legado: 'legacy',
+  raiva: 'rage',
+  luto: 'grief',
+  vinganca: 'vengeance',
+  orgulho: 'pride',
+  unidade: 'unity',
+  fe: 'faith',
+  esperanca: 'hope',
+};
+
 /** Extrai a assinatura do Fervor dominante a partir do campo `fervor` do reino. */
 export function fervorSignature(fervorField) {
   const m = /Fervor de ([\wÀ-ú]+)\s*\(dominante\)/i.exec(fervorField || '');
   const key = m ? NORMALIZE[m[1].toLowerCase()] : null;
   return FERVOR_SIGNATURES[key] || FERVOR_SIGNATURES.legado;
+}
+
+/** Relações públicas Reino → Fervor. O Guardião herda estas relações do Reino. */
+export function parseFervorField(fervorField) {
+  const matches = [...String(fervorField || '').matchAll(/Fervor de ([\wÀ-ú]+)\s*\((dominante|secundário)\)/gi)];
+  return matches.map((match) => {
+    const normalized = NORMALIZE[match[1].toLowerCase()];
+    return {
+      id: SLUGS[normalized],
+      label: match[1],
+      role: match[2].toLowerCase(),
+    };
+  }).filter((entry) => entry.id);
 }

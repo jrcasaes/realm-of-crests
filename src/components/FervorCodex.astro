@@ -1,0 +1,294 @@
+---
+import fervors from '../data/fervors.json';
+import realms from '../data/realms.json';
+import { parseFervorField } from '../lib/fervor.js';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const materials = [
+  { id: 'basalt', name: 'BASALTO', label: 'relevo territorial', description: 'Gravação mineral e monumental: o glifo como parte de muralhas, templos e território.' },
+  { id: 'light', name: 'LUZ CONTIDA', label: 'energia ativa', description: 'A assinatura luminosa do Fervor em estado operacional, sem alterar sua geometria.' },
+  { id: 'bronze', name: 'BRONZE', label: 'insígnia ritual', description: 'Metal envelhecido convertido em selo, objeto ou dispositivo de memória.' },
+  { id: 'cloth', name: 'PANO RITUAL', label: 'marca bordada', description: 'O glifo transportado por vestes, estandartes e tecidos de cerimônia.' },
+  { id: 'skin', name: 'PELE', label: 'manifestação corporal', description: 'Marca orgânica em relevo. Demonstra a gramática corporal; não define a anatomia de um Guardião específico.' },
+];
+
+const codex = fervors.map((fervor) => ({
+  ...fervor,
+  realms: realms.flatMap((realm) => {
+    const relation = parseFervorField(realm.fervor).find((entry) => entry.id === fervor.id);
+    return relation ? [{ slug: realm.slug, name: realm.realm, role: relation.role }] : [];
+  }),
+}));
+
+const first = codex[0];
+const firstMaterial = materials[0];
+const asset = (fervor, material) => `${base}/assets/fervor/glyph_${fervor}_${material}.webp`;
+---
+
+<section class="fervor-codex" id="codice-visual" aria-labelledby="codex-title">
+  <header class="fervor-codex-head">
+    <div>
+      <span class="rubric">matriz de transfigurações · raster 8 × 5</span>
+      <h3 id="codex-title">CÓDICE VISUAL DO FERVOR</h3>
+    </div>
+    <p>Escolha uma família e observe como a mesma identidade geométrica se transfigura em cinco suportes. Os materiais não são níveis nem estágios de poder.</p>
+  </header>
+
+  <div class="fervor-family-selector" role="listbox" aria-label="Famílias de Fervor" tabindex="0">
+    {codex.map((fervor, index) => (
+      <button
+        class:list={['fervor-family-option', { rare: fervor.id === 'legacy' }]}
+        type="button"
+        role="option"
+        aria-selected={index === 0 ? 'true' : 'false'}
+        data-fervor={fervor.id}
+        style={`--fervor-accent:${fervor.accent}`}
+      >
+        <img src={asset(fervor.id, 'light')} alt="" width="900" height="900" loading={index === 0 ? 'eager' : 'lazy'} />
+        <span>
+          <strong>{fervor.name}</strong>
+          <small>{fervor.pt}</small>
+        </span>
+        {fervor.id === 'legacy' && <em>raro</em>}
+      </button>
+    ))}
+  </div>
+
+  <div class="fervor-explorer" aria-live="polite">
+    <figure class="fervor-stage">
+      <img
+        id="fervor-stage-image"
+        src={asset(first.id, firstMaterial.id)}
+        alt={`Glifo de ${first.name} manifestado em ${firstMaterial.name}`}
+        width="900"
+        height="900"
+        fetchpriority="high"
+      />
+      <div class="fervor-stage-status">
+        <span id="fervor-stage-family">{first.name}</span>
+        <span id="fervor-stage-material">{firstMaterial.name}</span>
+      </div>
+      <figcaption>
+        <span class="rubric" id="fervor-classification">{first.classification}</span>
+        <h3 id="fervor-name">{first.name}</h3>
+        <p id="fervor-pt">{first.pt}</p>
+      </figcaption>
+    </figure>
+
+    <div class="fervor-ledger">
+      <div class="fervor-reading">
+        <span class="rubric">natureza</span>
+        <p id="fervor-concept">{first.concept}</p>
+        <span class="rubric">assinatura</span>
+        <p id="fervor-signature">{first.signature}</p>
+      </div>
+
+      <div class="fervor-materials" role="tablist" aria-label="Suportes materiais">
+        {materials.map((material, index) => (
+          <button
+            type="button"
+            role="tab"
+            aria-selected={index === 0 ? 'true' : 'false'}
+            tabindex={index === 0 ? '0' : '-1'}
+            data-material={material.id}
+          >
+            <strong>{material.name}</strong>
+            <small>{material.label}</small>
+          </button>
+        ))}
+      </div>
+
+      <div class="fervor-material-reading">
+        <span class="rubric">leitura do suporte</span>
+        <p id="fervor-material-description">{firstMaterial.description}</p>
+      </div>
+
+      <div class="fervor-realms">
+        <span class="rubric">reinos ressonantes · informação pública</span>
+        <div id="fervor-realm-links">
+          {first.realms.map((realm) => (
+            <a href={`${base}/reinos/${realm.slug}/`}>{realm.name}<small>{realm.role}</small></a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="fervor-compare" aria-labelledby="compare-title">
+    <header>
+      <span class="rubric">comparar suportes</span>
+      <h3 id="compare-title">UMA GEOMETRIA, CINCO MATÉRIAS</h3>
+    </header>
+    <div id="fervor-compare-grid">
+      {materials.map((material) => (
+        <button type="button" data-compare-material={material.id} aria-label={`Ver ${first.name} em ${material.name}`}>
+          <img src={asset(first.id, material.id)} alt="" width="900" height="900" loading="lazy" />
+          <span>{material.name}</span>
+        </button>
+      ))}
+    </div>
+  </section>
+
+  <details class="fervor-matrix">
+    <summary>
+      <span><strong>ABRIR MATRIZ COMPLETA 8 × 5</strong><small>40 derivados raster · Full Lock</small></span>
+      <i aria-hidden="true">＋</i>
+    </summary>
+    <div class="fervor-matrix-grid">
+      <div class="matrix-corner" aria-hidden="true">família / suporte</div>
+      {materials.map((material) => <div class="matrix-column">{material.name}</div>)}
+      {codex.map((fervor) => (
+        <>
+          <div class="matrix-row">
+            <strong>{fervor.name}</strong>
+            <small>{fervor.pt}</small>
+          </div>
+          {materials.map((material) => (
+            <button type="button" data-matrix-fervor={fervor.id} data-matrix-material={material.id} aria-label={`${fervor.name} em ${material.name}`}>
+              <img data-src={asset(fervor.id, material.id)} alt={`Glifo de ${fervor.name} em ${material.name}`} width="900" height="900" loading="lazy" />
+            </button>
+          ))}
+        </>
+      ))}
+    </div>
+  </details>
+
+  <p class="fervor-authority rubric">autoridade: cc-27 v1.2 · matriz raster 8 × 5 full lock · masters vetoriais fora deste marco</p>
+</section>
+
+<script define:vars={{ codex, materials, base }}>
+  function bindFervorCodex() {
+    const root = document.getElementById('codice-visual');
+    if (!root || root.dataset.bound) return;
+    root.dataset.bound = '1';
+
+    const families = Array.from(root.querySelectorAll('.fervor-family-option'));
+    const materialButtons = Array.from(root.querySelectorAll('.fervor-materials button'));
+    const stage = root.querySelector('.fervor-stage');
+    const stageImage = document.getElementById('fervor-stage-image');
+    const compareButtons = Array.from(root.querySelectorAll('[data-compare-material]'));
+    const matrix = root.querySelector('.fervor-matrix');
+    let familyIndex = 0;
+    let materialIndex = 0;
+    let request = 0;
+
+    const asset = (family, material) => `${base}/assets/fervor/glyph_${family}_${material}.webp`;
+    const setText = (id, value) => {
+      const node = document.getElementById(id);
+      if (node) node.textContent = value;
+    };
+
+    function renderRealmLinks(fervor) {
+      const holder = document.getElementById('fervor-realm-links');
+      if (!holder) return;
+      holder.replaceChildren(...fervor.realms.map((realm) => {
+        const link = document.createElement('a');
+        link.href = `${base}/reinos/${realm.slug}/`;
+        link.append(document.createTextNode(realm.name));
+        const role = document.createElement('small');
+        role.textContent = realm.role;
+        link.append(role);
+        return link;
+      }));
+    }
+
+    function loadStage(fervor, material) {
+      const token = ++request;
+      const next = new Image();
+      stage?.classList.add('is-loading');
+      next.onload = () => {
+        if (token !== request) return;
+        stageImage.src = next.src;
+        stageImage.alt = `Glifo de ${fervor.name} manifestado em ${material.name}`;
+        requestAnimationFrame(() => stage?.classList.remove('is-loading'));
+      };
+      next.onerror = () => token === request && stage?.classList.remove('is-loading');
+      next.src = asset(fervor.id, material.id);
+    }
+
+    function render(updateHash = true) {
+      const fervor = codex[familyIndex];
+      const material = materials[materialIndex];
+      families.forEach((button, index) => button.setAttribute('aria-selected', String(index === familyIndex)));
+      materialButtons.forEach((button, index) => {
+        button.setAttribute('aria-selected', String(index === materialIndex));
+        button.tabIndex = index === materialIndex ? 0 : -1;
+      });
+      setText('fervor-stage-family', fervor.name);
+      setText('fervor-stage-material', material.name);
+      setText('fervor-classification', fervor.classification);
+      setText('fervor-name', fervor.name);
+      setText('fervor-pt', fervor.pt);
+      setText('fervor-concept', fervor.concept);
+      setText('fervor-signature', fervor.signature);
+      setText('fervor-material-description', material.description);
+      renderRealmLinks(fervor);
+      loadStage(fervor, material);
+
+      compareButtons.forEach((button) => {
+        const support = button.dataset.compareMaterial;
+        const img = button.querySelector('img');
+        if (img) img.src = asset(fervor.id, support);
+        button.setAttribute('aria-label', `Ver ${fervor.name} em ${materials.find((item) => item.id === support)?.name || support}`);
+      });
+      if (updateHash) history.replaceState(null, '', `#fervor-${fervor.id}`);
+    }
+
+    families.forEach((button, index) => button.addEventListener('click', () => {
+      familyIndex = index;
+      render();
+    }));
+    materialButtons.forEach((button, index) => button.addEventListener('click', () => {
+      materialIndex = index;
+      render();
+    }));
+    compareButtons.forEach((button) => button.addEventListener('click', () => {
+      materialIndex = materials.findIndex((material) => material.id === button.dataset.compareMaterial);
+      render();
+      stage?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }));
+
+    function bindArrowKeys(container, buttons, getIndex, setIndex) {
+      container?.addEventListener('keydown', (event) => {
+        if (!['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp', 'Home', 'End'].includes(event.key)) return;
+        event.preventDefault();
+        let index = getIndex();
+        if (event.key === 'Home') index = 0;
+        else if (event.key === 'End') index = buttons.length - 1;
+        else if (event.key === 'ArrowRight' || event.key === 'ArrowDown') index = (index + 1) % buttons.length;
+        else index = (index - 1 + buttons.length) % buttons.length;
+        setIndex(index);
+        buttons[index].focus();
+        render();
+      });
+    }
+    bindArrowKeys(root.querySelector('.fervor-family-selector'), families, () => familyIndex, (index) => familyIndex = index);
+    bindArrowKeys(root.querySelector('.fervor-materials'), materialButtons, () => materialIndex, (index) => materialIndex = index);
+
+    matrix?.addEventListener('toggle', () => {
+      const icon = matrix.querySelector('summary i');
+      if (icon) icon.textContent = matrix.open ? '−' : '＋';
+      if (!matrix.open) return;
+      matrix.querySelectorAll('img[data-src]').forEach((img) => {
+        img.src = img.dataset.src;
+        img.removeAttribute('data-src');
+      });
+    });
+    root.querySelectorAll('[data-matrix-fervor]').forEach((button) => button.addEventListener('click', () => {
+      familyIndex = codex.findIndex((fervor) => fervor.id === button.dataset.matrixFervor);
+      materialIndex = materials.findIndex((material) => material.id === button.dataset.matrixMaterial);
+      render();
+      stage?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }));
+
+    const hash = location.hash.replace('#fervor-', '');
+    const fromHash = codex.findIndex((fervor) => fervor.id === hash);
+    if (fromHash >= 0) {
+      familyIndex = fromHash;
+      render(false);
+      requestAnimationFrame(() => root.scrollIntoView({ block: 'start' }));
+    }
+  }
+
+  document.addEventListener('astro:page-load', bindFervorCodex);
+</script>

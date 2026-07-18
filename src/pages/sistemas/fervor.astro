@@ -3,14 +3,15 @@ import { loreMasterLabel } from '../../lib/canon.js';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SystemsRail from '../../components/SystemsRail.astro';
 import OrnamentDivider from '../../components/OrnamentDivider.astro';
+import FervorCodex from '../../components/FervorCodex.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
-<BaseLayout title="Fervor — Sistemas — Realm of Crests" description="Fervor: a energia operacional do Realm of Crests. Natureza, os sete tipos, saturação, corrupção e o Legacy Fervor.">
+<BaseLayout title="Fervor — Sistemas — Realm of Crests" description="Fervor: natureza, sete famílias canônicas, o Legacy raro e a matriz visual de 40 transfigurações materiais.">
   <SystemsRail />
 
   <div class="page-head">
-    <span class="rubric">lore master book ii · full lock</span>
+    <span class="rubric">leis do sistema · canon lock · matriz raster 8 × 5 full lock</span>
     <h1>FERVOR</h1>
     <p class="lede">O sangue invisível da colisão e da soberania. A força que transforma emoção em existência. Sem Fervor, o universo permanece imóvel.</p>
   </div>
@@ -35,49 +36,11 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     </section>
 
     <section class="chapter">
-      <h2>II — Os Sete Tipos</h2>
+      <h2>II — Sete Famílias e o Legacy Raro</h2>
       <div class="prose">
         <p>O Fervor nunca foi uniforme. Alguns Reinos sustentam sua existência na fé; outros, na raiva, no luto ou na vingança. Essas variações moldam a guerra, o Guardião e o próprio Reino.</p>
       </div>
-      <div class="types">
-        <article class="type-card" style="--accent:#d9c27a">
-          <h3>FAITH</h3><span class="pt">fé</span>
-          <p>Estabilidade, persistência, disciplina.</p>
-          <p class="sig">Assinatura: luz interna suave e constante sob a pele ou armadura.</p>
-        </article>
-        <article class="type-card" style="--accent:#c1452e">
-          <h3>RAGE</h3><span class="pt">raiva</span>
-          <p>Explosão, violência, pressão.</p>
-          <p class="sig">Assinatura: brasas e fissuras incandescentes nas articulações, calor visível.</p>
-        </article>
-        <article class="type-card" style="--accent:#e8b45a">
-          <h3>HOPE</h3><span class="pt">esperança</span>
-          <p>Ascensão, resistência.</p>
-          <p class="sig">Assinatura: partículas ascendentes, como brasas flutuando para cima.</p>
-        </article>
-        <article class="type-card" style="--accent:#6f7d8c">
-          <h3>GRIEF</h3><span class="pt">luto</span>
-          <p>Peso, dor, memória profunda.</p>
-          <p class="sig">Assinatura: textura pesada e fosca; marcas como lágrimas cristalizadas.</p>
-        </article>
-        <article class="type-card" style="--accent:#7a1f1f">
-          <h3>VENGEANCE</h3><span class="pt">vingança</span>
-          <p>Obsessão, retorno, correção histórica.</p>
-          <p class="sig">Assinatura: marcações geométricas em vermelho-escuro ao longo do corpo.</p>
-        </article>
-        <article class="type-card" style="--accent:#b98e3f">
-          <span class="patch">PATCH V1</span>
-          <h3>PRIDE</h3><span class="pt">orgulho</span>
-          <p>Variante de Faith voltada à dinastia e ao orgulho próprio. Disciplina aristocrática, recusa à submissão.</p>
-          <p class="sig">Assinatura: postura alongada, silhueta de coroa ou crista.</p>
-        </article>
-        <article class="type-card" style="--accent:#9aa27a">
-          <span class="patch">PATCH V1</span>
-          <h3>UNITY</h3><span class="pt">unidade</span>
-          <p>Variante de Faith voltada à coesão do Povo como massa única. Sacrifício compartilhado.</p>
-          <p class="sig">Assinatura: padrões trançados conectando os membros, como tecido coletivo.</p>
-        </article>
-      </div>
+      <FervorCodex />
     </section>
 
     <section class="chapter">
@@ -125,7 +88,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         <p>Legacy Fervor não pode ser fabricado. Só herdado.</p>
       </div>
 
-      <p class="source-line rubric">{`fonte: ${loreMasterLabel} · livro ii — fervor · full lock — revisão canônica: 2026-07-11`}</p>
+      <p class="source-line rubric">{`fontes: ${loreMasterLabel} · livro ii — fervor · cc-27 v1.2 · matriz raster 8 × 5 full lock · source registry v1.2.9`}</p>
 
       <nav class="realm-nav" aria-label="Navegação entre sistemas">
         <a href={`${base}/sistemas/`}>← sistemas</a>

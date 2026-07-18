@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import OrnamentDivider from '../../components/OrnamentDivider.astro';
 import { guardianRoster } from '../../lib/guardians.js';
+import { parseFervorField } from '../../lib/fervor.js';
 
 export function getStaticPaths() {
   return guardianRoster.map((g) => ({ params: { slug: g.slug }, props: { guardian: g } }));
@@ -9,6 +10,7 @@ export function getStaticPaths() {
 
 const { guardian: g } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const fervorRelations = parseFervorField(g.fervor);
 ---
 <BaseLayout title={`${g.name} — Guardiões — Realm of Crests`} description={`${g.name}, “${g.epithet}” — Guardião de ${g.realmName}.`}>
   <div class="page-head">
@@ -63,6 +65,22 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
             {g.traits.map((t) => <span>{t}</span>)}
           </div>
         )}
+
+        <section class="char-section guardian-fervor">
+          <h2>FERVOR ENCARNADO</h2>
+          <p>O Reino produz e sustenta o Fervor; o Guardião o converte em presença operacional. Os glifos abaixo representam essa relação sem definir uma transformação anatômica.</p>
+          <div class="guardian-fervor-grid">
+            {fervorRelations.map((relation) => (
+              <a href={`${base}/sistemas/fervor/#fervor-${relation.id}`}>
+                <img src={`${base}/assets/fervor/glyph_${relation.id}_light.webp`} alt="" width="900" height="900" loading="lazy" />
+                <span>
+                  <strong>Fervor de {relation.label}</strong>
+                  <small>{relation.role}</small>
+                </span>
+              </a>
+            ))}
+          </div>
+        </section>
 
         {g.symbols.length > 0 && (
           <section class="char-section">

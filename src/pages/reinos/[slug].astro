@@ -3,7 +3,7 @@ import { canonLabel, loreMasterLabel, dossierLabel } from '../../lib/canon.js';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import RealmPanorama from '../../components/RealmPanorama.astro';
 import realms from '../../data/realms.json';
-import { fervorSignature } from '../../lib/fervor.js';
+import { fervorSignature, parseFervorField } from '../../lib/fervor.js';
 
 export function getStaticPaths() {
   return realms.map((realm) => ({
@@ -16,6 +16,7 @@ const { realm } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const folio = String(realm.order).padStart(2, '0');
 const fv = fervorSignature(realm.fervor);
+const fervorRelations = parseFervorField(realm.fervor);
 const guardianSlug = realm.guardian.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 
 const idx = realms.findIndex((r) => r.slug === realm.slug);
@@ -61,7 +62,14 @@ const next = realms[(idx + 1) % realms.length];
             </div>
             <div>
               <dt>Fervor</dt>
-              <dd>{realm.fervor}</dd>
+              <dd class="fervor-links">
+                {fervorRelations.map((relation) => (
+                  <a href={`${base}/sistemas/fervor/#fervor-${relation.id}`}>
+                    <span>Fervor de {relation.label}</span>
+                    <small>{relation.role}</small>
+                  </a>
+                ))}
+              </dd>
             </div>
             <div>
               <dt>Gravity</dt>

@@ -1,0 +1,74 @@
+[
+  {
+    "id": "faith",
+    "name": "FAITH",
+    "pt": "fé",
+    "classification": "Fervor regular",
+    "concept": "Estabilidade, persistência e disciplina.",
+    "signature": "Luz interna suave e constante sob a pele ou a armadura.",
+    "accent": "#d9c27a"
+  },
+  {
+    "id": "rage",
+    "name": "RAGE",
+    "pt": "raiva",
+    "classification": "Fervor regular",
+    "concept": "Explosão, violência e pressão.",
+    "signature": "Brasas e fissuras incandescentes; calor visível e energia sob tensão.",
+    "accent": "#c1452e"
+  },
+  {
+    "id": "hope",
+    "name": "HOPE",
+    "pt": "esperança",
+    "classification": "Fervor regular",
+    "concept": "Ascensão, resistência e impulso de continuidade.",
+    "signature": "Partículas ascendentes, como brasas que recusam a queda.",
+    "accent": "#e8b45a"
+  },
+  {
+    "id": "grief",
+    "name": "GRIEF",
+    "pt": "luto",
+    "classification": "Fervor regular",
+    "concept": "Peso, dor e memória profunda.",
+    "signature": "Textura pesada e fosca; marcas que retêm luz em vez de emiti-la.",
+    "accent": "#6f7d8c"
+  },
+  {
+    "id": "vengeance",
+    "name": "VENGEANCE",
+    "pt": "vingança",
+    "classification": "Fervor regular",
+    "concept": "Obsessão, retorno e correção histórica.",
+    "signature": "Marcações geométricas insistentes, repetidas como dívida ainda aberta.",
+    "accent": "#7a1f1f"
+  },
+  {
+    "id": "pride",
+    "name": "PRIDE",
+    "pt": "orgulho",
+    "classification": "Variante de Faith",
+    "concept": "Disciplina aristocrática, dinastia e recusa à submissão.",
+    "signature": "Postura alongada e leitura visual de coroa ou crista.",
+    "accent": "#b98e3f"
+  },
+  {
+    "id": "unity",
+    "name": "UNITY",
+    "pt": "unidade",
+    "classification": "Variante de Faith",
+    "concept": "Coesão do Povo, vínculo e sacrifício compartilhado.",
+    "signature": "Padrões conectados que tornam muitas vontades uma única forma.",
+    "accent": "#9aa27a"
+  },
+  {
+    "id": "legacy",
+    "name": "LEGACY",
+    "pt": "legado",
+    "classification": "Fervor raro",
+    "concept": "Memória, identidade, Emberline e pertencimento em convergência.",
+    "signature": "Brilho gravado e persistente; a matéria parece recordar a própria marca.",
+    "accent": "#c9a35c"
+  }
+]

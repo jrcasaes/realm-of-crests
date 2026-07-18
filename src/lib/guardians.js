@@ -39,6 +39,7 @@ export const guardianRoster = realms.map((realm) => {
     realmSlug: realm.slug,
     realmName: realm.realm,
     realmEcho: realm.territorialEcho,
+    fervor: realm.fervor,
     epithet: realm.epithet,
     ecoAncestral: realm.guardianEcho,
     vulgo: realm.guardianVulgo,
