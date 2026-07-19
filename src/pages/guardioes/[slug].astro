@@ -1,101 +1,284 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import OrnamentDivider from '../../components/OrnamentDivider.astro';
 import { guardianRoster } from '../../lib/guardians.js';
-import { fervorVectorAsset, parseFervorField } from '../../lib/fervor.js';
+import { fervorSignature, fervorVectorAsset } from '../../lib/fervor.js';
 
 export function getStaticPaths() {
-  return guardianRoster.map((g) => ({ params: { slug: g.slug }, props: { guardian: g } }));
+  return guardianRoster.map((guardian) => ({ params: { slug: guardian.slug }, props: { guardian } }));
 }
 
 const { guardian: g } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const fervorRelations = parseFervorField(g.fervor);
+const currentIndex = guardianRoster.findIndex((guardian) => guardian.slug === g.slug);
+const previous = guardianRoster[(currentIndex - 1 + guardianRoster.length) % guardianRoster.length];
+const next = guardianRoster[(currentIndex + 1) % guardianRoster.length];
+const signature = fervorSignature(g.fervor);
+const publicSections = g.sections.length ? g.sections : [
+  {
+    title: 'VÍNCULO TERRITORIAL',
+    text: `${g.name} é a manifestação soberana de ${g.realmName}. Sua leitura pública nasce da relação entre ${g.essence}, ${g.fervor.toLowerCase()} e a pressão ${g.gravity}.`,
+  },
+  {
+    title: 'ÂNCORA DO DOMÍNIO',
+    text: `Sua presença é inseparável de ${g.temple}, no território reconhecido como ${g.realmEcho}. O arquivo não projeta além dessas relações canônicas publicamente aprovadas.`,
+  },
+];
 ---
-<BaseLayout title={`${g.name} — Guardiões — Realm of Crests`} description={`${g.name}, “${g.epithet}” — Guardião de ${g.realmName}.`}>
-  <div class="page-head">
-    <span class="rubric">guardião de {g.realmName.toLowerCase()}</span>
-    <h1>{g.name.toUpperCase()}</h1>
-    <p class="epithet" style="margin-top:.7rem; font-size:1.3rem; font-style:italic; color:var(--gold);">“{g.epithet}”</p>
-  </div>
 
-  <OrnamentDivider />
-
-  <div class="wrap">
-    <div class="char-layout">
-      <div>
-        <figure class="portrait-frame" style="margin:0;">
-          {g.portrait
-            ? <img src={`${base}/assets/guardians/${g.portrait}`} alt={`${g.name}, Guardião de ${g.realmName}`} width={g.portraitWidth} height={g.portraitHeight} />
-            : <div class="portrait-pending">
-                <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="36" cy="26" r="12" stroke="currentColor" stroke-width="2"/><path d="M14 62 C14 48 24 42 36 42 C48 42 58 48 58 62" stroke="currentColor" stroke-width="2"/></svg>
-                <span>RETRATO PENDENTE</span>
-              </div>
-          }
-          <figcaption class="folio">{g.portraitLabel}</figcaption>
-        </figure>
-        <table class="identity-table">
-          <tbody>
-            <tr><td>Eco Ancestral</td><td>{g.ecoAncestral}</td></tr>
-            <tr><td>Título Soberano</td><td>{g.epithet}</td></tr>
-            <tr><td>Vulgo da Multidão</td><td>{g.vulgo}</td></tr>
-            <tr><td>Eco das Batalhas</td><td>{g.battleEcho}</td></tr>
-            <tr><td>Reino</td><td>{g.realmName} — {g.realmEcho}</td></tr>
-          </tbody>
-        </table>
+<BaseLayout title={`${g.name} — Dossiês Vivos — Realm of Crests`} description={`${g.name}, “${g.epithet}” — manifestação soberana de ${g.realmName}.`}>
+  <article class="living-dossier" data-living-dossier data-realm={g.realmSlug} style={`--guardian-accent:${signature.color}; --guardian-soft:${signature.soft}; --guardian-image:url("${base}/assets/guardians/${g.portrait}");`}>
+    <header class="dossier-hero">
+      <div class="dossier-hero-image" aria-hidden="true"></div>
+      <img class:list={{ 'dossier-portrait': true, 'is-vertical': g.portraitHeight > g.portraitWidth }} src={`${base}/assets/guardians/${g.portrait}`} alt={`${g.name}, Guardião de ${g.realmName}`} width={g.portraitWidth} height={g.portraitHeight} fetchpriority="high" />
+      <div class="dossier-hero-wash" aria-hidden="true"></div>
+      <div class="wide-wrap dossier-hero-content">
+        <p class="dossier-folio"><span>{String(g.order).padStart(2, '0')}</span> / 19 · dossiê soberano</p>
+        <span class="rubric">guardião de {g.realmName.toLowerCase()}</span>
+        <h1>{g.name.toUpperCase()}</h1>
+        <p class="dossier-epithet">“{g.epithet}”</p>
+        <div class="dossier-hero-actions">
+          <a href="#presenca">Ler a presença <span aria-hidden="true">↓</span></a>
+          <a href={`${base}/reinos/${g.realmSlug}/`}>Entrar em {g.realmName}</a>
+        </div>
+        <p class="dossier-memory" data-guardian-memory-state>Território ainda não registrado nesta jornada</p>
       </div>
+      <p class="dossier-portrait-label">{g.portraitLabel}</p>
+    </header>
 
-      <div>
-        {g.lawTag && g.lawText && (
-          <div class="law" style="margin-top:0;">
-            <span class="tag">{g.lawTag}</span>
-            <p>{g.lawText}</p>
-          </div>
-        )}
+    <nav class="dossier-nav" aria-label={`Seções do dossiê de ${g.name}`}>
+      <div class="wrap">
+        <a href="#identidade">Identidade</a>
+        <a href="#presenca">Presença</a>
+        <a href="#sistemas">Sistemas</a>
+        <a href="#fervor">Fervor</a>
+        {g.symbols.length > 0 && <a href="#geometria">Geometria</a>}
+      </div>
+    </nav>
 
-        {g.sections.map((s) => (
-          <section class="char-section">
-            <h2>{s.title}</h2>
-            <p>{s.text}</p>
-          </section>
-        ))}
+    <section class="dossier-identity wrap" id="identidade" data-dossier-reveal>
+      <header>
+        <span class="rubric">camadas de nomeação</span>
+        <h2>UMA PRESENÇA.<br /><em>CINCO LEITURAS.</em></h2>
+      </header>
+      <dl>
+        <div><dt>Eco ancestral</dt><dd>{g.ecoAncestral}</dd></div>
+        <div><dt>Título soberano</dt><dd>{g.epithet}</dd></div>
+        <div><dt>Vulgo da multidão</dt><dd>{g.vulgo}</dd></div>
+        <div><dt>Eco das batalhas</dt><dd>{g.battleEcho}</dd></div>
+        <div><dt>Domínio</dt><dd>{g.realmName} — {g.realmEcho}</dd></div>
+      </dl>
+    </section>
 
+    {g.lawTag && g.lawText && (
+      <aside class="dossier-law wide-wrap" data-dossier-reveal>
+        <span>{g.lawTag}</span>
+        <blockquote>“{g.lawText}”</blockquote>
+      </aside>
+    )}
+
+    <section class="dossier-presence" id="presenca">
+      <div class="wrap">
+        <header data-dossier-reveal>
+          <span class="rubric">leitura pública aprovada</span>
+          <h2>A PRESENÇA SOBERANA</h2>
+          {!g.sections.length && <p>Este Guardião possui vínculos sistêmicos públicos, mas não uma biografia editorial detalhada. O silêncio também é uma fronteira do cânone.</p>}
+        </header>
+        <div class="presence-path">
+          {publicSections.map((section, index) => (
+            <article data-dossier-reveal>
+              <span>{String(index + 1).padStart(2, '0')}</span>
+              <div><h3>{section.title}</h3><p>{section.text}</p></div>
+            </article>
+          ))}
+        </div>
         {g.traits.length > 0 && (
-          <div class="traits">
-            {g.traits.map((t) => <span>{t}</span>)}
+          <div class="dossier-traits" data-dossier-reveal>
+            <span class="rubric">marcadores públicos</span>
+            <div>{g.traits.map((trait) => <span>{trait}</span>)}</div>
           </div>
         )}
-
-        <section class="char-section guardian-fervor">
-          <h2>FERVOR ENCARNADO</h2>
-          <p>O Reino produz e sustenta o Fervor; o Guardião o converte em presença operacional. Os glifos abaixo representam essa relação sem definir uma transformação anatômica.</p>
-          <div class="guardian-fervor-grid">
-            {fervorRelations.map((relation) => (
-              <a href={`${base}/sistemas/fervor/#fervor-${relation.id}`}>
-                <img src={fervorVectorAsset(relation.id, base)} alt="" width="1000" height="1000" loading="lazy" />
-                <span>
-                  <strong>Fervor de {relation.label}</strong>
-                  <small>{relation.role}</small>
-                </span>
-              </a>
-            ))}
-          </div>
-        </section>
-
-        {g.symbols.length > 0 && (
-          <section class="char-section">
-            <h2>GEOMETRIA SAGRADA</h2>
-            <dl class="symbols">
-              {g.symbols.map((s) => (
-                <div><dt>{s.name}</dt><dd>{s.meaning}</dd></div>
-              ))}
-            </dl>
-          </section>
-        )}
-
-        <a class="realm-link" href={`${base}/reinos/${g.realmSlug}/`}>→ folio do reino de {g.realmName.toLowerCase()}</a>
-        <p class="source-line rubric">fontes: {g.sourceRefs.join(' · ')} — revisão canônica: {g.lastCanonReview}</p>
       </div>
-    </div>
-  </div>
+    </section>
+
+    <section class="dossier-systems wide-wrap" id="sistemas" data-dossier-reveal>
+      <header>
+        <span class="rubric">pressões que moldam a manifestação</span>
+        <h2>LEITURA SISTÊMICA</h2>
+      </header>
+      <dl>
+        <div><dt>Essência</dt><dd>{g.essence}</dd></div>
+        <div><dt>Fervores</dt><dd>{g.fervor}</dd></div>
+        <div><dt>Sovereign Gravity</dt><dd>{g.gravity}</dd></div>
+        <div><dt>Âncora territorial</dt><dd>{g.temple}</dd></div>
+      </dl>
+      <p>{g.templeDesc}</p>
+    </section>
+
+    <section class="dossier-fervor" id="fervor">
+      <div class="wrap">
+        <header data-dossier-reveal>
+          <span class="rubric">o Reino produz · o Guardião operacionaliza</span>
+          <h2>FERVOR ENCARNADO</h2>
+          <p>Os glifos registram relações do domínio. Não definem transformação anatômica nem substituem a vontade do Reino.</p>
+        </header>
+        <div class="fervor-presences">
+          {g.fervorRelations.map((relation) => (
+            <a href={`${base}/sistemas/fervor/#fervor-${relation.id}`} data-dossier-reveal>
+              <img src={fervorVectorAsset(relation.id, base)} alt="" width="1000" height="1000" loading="lazy" />
+              <span class="rubric">{relation.role}</span>
+              <h3>FERVOR DE {relation.label.toUpperCase()}</h3>
+              <span class="fervor-open">Abrir matriz visual <i aria-hidden="true">↗</i></span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {g.symbols.length > 0 && (
+      <section class="dossier-geometry wide-wrap" id="geometria" data-dossier-reveal>
+        <header><span class="rubric">símbolos aprovados</span><h2>GEOMETRIA SAGRADA</h2></header>
+        <dl>
+          {g.symbols.map((symbol) => <div><dt>{symbol.name}</dt><dd>{symbol.meaning}</dd></div>)}
+        </dl>
+      </section>
+    )}
+
+    <section class="dossier-territory wrap" data-dossier-reveal>
+      <img src={`${base}/assets/emblems/${g.emblem}`} alt={`Brasão de ${g.realmName}`} width="256" height="256" loading="lazy" />
+      <div>
+        <span class="rubric">nenhum Guardião existe sem território</span>
+        <h2>ATRAVESSE PARA {g.realmName.toUpperCase()}</h2>
+        <p>{g.biome}.</p>
+        <a href={`${base}/reinos/${g.realmSlug}/`}>Abrir folio territorial <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+
+    <nav class="dossier-pagination wide-wrap" aria-label="Dossiês anterior e seguinte">
+      <a href={`${base}/guardioes/${previous.slug}/`}><span>← anterior</span><strong>{previous.name}</strong><small>{previous.realmName}</small></a>
+      <a href={`${base}/guardioes/`}><span>arquivo</span><strong>19 GUARDIÕES</strong><small>voltar à galeria</small></a>
+      <a href={`${base}/guardioes/${next.slug}/`}><span>seguinte →</span><strong>{next.name}</strong><small>{next.realmName}</small></a>
+    </nav>
+
+    <p class="dossier-source rubric">fontes: {g.sourceRefs.join(' · ')} · revisão canônica: {g.lastCanonReview} · retrato web derivado não é fonte de cânone</p>
+  </article>
 </BaseLayout>
+
+<script>
+  function bindLivingDossier() {
+    const root = document.querySelector<HTMLElement>('[data-living-dossier]');
+    if (!root || root.dataset.bound) return;
+    root.dataset.bound = 'true';
+    const memory = root.querySelector<HTMLElement>('[data-guardian-memory-state]');
+    try {
+      const state = JSON.parse(localStorage.getItem('roc.exploration.v1') || 'null');
+      const visited = new Set<string>(Array.isArray(state?.visited) ? state.visited : []);
+      if (memory && visited.has(root.dataset.realm || '')) {
+        memory.textContent = 'Território registrado nesta jornada';
+        memory.classList.add('is-registered');
+      }
+    } catch { /* memória local indisponível */ }
+
+    const items = Array.from(root.querySelectorAll<HTMLElement>('[data-dossier-reveal]'));
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      items.forEach((item) => item.classList.add('is-visible'));
+      return;
+    }
+    const observer = new IntersectionObserver((records) => {
+      records.forEach((record) => {
+        if (!record.isIntersecting) return;
+        record.target.classList.add('is-visible');
+        observer.unobserve(record.target);
+      });
+    }, { threshold: .14 });
+    items.forEach((item) => observer.observe(item));
+  }
+  document.addEventListener('astro:page-load', bindLivingDossier);
+</script>
+
+<style>
+  .living-dossier { background: radial-gradient(circle at 70% 15%, var(--guardian-soft), transparent 24%), var(--ink); }
+  .dossier-hero { position: relative; display: grid; min-height: calc(100svh - 74px); align-items: center; overflow: hidden; isolation: isolate; border-bottom: 1px solid color-mix(in srgb, var(--guardian-accent) 40%, var(--edge)); }
+  .dossier-hero-image { position: absolute; z-index: -4; inset: -6%; background: var(--guardian-image) center 20% / cover; filter: blur(26px) saturate(.6) brightness(.4); transform: scale(1.08); }
+  .dossier-portrait { position: absolute; z-index: -3; inset: 0 0 0 auto; width: min(68vw, 1080px); height: 100%; object-fit: cover; object-position: center 18%; filter: saturate(.76) brightness(.72); }
+  .dossier-portrait.is-vertical { object-fit: contain; object-position: right center; }
+  .dossier-hero-wash { position: absolute; z-index: -2; inset: 0; background: linear-gradient(90deg, rgba(12,10,8,.98) 0 30%, rgba(12,10,8,.68) 52%, rgba(12,10,8,.06) 78%), linear-gradient(180deg, rgba(12,10,8,.25), transparent 55%, var(--ink)); }
+  .dossier-hero-content { padding-block: 5rem 7rem; }
+  .dossier-folio { margin: 0 0 2.2rem; color: var(--parchment-faint); font-family: var(--font-display); font-size: .62rem; letter-spacing: .14em; text-transform: uppercase; }
+  .dossier-folio span { color: var(--guardian-accent); font-size: 1.3rem; }
+  .dossier-hero .rubric { color: var(--guardian-accent); }
+  .dossier-hero h1 { max-width: 60%; margin-top: .5rem; color: var(--parchment); font-size: clamp(3rem, 8vw, 7.8rem); letter-spacing: .1em; text-shadow: 0 8px 40px #000; }
+  .dossier-epithet { max-width: 48%; margin: .8rem 0 0; color: var(--parchment); font-size: clamp(1.1rem, 2vw, 1.45rem); font-style: italic; text-shadow: 0 2px 16px #000; }
+  .dossier-hero-actions { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 2rem; }
+  .dossier-hero-actions a { padding: .72rem .9rem; border: 1px solid color-mix(in srgb, var(--guardian-accent) 60%, var(--edge)); color: var(--parchment); background: rgba(12,10,8,.55); font-family: var(--font-display); font-size: .6rem; letter-spacing: .12em; text-transform: uppercase; backdrop-filter: blur(8px); }
+  .dossier-hero-actions a:first-child { color: var(--ink); background: var(--guardian-accent); }
+  .dossier-memory { display: inline-block; margin: 1.2rem 0 0; padding: .22rem .45rem; border-left: 1px solid var(--parchment-faint); color: var(--parchment-faint); font-size: .65rem; letter-spacing: .06em; }
+  .dossier-memory.is-registered { border-color: var(--guardian-accent); color: var(--guardian-accent); }
+  .dossier-portrait-label { position: absolute; right: 1rem; bottom: 1rem; margin: 0; color: rgba(230,217,184,.38); font-family: var(--font-display); font-size: .5rem; letter-spacing: .12em; }
+  .dossier-nav { position: sticky; z-index: 12; top: 0; border-bottom: 1px solid var(--edge); background: rgba(12,10,8,.92); backdrop-filter: blur(14px); }
+  .dossier-nav .wrap { display: flex; justify-content: center; overflow-x: auto; }
+  .dossier-nav a { flex: 0 0 auto; padding: .75rem 1rem; color: var(--parchment-dim); font-variant: small-caps; font-size: .72rem; letter-spacing: .12em; }
+  .dossier-nav a:hover { color: var(--guardian-accent); }
+  .dossier-identity { display: grid; grid-template-columns: .75fr 1.25fr; gap: clamp(2rem, 7vw, 7rem); align-items: start; padding-block: clamp(5rem, 10vw, 9rem); }
+  .dossier-identity .rubric, .dossier-presence .rubric, .dossier-systems .rubric, .dossier-fervor .rubric, .dossier-geometry .rubric, .dossier-territory .rubric { color: var(--guardian-accent); }
+  .dossier-identity h2 { margin-top: .7rem; color: var(--parchment); font-size: clamp(1.8rem, 4vw, 3rem); }
+  .dossier-identity h2 em { color: var(--guardian-accent); font-style: normal; }
+  .dossier-identity dl { margin: 0; }
+  .dossier-identity dl > div { display: grid; grid-template-columns: 170px 1fr; gap: 1rem; padding: .85rem 0; border-bottom: 1px solid var(--edge); }
+  .dossier-identity dt { color: var(--parchment-faint); font-variant: small-caps; font-size: .75rem; letter-spacing: .08em; }
+  .dossier-identity dd { margin: 0; color: var(--parchment); }
+  .dossier-law { padding: clamp(2rem, 5vw, 4rem); border-block: 1px solid color-mix(in srgb, var(--guardian-accent) 42%, var(--edge)); background: linear-gradient(90deg, var(--guardian-soft), transparent); text-align: center; }
+  .dossier-law > span { color: var(--guardian-accent); font-family: var(--font-display); font-size: .62rem; letter-spacing: .18em; }
+  .dossier-law blockquote { max-width: 35ch; margin: 1rem auto 0; color: var(--parchment); font-size: clamp(1.4rem, 3vw, 2.2rem); font-style: italic; line-height: 1.35; }
+  .dossier-presence { padding-block: clamp(5rem, 10vw, 9rem); }
+  .dossier-presence > .wrap > header { max-width: 720px; }
+  .dossier-presence h2, .dossier-systems h2, .dossier-fervor h2, .dossier-geometry h2, .dossier-territory h2 { margin-top: .55rem; color: var(--parchment); font-size: clamp(1.7rem, 4vw, 2.8rem); }
+  .dossier-presence header p, .dossier-fervor header p { margin-top: 1rem; color: var(--parchment-dim); font-style: italic; }
+  .presence-path { position: relative; max-width: 900px; margin: 3rem auto 0; }
+  .presence-path::before { content: ''; position: absolute; top: 1rem; bottom: 1rem; left: 27px; width: 1px; background: linear-gradient(var(--guardian-accent), transparent); }
+  .presence-path article { position: relative; display: grid; grid-template-columns: 56px 1fr; gap: 1.4rem; padding: 1.4rem 0; }
+  .presence-path article > span { position: relative; z-index: 1; display: grid; width: 56px; aspect-ratio: 1; place-items: center; border: 1px solid color-mix(in srgb, var(--guardian-accent) 50%, var(--edge)); border-radius: 50%; color: var(--guardian-accent); background: var(--ink); font-family: var(--font-display); font-size: .58rem; }
+  .presence-path article > div { padding-bottom: 1.4rem; border-bottom: 1px solid var(--edge); }
+  .presence-path h3 { color: var(--guardian-accent); font-size: .95rem; letter-spacing: .13em; }
+  .presence-path p { max-width: 65ch; margin: .7rem 0 0; color: var(--parchment-dim); }
+  .dossier-traits { max-width: 900px; margin: 2rem auto 0; }
+  .dossier-traits > div { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .7rem; }
+  .dossier-traits > div span { padding: .35rem .7rem; border: 1px solid var(--edge); color: var(--parchment-dim); font-variant: small-caps; font-size: .74rem; letter-spacing: .1em; }
+  .dossier-systems { padding: clamp(2rem, 5vw, 4rem); border: 1px solid var(--edge); background: linear-gradient(145deg, var(--codex-raised), var(--ink)); }
+  .dossier-systems dl { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin: 2rem 0 0; background: var(--edge); }
+  .dossier-systems dl > div { min-width: 0; padding: 1rem; background: var(--codex); }
+  .dossier-systems dt { color: var(--guardian-accent); font-variant: small-caps; font-size: .68rem; letter-spacing: .12em; }
+  .dossier-systems dd { margin: .45rem 0 0; color: var(--parchment); font-size: .9rem; line-height: 1.4; }
+  .dossier-systems > p { max-width: 72ch; margin: 1.3rem 0 0; color: var(--parchment-dim); font-style: italic; }
+  .dossier-fervor { padding-block: clamp(5rem, 10vw, 9rem); }
+  .dossier-fervor header { max-width: 720px; }
+  .fervor-presences { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 2.5rem; }
+  .fervor-presences a { position: relative; display: grid; min-height: 320px; place-items: center; overflow: hidden; border: 1px solid var(--edge); color: var(--parchment); background: radial-gradient(circle, var(--guardian-soft), transparent 56%), var(--codex); text-align: center; }
+  .fervor-presences img { position: absolute; width: min(62%, 290px); height: auto; opacity: .18; transition: opacity .35s ease, transform .5s ease; }
+  .fervor-presences a:hover img { opacity: .32; transform: scale(1.05) rotate(2deg); }
+  .fervor-presences a > span, .fervor-presences h3 { position: relative; z-index: 1; }
+  .fervor-presences h3 { max-width: 80%; font-size: clamp(1.2rem, 3vw, 2rem); }
+  .fervor-open { align-self: end; padding-bottom: 1rem; color: var(--parchment-dim); font-size: .65rem; letter-spacing: .08em; }
+  .fervor-open i { color: var(--guardian-accent); font-style: normal; }
+  .dossier-geometry { padding-block: clamp(4rem, 8vw, 7rem); }
+  .dossier-geometry dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1px; margin-top: 2rem; background: var(--edge); }
+  .dossier-geometry dl > div { padding: 1.2rem; background: var(--codex); }
+  .dossier-geometry dt { color: var(--guardian-accent); font-family: var(--font-display); font-size: .8rem; letter-spacing: .1em; }
+  .dossier-geometry dd { margin: .45rem 0 0; color: var(--parchment-dim); font-size: .85rem; }
+  .dossier-territory { display: grid; grid-template-columns: 220px 1fr; gap: clamp(2rem, 6vw, 6rem); align-items: center; padding-block: clamp(5rem, 9vw, 8rem); }
+  .dossier-territory img { width: 100%; height: auto; filter: drop-shadow(0 18px 30px rgba(0,0,0,.5)); }
+  .dossier-territory p { max-width: 64ch; margin-top: 1rem; color: var(--parchment-dim); }
+  .dossier-territory a { display: inline-block; margin-top: .7rem; padding-bottom: .3rem; border-bottom: 1px solid var(--guardian-accent); color: var(--guardian-accent); font-family: var(--font-display); font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; }
+  .dossier-pagination { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--edge); }
+  .dossier-pagination a { display: grid; padding: 1rem 1.2rem; color: var(--parchment-dim); }
+  .dossier-pagination a + a { border-left: 1px solid var(--edge); text-align: center; }
+  .dossier-pagination a:last-child { text-align: right; }
+  .dossier-pagination span { color: var(--guardian-accent); font-variant: small-caps; font-size: .64rem; letter-spacing: .1em; }
+  .dossier-pagination strong { margin-top: .2rem; color: var(--parchment); font-family: var(--font-display); font-size: .8rem; letter-spacing: .08em; }
+  .dossier-pagination small { color: var(--parchment-faint); }
+  .dossier-source { margin: 2rem auto 0; padding-bottom: 4rem; color: var(--parchment-faint); font-size: .58rem; text-align: center; }
+  [data-dossier-reveal] { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+  [data-dossier-reveal].is-visible { opacity: 1; transform: none; }
+  @media (max-width: 900px) { .dossier-hero-wash { background: linear-gradient(90deg, rgba(12,10,8,.94), rgba(12,10,8,.38)), linear-gradient(180deg, transparent 50%, var(--ink)); } .dossier-hero h1, .dossier-epithet { max-width: 82%; } .dossier-identity { grid-template-columns: 1fr; } .dossier-systems dl { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 650px) { .dossier-hero { min-height: 82svh; } .dossier-portrait { width: 100%; opacity: .66; } .dossier-hero h1, .dossier-epithet { max-width: 100%; } .dossier-hero-wash { background: linear-gradient(180deg, rgba(12,10,8,.45), rgba(12,10,8,.58) 45%, var(--ink)); } .dossier-identity dl > div { grid-template-columns: 1fr; gap: .2rem; } .dossier-systems dl, .fervor-presences { grid-template-columns: 1fr; } .dossier-territory { grid-template-columns: 120px 1fr; } .dossier-pagination { grid-template-columns: 1fr; } .dossier-pagination a + a { border-left: 0; border-top: 1px solid var(--edge); text-align: left; } .dossier-pagination a:last-child { text-align: left; } }
+  @media (prefers-reduced-motion: reduce) { [data-dossier-reveal] { opacity: 1; transform: none; transition: none; } .fervor-presences img { transition: none; } }
+</style>

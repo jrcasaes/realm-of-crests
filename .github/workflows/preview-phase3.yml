@@ -1,0 +1,99 @@
+name: Prévia imersiva — Fase 3
+
+on:
+  pull_request:
+    branches:
+      - agent/immersive-phase-2
+    types: [opened, synchronize, reopened]
+    paths:
+      - .github/workflows/preview-phase3.yml
+      - astro.config.mjs
+      - package.json
+      - package-lock.json
+      - public/**
+      - src/**
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'agent/immersive-phase-3'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar a produção estável
+        uses: actions/checkout@v4
+        with: { ref: main, path: production }
+
+      - name: Baixar a Fase 1
+        uses: actions/checkout@v4
+        with: { ref: agent/immersive-phase-1, path: phase1 }
+
+      - name: Baixar a Fase 2
+        uses: actions/checkout@v4
+        with: { ref: agent/immersive-phase-2, path: phase2 }
+
+      - name: Baixar a Fase 3
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          path: phase3
+
+      - name: Preparar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: |
+            production/package-lock.json
+            phase1/package-lock.json
+            phase2/package-lock.json
+            phase3/package-lock.json
+
+      - name: Construir produção
+        working-directory: production
+        run: npm ci && npm run build
+
+      - name: Construir Fase 1
+        working-directory: phase1
+        env: { ASTRO_BASE: /realm-of-crests/previews/phase-1, PUBLIC_ROBOTS: "noindex, nofollow" }
+        run: npm ci && npm run check
+
+      - name: Construir Fase 2
+        working-directory: phase2
+        env: { ASTRO_BASE: /realm-of-crests/previews/phase-2, PUBLIC_ROBOTS: "noindex, nofollow" }
+        run: npm ci && npm run check
+
+      - name: Construir Fase 3
+        working-directory: phase3
+        env: { ASTRO_BASE: /realm-of-crests/previews/phase-3, PUBLIC_ROBOTS: "noindex, nofollow" }
+        run: npm ci && npm run check
+
+      - name: Compor produção e prévias
+        run: |
+          mkdir -p site/previews/phase-1 site/previews/phase-2 site/previews/phase-3
+          cp -R production/dist/. site/
+          cp -R phase1/dist/. site/previews/phase-1/
+          cp -R phase2/dist/. site/previews/phase-2/
+          cp -R phase3/dist/. site/previews/phase-3/
+
+      - name: Empacotar GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with: { path: site }
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages-preview
+      url: ${{ steps.deployment.outputs.page_url }}previews/phase-3/
+    steps:
+      - name: Publicar prévia temporária
+        id: deployment
+        uses: actions/deploy-pages@v4

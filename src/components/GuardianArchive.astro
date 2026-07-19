@@ -1,0 +1,415 @@
+---
+import { fervorSignature } from '../lib/fervor.js';
+
+interface Props {
+  guardians: any[];
+  base: string;
+}
+
+const { guardians, base } = Astro.props;
+const entries = guardians.map((guardian) => ({
+  slug: guardian.slug,
+  order: guardian.order,
+  name: guardian.name,
+  realmSlug: guardian.realmSlug,
+  realmName: guardian.realmName,
+  realmEcho: guardian.realmEcho,
+  epithet: guardian.epithet,
+  ecoAncestral: guardian.ecoAncestral,
+  vulgo: guardian.vulgo,
+  battleEcho: guardian.battleEcho,
+  essence: guardian.essence,
+  fervor: guardian.fervor,
+  dominantFervor: guardian.fervorRelations[0]?.id ?? 'unknown',
+  dominantFervorLabel: guardian.fervorRelations[0]?.label ?? 'Indefinido',
+  secondaryFervorLabel: guardian.fervorRelations[1]?.label ?? 'Indefinido',
+  gravity: guardian.gravity,
+  gravityState: guardian.gravityState,
+  temple: guardian.temple,
+  portrait: `${base}/assets/guardians/${guardian.portrait}`,
+  portraitVertical: guardian.portraitHeight > guardian.portraitWidth,
+  dossierHref: `${base}/guardioes/${guardian.slug}/`,
+  realmHref: `${base}/reinos/${guardian.realmSlug}/`,
+  emblem: `${base}/assets/emblems/${guardian.emblem}`,
+  color: fervorSignature(guardian.fervor).color,
+  soft: fervorSignature(guardian.fervor).soft,
+}));
+const first = entries[0];
+const fervorFilters = [...new Map(entries.map((entry) => [entry.dominantFervor, entry.dominantFervorLabel])).entries()];
+const serializedEntries = JSON.stringify(entries).replace(/</g, '\\u003c');
+---
+
+<section class="guardian-archive" id="arquivo-vivo" data-guardian-archive aria-labelledby="guardian-archive-title">
+  <script id="guardian-archive-data" type="application/json" set:html={serializedEntries}></script>
+
+  <header class="archive-heading">
+    <div>
+      <span class="rubric">instrumento de leitura soberana</span>
+      <h2 id="guardian-archive-title">ARQUIVO VIVO</h2>
+      <p>Filtre presenças, confronte assinaturas e escolha qual soberania observar de perto.</p>
+    </div>
+    <p class="archive-count" aria-live="polite"><strong data-guardian-visible-count>19</strong><span>/ 19 visíveis</span></p>
+  </header>
+
+  <div class="archive-toolbar" aria-label="Filtros dos Guardiões">
+    <label class="archive-search">
+      <span>Buscar no arquivo</span>
+      <input type="search" data-guardian-search placeholder="Guardião, Reino ou título…" autocomplete="off" />
+    </label>
+
+    <fieldset class="archive-fervor-filters">
+      <legend>Fervor dominante</legend>
+      <button type="button" data-fervor-filter="all" aria-pressed="true">Todos</button>
+      {fervorFilters.map(([id, label]) => (
+        <button type="button" data-fervor-filter={id} aria-pressed="false">{label}</button>
+      ))}
+    </fieldset>
+
+    <label class="archive-gravity-filter">
+      <span>Sovereign Gravity</span>
+      <select data-gravity-filter>
+        <option value="all">Todas as pressões</option>
+        <option value="constructive">Constructive</option>
+        <option value="catalytic">Catalytic</option>
+      </select>
+    </label>
+
+    <button class="archive-reset" type="button" data-guardian-reset>Limpar filtros</button>
+  </div>
+
+  <article class="guardian-focus" data-guardian-focus style={`--guardian-accent:${first.color}; --guardian-soft:${first.soft};`}>
+    <figure class:list={{ 'focus-portrait': true, 'is-vertical': first.portraitVertical }}>
+      <img data-focus-portrait src={first.portrait} alt={`${first.name}, Guardião de ${first.realmName}`} width="1536" height="1024" />
+      <div class="focus-wash" aria-hidden="true"></div>
+      <figcaption>
+        <span data-focus-folio>{String(first.order).padStart(2, '0')} / 19</span>
+        <span>retrato web derivado · rmv v0.1</span>
+      </figcaption>
+    </figure>
+
+    <div class="focus-dossier">
+      <span class="rubric" data-focus-realm>guardião de {first.realmName}</span>
+      <h3 data-focus-name>{first.name.toUpperCase()}</h3>
+      <p class="focus-epithet" data-focus-epithet>“{first.epithet}”</p>
+      <dl>
+        <div><dt>Eco ancestral</dt><dd data-focus-echo>{first.ecoAncestral}</dd></div>
+        <div><dt>Fervor dominante</dt><dd data-focus-fervor>{first.dominantFervorLabel}</dd></div>
+        <div><dt>Gravity</dt><dd data-focus-gravity>{first.gravity}</dd></div>
+        <div><dt>Templo</dt><dd data-focus-temple>{first.temple}</dd></div>
+      </dl>
+      <div class="focus-actions">
+        <a data-focus-dossier href={first.dossierHref}>Abrir dossiê completo <span aria-hidden="true">→</span></a>
+        <a data-focus-realm-link href={first.realmHref}>Folio do Reino</a>
+      </div>
+      <div class="focus-navigation" aria-label="Navegar entre Guardiões">
+        <button type="button" data-focus-previous aria-label="Guardião anterior">←</button>
+        <span data-focus-position>01 / 19</span>
+        <button type="button" data-focus-next aria-label="Próximo Guardião">→</button>
+      </div>
+    </div>
+  </article>
+
+  <div class="guardian-results" data-guardian-results>
+    {entries.map((guardian, index) => (
+      <article
+        class="guardian-record"
+        data-guardian-card
+        data-index={index}
+        data-search={`${guardian.name} ${guardian.realmName} ${guardian.epithet} ${guardian.ecoAncestral}`.toLocaleLowerCase('pt-BR')}
+        data-fervor={guardian.dominantFervor}
+        data-gravity={guardian.gravityState}
+        data-realm={guardian.realmSlug}
+        style={`--guardian-accent:${guardian.color}; --guardian-soft:${guardian.soft};`}
+      >
+        <button class="record-focus" type="button" data-guardian-select aria-pressed={index === 0 ? 'true' : 'false'} aria-label={`Focalizar ${guardian.name}, Guardião de ${guardian.realmName}`}>
+          <span class:list={{ 'record-portrait': true, 'is-vertical': guardian.portraitVertical }}>
+            <img src={guardian.portrait} alt="" loading="lazy" width="640" height="480" />
+            <span class="record-number">{String(guardian.order).padStart(2, '0')}</span>
+            <span class="record-discovery" data-realm-state>Reino não registrado</span>
+          </span>
+          <span class="record-copy">
+            <small>{guardian.realmName}</small>
+            <strong>{guardian.name}</strong>
+            <em>“{guardian.epithet}”</em>
+            <span>{guardian.dominantFervorLabel} · {guardian.gravityState}</span>
+          </span>
+        </button>
+        <footer>
+          <a href={guardian.dossierHref}>Dossiê <span aria-hidden="true">↗</span></a>
+          <button type="button" data-compare-toggle aria-pressed="false">+ comparar</button>
+        </footer>
+      </article>
+    ))}
+  </div>
+
+  <p class="archive-empty" data-guardian-empty hidden>Nenhum Guardião corresponde a essa leitura. Remova um filtro para reabrir o arquivo.</p>
+
+  <section class="guardian-comparison" id="comparar-guardioes" aria-labelledby="comparison-title" data-guardian-comparison>
+    <header>
+      <div>
+        <span class="rubric">mesa de confronto · máximo 2</span>
+        <h3 id="comparison-title">CONFRONTAR ASSINATURAS</h3>
+      </div>
+      <p data-comparison-status aria-live="polite">Selecione dois Guardiões na galeria.</p>
+    </header>
+
+    <div class="comparison-slots">
+      <div data-comparison-slot="0"><span>I</span><p>Primeira presença</p></div>
+      <div data-comparison-slot="1"><span>II</span><p>Segunda presença</p></div>
+    </div>
+
+    <div class="comparison-table-wrap" data-comparison-table hidden>
+      <table>
+        <caption>Comparação canônica entre os Guardiões selecionados</caption>
+        <thead><tr><th scope="col">Dimensão</th><th scope="col" data-compare-name="0"></th><th scope="col" data-compare-name="1"></th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Reino</th><td data-compare-value="realm-0"></td><td data-compare-value="realm-1"></td></tr>
+          <tr><th scope="row">Eco ancestral</th><td data-compare-value="echo-0"></td><td data-compare-value="echo-1"></td></tr>
+          <tr><th scope="row">Fervor dominante</th><td data-compare-value="fervor-0"></td><td data-compare-value="fervor-1"></td></tr>
+          <tr><th scope="row">Fervor secundário</th><td data-compare-value="secondary-0"></td><td data-compare-value="secondary-1"></td></tr>
+          <tr><th scope="row">Sovereign Gravity</th><td data-compare-value="gravity-0"></td><td data-compare-value="gravity-1"></td></tr>
+          <tr><th scope="row">Essência</th><td data-compare-value="essence-0"></td><td data-compare-value="essence-1"></td></tr>
+          <tr><th scope="row">Templo</th><td data-compare-value="temple-0"></td><td data-compare-value="temple-1"></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</section>
+
+<script>
+  type GuardianEntry = {
+    slug: string; order: number; name: string; realmSlug: string; realmName: string; realmEcho: string;
+    epithet: string; ecoAncestral: string; essence: string; dominantFervor: string; dominantFervorLabel: string;
+    secondaryFervorLabel: string; gravity: string; gravityState: string; temple: string; portrait: string;
+    portraitVertical: boolean; dossierHref: string; realmHref: string; color: string; soft: string;
+  };
+
+  function bindGuardianArchive() {
+    const root = document.querySelector<HTMLElement>('[data-guardian-archive]');
+    if (!root || root.dataset.bound) return;
+    root.dataset.bound = 'true';
+    const dataNode = root.querySelector<HTMLScriptElement>('#guardian-archive-data');
+    if (!dataNode?.textContent) return;
+    const entries = JSON.parse(dataNode.textContent) as GuardianEntry[];
+    const cards = Array.from(root.querySelectorAll<HTMLElement>('[data-guardian-card]'));
+    const search = root.querySelector<HTMLInputElement>('[data-guardian-search]')!;
+    const gravity = root.querySelector<HTMLSelectElement>('[data-gravity-filter]')!;
+    const fervorButtons = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-fervor-filter]'));
+    const count = root.querySelector<HTMLElement>('[data-guardian-visible-count]')!;
+    const empty = root.querySelector<HTMLElement>('[data-guardian-empty]')!;
+    const focus = root.querySelector<HTMLElement>('[data-guardian-focus]')!;
+    let activeFervor = 'all';
+    let current = 0;
+    let compared: number[] = [];
+
+    const normalize = (value: string) => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('pt-BR');
+
+    function selectGuardian(index: number, scroll = false) {
+      current = (index + entries.length) % entries.length;
+      const entry = entries[current];
+      focus.style.setProperty('--guardian-accent', entry.color);
+      focus.style.setProperty('--guardian-soft', entry.soft);
+      const portrait = root.querySelector<HTMLImageElement>('[data-focus-portrait]')!;
+      portrait.src = entry.portrait;
+      portrait.alt = `${entry.name}, Guardião de ${entry.realmName}`;
+      portrait.parentElement?.classList.toggle('is-vertical', entry.portraitVertical);
+      root.querySelector<HTMLElement>('[data-focus-folio]')!.textContent = `${String(entry.order).padStart(2, '0')} / 19`;
+      root.querySelector<HTMLElement>('[data-focus-realm]')!.textContent = `guardião de ${entry.realmName}`;
+      root.querySelector<HTMLElement>('[data-focus-name]')!.textContent = entry.name.toUpperCase();
+      root.querySelector<HTMLElement>('[data-focus-epithet]')!.textContent = `“${entry.epithet}”`;
+      root.querySelector<HTMLElement>('[data-focus-echo]')!.textContent = entry.ecoAncestral;
+      root.querySelector<HTMLElement>('[data-focus-fervor]')!.textContent = entry.dominantFervorLabel;
+      root.querySelector<HTMLElement>('[data-focus-gravity]')!.textContent = entry.gravity;
+      root.querySelector<HTMLElement>('[data-focus-temple]')!.textContent = entry.temple;
+      root.querySelector<HTMLAnchorElement>('[data-focus-dossier]')!.href = entry.dossierHref;
+      root.querySelector<HTMLAnchorElement>('[data-focus-realm-link]')!.href = entry.realmHref;
+      root.querySelector<HTMLElement>('[data-focus-position]')!.textContent = `${String(current + 1).padStart(2, '0')} / 19`;
+      cards.forEach((card, cardIndex) => card.querySelector('[data-guardian-select]')?.setAttribute('aria-pressed', String(cardIndex === current)));
+      if (scroll) focus.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
+    }
+
+    function applyFilters() {
+      const term = normalize(search.value.trim());
+      let visible = 0;
+      cards.forEach((card) => {
+        const matchesSearch = !term || normalize(card.dataset.search || '').includes(term);
+        const matchesFervor = activeFervor === 'all' || card.dataset.fervor === activeFervor;
+        const matchesGravity = gravity.value === 'all' || card.dataset.gravity === gravity.value;
+        const show = matchesSearch && matchesFervor && matchesGravity;
+        card.hidden = !show;
+        if (show) visible += 1;
+      });
+      count.textContent = String(visible);
+      empty.hidden = visible !== 0;
+      const currentCard = cards[current];
+      if (currentCard?.hidden) {
+        const next = cards.findIndex((card) => !card.hidden);
+        if (next >= 0) selectGuardian(next);
+      }
+    }
+
+    function markTerritorialMemory() {
+      try {
+        const state = JSON.parse(localStorage.getItem('roc.exploration.v1') || 'null');
+        const visited = new Set<string>(Array.isArray(state?.visited) ? state.visited : []);
+        cards.forEach((card) => {
+          const registered = visited.has(card.dataset.realm || '');
+          card.classList.toggle('is-realm-visited', registered);
+          const label = card.querySelector<HTMLElement>('[data-realm-state]');
+          if (label) label.textContent = registered ? 'Reino registrado' : 'Reino não registrado';
+        });
+      } catch { /* memória local indisponível */ }
+    }
+
+    function renderComparison() {
+      cards.forEach((card, index) => card.querySelector('[data-compare-toggle]')?.setAttribute('aria-pressed', String(compared.includes(index))));
+      const status = root.querySelector<HTMLElement>('[data-comparison-status]')!;
+      status.textContent = compared.length === 2 ? 'Duas assinaturas em confronto.' : compared.length === 1 ? 'Escolha mais uma presença.' : 'Selecione dois Guardiões na galeria.';
+      [0, 1].forEach((slotIndex) => {
+        const slot = root.querySelector<HTMLElement>(`[data-comparison-slot="${slotIndex}"]`)!;
+        const entry = entries[compared[slotIndex]];
+        slot.classList.toggle('is-filled', Boolean(entry));
+        slot.querySelector('span')!.textContent = entry ? String(entry.order).padStart(2, '0') : slotIndex ? 'II' : 'I';
+        slot.querySelector('p')!.textContent = entry ? `${entry.name} · ${entry.realmName}` : slotIndex ? 'Segunda presença' : 'Primeira presença';
+      });
+      const table = root.querySelector<HTMLElement>('[data-comparison-table]')!;
+      table.hidden = compared.length !== 2;
+      if (compared.length !== 2) return;
+      compared.forEach((entryIndex, column) => {
+        const entry = entries[entryIndex];
+        root.querySelector<HTMLElement>(`[data-compare-name="${column}"]`)!.textContent = entry.name;
+        const values: Record<string, string> = {
+          realm: `${entry.realmName} — ${entry.realmEcho}`,
+          echo: entry.ecoAncestral,
+          fervor: entry.dominantFervorLabel,
+          secondary: entry.secondaryFervorLabel,
+          gravity: entry.gravity,
+          essence: entry.essence,
+          temple: entry.temple,
+        };
+        Object.entries(values).forEach(([key, value]) => {
+          root.querySelector<HTMLElement>(`[data-compare-value="${key}-${column}"]`)!.textContent = value;
+        });
+      });
+    }
+
+    cards.forEach((card, index) => {
+      card.querySelector('[data-guardian-select]')?.addEventListener('click', () => selectGuardian(index, true));
+      card.querySelector('[data-compare-toggle]')?.addEventListener('click', () => {
+        if (compared.includes(index)) compared = compared.filter((item) => item !== index);
+        else compared = [...compared.slice(-1), index];
+        renderComparison();
+      });
+    });
+    fervorButtons.forEach((button) => button.addEventListener('click', () => {
+      activeFervor = button.dataset.fervorFilter || 'all';
+      fervorButtons.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+      applyFilters();
+    }));
+    search.addEventListener('input', applyFilters);
+    gravity.addEventListener('change', applyFilters);
+    root.querySelector('[data-guardian-reset]')?.addEventListener('click', () => {
+      search.value = '';
+      gravity.value = 'all';
+      activeFervor = 'all';
+      fervorButtons.forEach((item) => item.setAttribute('aria-pressed', String(item.dataset.fervorFilter === 'all')));
+      applyFilters();
+      search.focus();
+    });
+    root.querySelector('[data-focus-previous]')?.addEventListener('click', () => selectGuardian(current - 1));
+    root.querySelector('[data-focus-next]')?.addEventListener('click', () => selectGuardian(current + 1));
+    markTerritorialMemory();
+    renderComparison();
+  }
+
+  document.addEventListener('astro:page-load', bindGuardianArchive);
+</script>
+
+<style>
+  .guardian-archive { padding-bottom: clamp(5rem, 9vw, 8rem); }
+  .archive-heading { display: flex; align-items: end; justify-content: space-between; gap: 2rem; padding-block: 3rem 2rem; }
+  .archive-heading .rubric { color: var(--gold); }
+  .archive-heading h2 { margin-top: .45rem; color: var(--parchment); font-size: clamp(1.8rem, 4vw, 3rem); }
+  .archive-heading p { max-width: 56ch; margin: .8rem 0 0; color: var(--parchment-dim); }
+  .archive-count { display: flex; align-items: baseline; flex: 0 0 auto; gap: .45rem; margin: 0; }
+  .archive-count strong { color: var(--gold); font-family: var(--font-display); font-size: 2.4rem; line-height: 1; }
+  .archive-count span { color: var(--parchment-faint); font-size: .7rem; letter-spacing: .1em; }
+  .archive-toolbar { display: grid; grid-template-columns: minmax(220px, 1.25fr) 2fr minmax(190px, .8fr) auto; gap: 1rem; align-items: end; padding: 1.1rem; border: 1px solid var(--edge); background: rgba(23,19,15,.72); }
+  .archive-toolbar label, .archive-fervor-filters { min-width: 0; }
+  .archive-toolbar label > span, .archive-fervor-filters legend { display: block; margin-bottom: .4rem; color: var(--parchment-faint); font-variant: small-caps; letter-spacing: .14em; font-size: .67rem; }
+  .archive-search input, .archive-gravity-filter select { width: 100%; height: 42px; border: 1px solid var(--edge); color: var(--parchment); background: var(--ink); font: .86rem var(--font-body); }
+  .archive-search input { padding: .55rem .7rem; }
+  .archive-gravity-filter select { padding-inline: .55rem; }
+  .archive-fervor-filters { display: flex; flex-wrap: wrap; gap: .35rem; margin: 0; padding: 0; border: 0; }
+  .archive-fervor-filters legend { width: 100%; }
+  .archive-fervor-filters button, .archive-reset { min-height: 34px; padding: .35rem .55rem; border: 1px solid var(--edge); color: var(--parchment-dim); background: var(--ink); font: small-caps .67rem var(--font-body); letter-spacing: .08em; cursor: pointer; }
+  .archive-fervor-filters button[aria-pressed='true'] { border-color: var(--gold); color: var(--gold); background: rgba(201,163,92,.08); }
+  .archive-reset { height: 42px; white-space: nowrap; }
+  .guardian-focus { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(330px, .65fr); min-height: 620px; margin-top: 1.5rem; border: 1px solid color-mix(in srgb, var(--guardian-accent) 52%, var(--edge)); background: linear-gradient(145deg, var(--codex-raised), var(--ink)); box-shadow: 0 24px 70px rgba(0,0,0,.35); }
+  .focus-portrait { position: relative; min-width: 0; min-height: 620px; margin: 0; overflow: hidden; background: #050403; }
+  .focus-portrait > img { width: 100%; height: 100%; object-fit: cover; object-position: center 18%; transition: opacity .3s ease; }
+  .focus-portrait.is-vertical > img { object-fit: contain; }
+  .focus-wash { position: absolute; inset: 0; background: linear-gradient(90deg, transparent 55%, rgba(12,10,8,.68)), linear-gradient(180deg, transparent 55%, rgba(12,10,8,.82)); pointer-events: none; }
+  .focus-portrait figcaption { position: absolute; left: 1rem; right: 1rem; bottom: .8rem; display: flex; justify-content: space-between; gap: 1rem; color: rgba(230,217,184,.55); font-family: var(--font-display); font-size: .52rem; letter-spacing: .12em; text-transform: uppercase; }
+  .focus-portrait figcaption span:first-child { color: var(--guardian-accent); }
+  .focus-dossier { position: relative; display: flex; flex-direction: column; justify-content: center; padding: clamp(2rem, 4vw, 3.5rem); }
+  .focus-dossier::before { content: ''; position: absolute; top: 10%; bottom: 10%; left: 0; width: 1px; background: linear-gradient(transparent, var(--guardian-accent), transparent); }
+  .focus-dossier .rubric { color: var(--guardian-accent); }
+  .focus-dossier h3 { margin-top: .6rem; color: var(--parchment); font-size: clamp(2rem, 4vw, 3.4rem); }
+  .focus-epithet { margin: .45rem 0 1.5rem; color: var(--parchment-dim); font-size: 1.12rem; font-style: italic; }
+  .focus-dossier dl { margin: 0; }
+  .focus-dossier dl > div { display: grid; grid-template-columns: 120px 1fr; gap: .8rem; padding: .55rem 0; border-bottom: 1px solid var(--edge); }
+  .focus-dossier dt { color: var(--parchment-faint); font-variant: small-caps; font-size: .73rem; letter-spacing: .07em; }
+  .focus-dossier dd { margin: 0; color: var(--parchment); font-size: .87rem; line-height: 1.35; }
+  .focus-actions { display: flex; flex-wrap: wrap; gap: .65rem; margin-top: 1.5rem; }
+  .focus-actions a { padding: .65rem .8rem; border: 1px solid color-mix(in srgb, var(--guardian-accent) 60%, var(--edge)); color: var(--parchment); font-family: var(--font-display); font-size: .58rem; letter-spacing: .1em; text-transform: uppercase; }
+  .focus-actions a:first-child { color: var(--ink); background: var(--guardian-accent); }
+  .focus-navigation { display: flex; align-items: center; justify-content: space-between; margin-top: 1.8rem; }
+  .focus-navigation button { width: 38px; height: 38px; border: 1px solid var(--edge); color: var(--guardian-accent); background: transparent; cursor: pointer; }
+  .focus-navigation span { color: var(--parchment-faint); font-family: var(--font-display); font-size: .6rem; letter-spacing: .13em; }
+  .guardian-results { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+  .guardian-record { position: relative; min-width: 0; overflow: hidden; border: 1px solid var(--edge); background: var(--codex); transition: border-color .25s ease, transform .3s ease; }
+  .guardian-record:hover, .guardian-record:focus-within { border-color: color-mix(in srgb, var(--guardian-accent) 65%, var(--edge)); transform: translateY(-3px); }
+  .guardian-record[hidden] { display: none; }
+  .record-focus { display: block; width: 100%; padding: 0; border: 0; color: inherit; background: transparent; text-align: left; cursor: pointer; }
+  .record-portrait { position: relative; display: block; aspect-ratio: 4 / 3; overflow: hidden; background: #050403; }
+  .record-portrait img { width: 100%; height: 100%; object-fit: cover; object-position: center 18%; filter: saturate(.78) brightness(.82); transition: transform .45s ease, filter .3s ease; }
+  .record-portrait.is-vertical img { object-fit: contain; }
+  .record-focus:hover img, .record-focus[aria-pressed='true'] img { transform: scale(1.025); filter: saturate(.95) brightness(.95); }
+  .record-focus[aria-pressed='true'] .record-portrait::after { content: ''; position: absolute; inset: 0; box-shadow: inset 0 -3px 0 var(--guardian-accent); pointer-events: none; }
+  .record-number { position: absolute; top: .55rem; left: .6rem; color: var(--guardian-accent); font-family: var(--font-display); font-size: .62rem; text-shadow: 0 2px 8px #000; }
+  .record-discovery { position: absolute; right: .45rem; bottom: .45rem; padding: .18rem .35rem; border: 1px solid rgba(230,217,184,.18); color: rgba(230,217,184,.55); background: rgba(12,10,8,.75); font-size: .52rem; letter-spacing: .05em; }
+  .is-realm-visited .record-discovery { border-color: color-mix(in srgb, var(--guardian-accent) 58%, transparent); color: var(--guardian-accent); }
+  .record-copy { display: grid; padding: .85rem .9rem 1rem; }
+  .record-copy small { color: var(--guardian-accent); font-variant: small-caps; letter-spacing: .14em; font-size: .64rem; }
+  .record-copy strong { margin-top: .25rem; color: var(--parchment); font-family: var(--font-display); font-size: 1rem; letter-spacing: .1em; }
+  .record-copy em { margin-top: .2rem; overflow: hidden; color: var(--parchment-dim); font-size: .78rem; font-style: italic; text-overflow: ellipsis; white-space: nowrap; }
+  .record-copy > span { margin-top: .6rem; color: var(--parchment-faint); font-size: .62rem; text-transform: capitalize; }
+  .guardian-record footer { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--edge); }
+  .guardian-record footer a, .guardian-record footer button { padding: .55rem .7rem; border: 0; color: var(--parchment-dim); background: transparent; font: small-caps .64rem var(--font-body); letter-spacing: .08em; cursor: pointer; }
+  .guardian-record footer button[aria-pressed='true'] { color: var(--guardian-accent); }
+  .archive-empty { padding: 4rem 1rem; border: 1px dashed var(--edge); color: var(--parchment-dim); text-align: center; }
+  .guardian-comparison { margin-top: 4rem; padding: clamp(1.2rem, 3vw, 2rem); border: 1px solid rgba(201,163,92,.32); background: linear-gradient(145deg, rgba(30,25,19,.8), rgba(12,10,8,.94)); }
+  .guardian-comparison > header { display: flex; align-items: end; justify-content: space-between; gap: 2rem; }
+  .guardian-comparison .rubric { color: var(--gold); }
+  .guardian-comparison h3 { margin-top: .4rem; color: var(--parchment); font-size: 1.25rem; }
+  .guardian-comparison header p { margin: 0; color: var(--parchment-faint); font-size: .8rem; }
+  .comparison-slots { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; margin-top: 1.3rem; background: var(--edge); border: 1px solid var(--edge); }
+  .comparison-slots > div { display: flex; align-items: center; gap: .75rem; min-height: 68px; padding: .8rem 1rem; background: var(--ink); }
+  .comparison-slots span { display: grid; width: 36px; aspect-ratio: 1; place-items: center; border: 1px solid var(--edge); color: var(--parchment-faint); border-radius: 50%; font-family: var(--font-display); font-size: .6rem; }
+  .comparison-slots p { margin: 0; color: var(--parchment-faint); }
+  .comparison-slots .is-filled span { border-color: var(--gold); color: var(--gold); }
+  .comparison-slots .is-filled p { color: var(--parchment); }
+  .comparison-table-wrap { margin-top: 1rem; overflow-x: auto; }
+  .comparison-table-wrap[hidden] { display: none; }
+  .comparison-table-wrap table { width: 100%; min-width: 650px; border-collapse: collapse; }
+  .comparison-table-wrap caption { padding: .5rem 0; color: var(--parchment-faint); font-size: .65rem; text-align: left; }
+  .comparison-table-wrap th, .comparison-table-wrap td { padding: .7rem .8rem; border: 1px solid var(--edge); text-align: left; vertical-align: top; }
+  .comparison-table-wrap thead th { color: var(--gold); font-family: var(--font-display); font-size: .76rem; letter-spacing: .08em; }
+  .comparison-table-wrap tbody th { width: 160px; color: var(--parchment-faint); font-variant: small-caps; font-size: .72rem; font-weight: 400; letter-spacing: .06em; }
+  .comparison-table-wrap td { color: var(--parchment-dim); font-size: .84rem; line-height: 1.35; }
+  @media (max-width: 1100px) { .archive-toolbar { grid-template-columns: 1fr 1fr; } .archive-fervor-filters { grid-column: 1 / -1; grid-row: 2; } .guardian-results { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 860px) { .guardian-focus { grid-template-columns: 1fr; } .focus-portrait { min-height: 470px; } .focus-dossier::before { display: none; } .guardian-results { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 620px) { .archive-heading, .guardian-comparison > header { align-items: start; flex-direction: column; } .archive-toolbar { grid-template-columns: 1fr; } .archive-fervor-filters { grid-column: auto; grid-row: auto; } .guardian-results { grid-template-columns: 1fr; } .focus-portrait { min-height: 360px; } .guardian-focus { min-height: 0; } .comparison-slots { grid-template-columns: 1fr; } }
+  @media (prefers-reduced-motion: reduce) { .guardian-record, .record-portrait img { transition: none; } }
+</style>
