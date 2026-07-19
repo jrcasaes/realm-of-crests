@@ -12,6 +12,7 @@ const globalCss = read('src/styles/global.css');
 const embers = read('src/components/EmberField.astro');
 const atlas = read('src/components/ImmersiveRealmMap.astro');
 const realmExplorer = read('src/components/RealmAtlasExplorer.astro');
+const explorationHud = read('src/components/ExplorationHUD.astro');
 const robots = read('src/pages/robots.txt.js');
 const sitemap = read('src/pages/sitemap.xml.js');
 const manifest = json('public/site.webmanifest');
@@ -66,6 +67,7 @@ const performanceContracts = [
 ];
 for (const [source, token, label] of performanceContracts) pass(source.includes(token), `Contrato de desempenho ausente: ${label}.`);
 pass(!realmExplorer.includes('preload(1)'), 'O atlas soberano não deve pré-carregar panoramas pesados sem intenção.');
+pass(explorationHud.includes('lastPath: currentLastPath'), 'A continuidade territorial deve migrar caminhos persistidos para a base da versão atual.');
 
 const scanRoots = ['src', 'scripts', 'docs', '.github'];
 const textExtensions = /\.(?:astro|css|js|mjs|json|md|ya?ml)$/i;

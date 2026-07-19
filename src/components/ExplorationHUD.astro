@@ -109,11 +109,14 @@ const registry = realms
       const known = new Set(registry.map(({ slug }) => slug));
       if (!parsed || parsed.version !== 1 || !Array.isArray(parsed.visited)) return { ...EMPTY_STATE };
       const visited = [...new Set(parsed.visited.filter((slug: unknown) => typeof slug === 'string' && known.has(slug)))];
+      const lastRealm = typeof parsed.lastRealm === 'string' && known.has(parsed.lastRealm) ? parsed.lastRealm : null;
+      const currentLastPath = registry.find(({ slug }) => slug === lastRealm)?.href || null;
       return {
         version: 1,
         visited,
-        lastRealm: typeof parsed.lastRealm === 'string' && known.has(parsed.lastRealm) ? parsed.lastRealm : null,
-        lastPath: typeof parsed.lastPath === 'string' ? parsed.lastPath : null,
+        lastRealm,
+        // Recompõe o caminho com a base atual para migrar estados vindos de outras prévias.
+        lastPath: currentLastPath,
         updatedAt: typeof parsed.updatedAt === 'string' ? parsed.updatedAt : null,
       };
     } catch {
