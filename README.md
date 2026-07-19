@@ -1,18 +1,18 @@
 # Realm of Crests — Site Oficial
 
 Site estático em **Astro** com estética **Dark Codex**, publicado via **GitHub Pages**.
-Conteúdo rastreável ao **LORE_MASTER_CANON v3.0.6**, ao **Dossiê Canônico dos 19 Guardiões v2.6**, à **Story Bible v2.2 CC-31 APPROVED** e ao **roc-source-registry v1.2.10**. As decisões CC-28C, CC-30 e CC-31 já estão incorporadas nessas fontes ativas.
+Conteúdo rastreável ao **LORE_MASTER_CANON v3.0.6**, ao **Dossiê Canônico dos 19 Guardiões v2.6**, à **Story Bible v2.2 CC-31 APPROVED** e ao **roc-source-registry v1.2.11**. As decisões CC-28C, CC-30 e CC-31 já estão incorporadas nessas fontes ativas.
 
 Status: derivado operacional. O site não cria cânone. A correção **CC-28C** é obrigatória em `src/data/realms.json`: as seis camadas transferidas ao Apêndice Não Canônico não podem aparecer como dados canônicos ativos. O `nego-dossier-v1` permanece fonte de apoio com escopo restrito a Nego, Victória e direção visual de personagem; não possui autoridade constitucional.
 
-Pacote sincronizado sob o registry **v1.2.10** em **2026-07-18**. O FULL LOCK VISUAL dos glifos é restrito à matriz raster 8 × 5, com PASS 40/40; PNG não substitui master SVG, e os masters SVG/monocromáticos permanecem pendentes. A CC-31 fixa a matriz dos dezenove e define o Legado como excepcional e herdado, sem rótulo universal de raridade: Nego é o único dominante, e Admiral e Eldric o manifestam como secundário. As verificações CC-28C e CC-30 permanecem vigentes.
+Pacote sincronizado sob o registry **v1.2.11** em **2026-07-19**. O FULL LOCK VISUAL dos glifos é restrito à matriz raster 8 × 5, com PASS 40/40; PNG não substitui master SVG, e os masters SVG/monocromáticos permanecem pendentes. A CC-31 fixa a matriz dos dezenove e define o Legado como excepcional e herdado, sem rótulo universal de raridade: Nego é o único dominante, e Admiral e Eldric o manifestam como secundário. As verificações CC-28C e CC-30 permanecem vigentes.
 
 ---
 
 ## O que já está pronto
 
 - Página inicial com manifesto e grade dos 19 reinos (revelação de arquivo ao rolar)
-- Página individual de cada reino: emblema, Essence/Fervor/Gravity, nomenclatura em camadas, bioma e templo — tudo reconciliado com o cânone v3.0.6 e o registry v1.2.10
+- Página individual de cada reino: emblema, Essence/Fervor/Gravity, nomenclatura em camadas, bioma e templo — tudo reconciliado com o cânone v3.0.6 e o registry v1.2.11
 - Emblemas pendentes aparecem como "Selo Pendente" automaticamente; basta soltar o PNG na pasta certa para substituir (ver `public/assets/emblems/_CONVENCAO.md`)
 - Deploy automático: todo push na branch `main` publica o site sozinho
 

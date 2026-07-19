@@ -1,17 +1,15 @@
 {
   "project": "Realm of Crests",
   "artifact": "site-operational-package",
-  "manifestVersion": "1.2.10",
-  "generatedDate": "2026-07-18",
+  "manifestVersion": "1.2.11",
+  "generatedDate": "2026-07-19",
   "status": "DERIVED_OPERATIONAL_ACTIVE",
   "createsCanon": false,
   "authority": {
     "loreMaster": "REALM_OF_CRESTS_LORE_MASTER_CANON_v3.0.6.docx",
     "dossier": "RoC_Dossie_Canonico_Guardioes_19_v2.6.docx",
-    "storyBible": "Realm_of_Crests_Story_Bible_Master_v2_2_CC31_APPROVED.html",
-    "registry": "roc-source-registry.v1.2.10.json",
-    "activeSourcesView": "RoC_Fontes_Ativas_para_Producao_v1.2.10",
-    "masterIndexView": "RoC_Indice_Mestre_do_Drive_v1.2.10",
+    "storyBible": "RoC_Story_Bible_MASTER_CC31_v2.2.html",
+    "registryVersion": "1.2.11",
     "cc27": "RoC_CC-27_Sistema_Canonico_Marcas_e_Glifos_de_Fervor_v1.3.docx",
     "cc31": "RoC_CC-31_Matriz_Canonica_de_Fervores_e_Estatuto_do_Legado_v1.0.docx"
   },
@@ -83,15 +81,17 @@
     "uniqueSlugCount": 19,
     "verification": "PASS"
   },
-  "legacyClosure": {
-    "folderName": "HISTORICO__REALM_OF_CRESTS_LEGADO_AUDITADO_MIGRADO_2026-07-03",
-    "duplicatesVerified": 48,
-    "uniqueItems": 0,
-    "deletions": 0
+  "localReleaseGate": {
+    "verifiedDate": "2026-07-19",
+    "productionBuild": "PASS_46_PAGES",
+    "realmRoutes": 19,
+    "guardianRoutes": 19,
+    "uniqueSlugCount": 19,
+    "cc28cForbiddenHits": 0,
+    "cc31CriticalFervorMatrix": "PASS"
   },
   "deployment": {
-    "drivePackage": "SYNCHRONIZED_AND_VALIDATED_REGISTRY_1.2.10",
-    "github": "PUBLIC_VERIFIED"
+    "github": "READY_FOR_PUBLICATION"
   },
   "publicMetadata": "SANITIZED_NO_PRIVATE_DRIVE_IDS",
   "publicVerification": {
@@ -101,6 +101,9 @@
     "cc28cForbiddenHits": 0,
     "canonVersion": "3.0.6",
     "dossierVersion": "2.6",
-    "verifiedDate": "2026-07-18"
+    "verifiedDate": "2026-07-18",
+    "verifiedRelease": "1.2.10",
+    "targetRelease": "1.2.11",
+    "targetStatus": "PENDING_POST_DEPLOY_VERIFICATION"
   }
 }
