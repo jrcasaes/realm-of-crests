@@ -1,7 +1,7 @@
 {
   "name": "realm-of-crests",
   "type": "module",
-  "version": "1.2.12",
+  "version": "1.3.0",
   "private": true,
   "scripts": {
     "dev": "astro dev",
@@ -9,7 +9,8 @@
     "preview": "astro preview",
     "validate:canon": "node scripts/validate-phase0.mjs",
     "validate:experience": "node scripts/validate-phase1.mjs",
-    "validate": "npm run validate:canon && npm run validate:experience",
+    "validate:journey": "node scripts/validate-phase2.mjs",
+    "validate": "npm run validate:canon && npm run validate:experience && npm run validate:journey",
     "check": "npm run validate && npm run build"
   },
   "dependencies": {

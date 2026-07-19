@@ -4,6 +4,7 @@ import { ClientRouter } from 'astro:transitions';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import EmberField from '../components/EmberField.astro';
+import ExplorationHUD from '../components/ExplorationHUD.astro';
 
 interface Props {
   title: string;
@@ -42,6 +43,7 @@ const canonicalUrl = new URL(canonicalPath, Astro.site);
     <main id="conteudo-principal">
       <slot />
     </main>
+    <ExplorationHUD />
     <Footer />
   </body>
 </html>
