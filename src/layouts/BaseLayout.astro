@@ -33,6 +33,15 @@ const canonicalUrl = new URL(canonicalPath, Astro.site);
       rel="stylesheet"
     />
     <title>{title}</title>
+    <script is:inline>
+      try {
+        const preferences = JSON.parse(localStorage.getItem('roc.preferences.v1') || 'null');
+        if (preferences?.version === 1) {
+          document.documentElement.dataset.rocMotion = preferences.motion === 'serene' ? 'serene' : 'full';
+          document.documentElement.dataset.rocReading = preferences.reading === 'expanded' ? 'expanded' : 'standard';
+        }
+      } catch { /* preferências locais indisponíveis */ }
+    </script>
     <ClientRouter />
   </head>
   <body>

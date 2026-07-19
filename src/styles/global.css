@@ -37,6 +37,17 @@ html {
   scroll-behavior: smooth;
 }
 
+html[data-roc-reading='expanded'] { font-size: 20px; }
+
+html[data-roc-motion='serene'] { scroll-behavior: auto; }
+html[data-roc-motion='serene'] *,
+html[data-roc-motion='serene'] *::before,
+html[data-roc-motion='serene'] *::after {
+  animation: none !important;
+  transition-duration: 0.01ms !important;
+  transition-delay: 0ms !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
