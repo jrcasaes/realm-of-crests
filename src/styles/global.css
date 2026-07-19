@@ -11,7 +11,7 @@
   --edge: #2c2419;
   --parchment: #e6d9b8;
   --parchment-dim: #a99878;
-  --parchment-faint: #6f6350;
+  --parchment-faint: #8e806a;
   --gold: #c9a35c;
   --amber: #e2b76b;
   --crimson: #8e2323;
@@ -31,10 +31,13 @@
 html {
   background: var(--ink);
   color: var(--parchment);
+  color-scheme: dark;
   font-family: var(--font-body);
   font-size: 18px;
   line-height: 1.65;
   scroll-behavior: smooth;
+  text-size-adjust: 100%;
+  overflow-x: clip;
 }
 
 html[data-roc-reading='expanded'] { font-size: 20px; }
@@ -56,12 +59,17 @@ html[data-roc-motion='serene'] *::after {
 body {
   margin: 0;
   min-height: 100vh;
+  min-width: 320px;
   /* Vinheta de tinta: escurece as bordas como página de grimório */
   background:
     radial-gradient(ellipse 120% 90% at 50% 0%, rgba(201, 163, 92, 0.045), transparent 55%),
     radial-gradient(ellipse 140% 120% at 50% 110%, rgba(142, 35, 35, 0.05), transparent 60%),
     var(--ink);
 }
+
+img, picture, svg, video, canvas { max-width: 100%; }
+button, input, select, textarea { font: inherit; }
+button, [role='button'] { touch-action: manipulation; }
 
 /* Grão de pergaminho — overlay fixo sobre tudo, quase imperceptível */
 .grain {
@@ -89,9 +97,21 @@ p { margin: 0 0 1em; }
 
 a { color: var(--amber); text-decoration: none; }
 a:hover { color: var(--parchment); }
-a:focus-visible, button:focus-visible {
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible {
   outline: 2px solid var(--amber);
   outline-offset: 3px;
+}
+
+main:focus { outline: none; }
+
+@media (hover: hover) {
+  a:hover { text-decoration-thickness: .08em; text-underline-offset: .2em; }
 }
 
 .skip-link {
@@ -132,6 +152,11 @@ a:focus-visible, button:focus-visible {
 .wide-wrap {
   width: min(1500px, calc(100% - 4rem));
   margin-inline: auto;
+}
+
+@media (max-width: 480px) {
+  .wrap, .wide-wrap { width: min(100% - 1.5rem, 1500px); }
+  .rubric { letter-spacing: .2em; }
 }
 
 main { position: relative; z-index: 1; }
@@ -193,10 +218,47 @@ main { position: relative; z-index: 1; }
 
   .site-nav a {
     flex: 0 0 auto;
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
     padding: .35rem .65rem;
     font-size: .72rem;
     scroll-snap-align: center;
   }
+}
+
+@media (hover: none), (pointer: coarse) {
+  button,
+  input[type='button'],
+  input[type='submit'],
+  .panorama-hotspot,
+  .atlas-map-controls button,
+  .realm-stage-controls button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --parchment-dim: #c7b996;
+    --parchment-faint: #b9aa88;
+    --edge: #6f6048;
+  }
+  a { text-decoration: underline; text-underline-offset: .18em; }
+}
+
+@media (forced-colors: active) {
+  .grain, .embers { display: none; }
+  a, button, input, select, textarea { forced-color-adjust: auto; }
+}
+
+@media print {
+  .site-header, .site-footer, .embers, .grain, .exploration-hud, button { display: none !important; }
+  html, body { background: #fff !important; color: #111 !important; }
+  main { width: 100%; }
+  a { color: #111 !important; text-decoration: underline; }
+  a[href]::after { content: " (" attr(href) ")"; font-size: .75em; }
 }
 
 /* ── Hero / manifesto ──────────────────────────────────────────── */

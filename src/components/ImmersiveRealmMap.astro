@@ -81,6 +81,7 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
             width="1536"
             height="1024"
             draggable="false"
+            decoding="async"
           />
           <nav class="atlas-pins" aria-label="Marcadores dos Reinos">
             {entries.map(({ mapNumber, x, y, realm }, index) => (
@@ -142,6 +143,7 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
           alt={`Panorama editorial de ${initial.realm.trueName}`}
           width="1915"
           height="821"
+          decoding="async"
         />
         <div class="atlas-dossier-visual-wash" aria-hidden="true"></div>
         <img
@@ -151,6 +153,7 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
           alt=""
           width="132"
           height="132"
+          decoding="async"
           onerror={`this.onerror=null;this.src='${base}/assets/emblems/placeholder.svg'`}
         />
         <figcaption>INTERPRETAÇÃO EDITORIAL · APROVADA PARA O SITE</figcaption>
@@ -294,6 +297,7 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
 
       const request = ++imageRequest;
       const incoming = new Image();
+      incoming.decoding = 'async';
       incoming.onload = () => {
         if (request !== imageRequest) return;
         panorama.src = entry.panorama;
@@ -310,12 +314,17 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
       }
     }
 
+    const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData === true;
+    let hoverTimer = 0;
     pins.forEach((pin, index) => {
       pin.addEventListener('click', () => selectRealm(index, { recordVisit: true }));
       pin.addEventListener('focus', () => selectRealm(index, { updateHash: false }));
       pin.addEventListener('pointerenter', (event) => {
-        if (event.pointerType === 'mouse') selectRealm(index, { updateHash: false });
+        if (event.pointerType !== 'mouse' || saveData) return;
+        window.clearTimeout(hoverTimer);
+        hoverTimer = window.setTimeout(() => selectRealm(index, { updateHash: false }), 220);
       });
+      pin.addEventListener('pointerleave', () => window.clearTimeout(hoverTimer));
     });
     listItems.forEach((item, index) => item.addEventListener('click', () => selectRealm(index, { recordVisit: true })));
     root.querySelector('#atlas-previous-realm')?.addEventListener('click', () => selectRealm(current - 1, { recordVisit: true }));
@@ -341,9 +350,10 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
     let highResolutionLoaded = false;
 
     function loadHighResolutionMap() {
-      if (highResolutionLoaded || !mapImage.dataset.hires) return;
+      if (highResolutionLoaded || !mapImage.dataset.hires || saveData) return;
       highResolutionLoaded = true;
       const incoming = new Image();
+      incoming.decoding = 'async';
       incoming.onload = () => { mapImage.src = mapImage.dataset.hires || mapImage.src; };
       incoming.src = mapImage.dataset.hires;
     }

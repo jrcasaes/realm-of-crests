@@ -1,11 +1,14 @@
 {
   "name": "realm-of-crests",
   "type": "module",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "private": true,
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "ASTRO_TELEMETRY_DISABLED=1 astro build",
     "preview": "astro preview",
     "validate:canon": "node scripts/validate-phase0.mjs",
     "validate:experience": "node scripts/validate-phase1.mjs",
@@ -13,10 +16,12 @@
     "validate:guardians": "node scripts/validate-phase3.mjs",
     "validate:pilgrimage": "node scripts/validate-phase4.mjs",
     "validate:journal": "node scripts/validate-phase5.mjs",
-    "validate": "npm run validate:canon && npm run validate:experience && npm run validate:journey && npm run validate:guardians && npm run validate:pilgrimage && npm run validate:journal",
-    "check": "npm run validate && npm run build"
+    "validate:release": "node scripts/validate-phase6.mjs",
+    "audit:dist": "node scripts/audit-dist.mjs",
+    "validate": "npm run validate:canon && npm run validate:experience && npm run validate:journey && npm run validate:guardians && npm run validate:pilgrimage && npm run validate:journal && npm run validate:release",
+    "check": "npm run validate && npm run build && npm run audit:dist"
   },
-  "dependencies": {
-    "astro": "^5.0.0"
+  "devDependencies": {
+    "astro": "^7.1.1"
   }
 }

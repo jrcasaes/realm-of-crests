@@ -1,0 +1,17 @@
+{
+  "name": "Realm of Crests",
+  "short_name": "Realm of Crests",
+  "description": "Codex imersivo dos dezenove Reinos e seus Guardiões.",
+  "display": "browser",
+  "background_color": "#0c0a08",
+  "theme_color": "#0c0a08",
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

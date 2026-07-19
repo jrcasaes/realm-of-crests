@@ -79,7 +79,7 @@ const serializedEntries = JSON.stringify(entries).replace(/</g, '\\u003c');
 
   <article class="guardian-focus" data-guardian-focus style={`--guardian-accent:${first.color}; --guardian-soft:${first.soft};`}>
     <figure class:list={{ 'focus-portrait': true, 'is-vertical': first.portraitVertical }}>
-      <img data-focus-portrait src={first.portrait} alt={`${first.name}, Guardião de ${first.realmName}`} width="1536" height="1024" />
+      <img data-focus-portrait src={first.portrait} alt={`${first.name}, Guardião de ${first.realmName}`} width="1536" height="1024" decoding="async" />
       <div class="focus-wash" aria-hidden="true"></div>
       <figcaption>
         <span data-focus-folio>{String(first.order).padStart(2, '0')} / 19</span>
@@ -123,7 +123,7 @@ const serializedEntries = JSON.stringify(entries).replace(/</g, '\\u003c');
       >
         <button class="record-focus" type="button" data-guardian-select aria-pressed={index === 0 ? 'true' : 'false'} aria-label={`Focalizar ${guardian.name}, Guardião de ${guardian.realmName}`}>
           <span class:list={{ 'record-portrait': true, 'is-vertical': guardian.portraitVertical }}>
-            <img src={guardian.portrait} alt="" loading="lazy" width="640" height="480" />
+            <img src={guardian.portrait} alt="" loading="lazy" decoding="async" width="640" height="480" />
             <span class="record-number">{String(guardian.order).padStart(2, '0')}</span>
             <span class="record-discovery" data-realm-state>Reino não registrado</span>
           </span>
