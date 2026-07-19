@@ -1,0 +1,93 @@
+name: Prévia imersiva — Fase 1
+
+on:
+  pull_request:
+    branches:
+      - agent/immersive-phase-0
+    types:
+      - opened
+      - synchronize
+      - reopened
+    paths:
+      - .github/workflows/preview-phase1.yml
+      - astro.config.mjs
+      - package.json
+      - package-lock.json
+      - public/**
+      - src/**
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: github.event.pull_request.number == 3 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar a produção estável
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: production
+
+      - name: Baixar a Fase 1
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          path: preview
+
+      - name: Preparar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: |
+            production/package-lock.json
+            preview/package-lock.json
+
+      - name: Instalar dependências da produção
+        working-directory: production
+        run: npm ci
+
+      - name: Reconstruir a raiz a partir da main
+        working-directory: production
+        run: npm run build
+
+      - name: Instalar dependências da prévia
+        working-directory: preview
+        run: npm ci
+
+      - name: Construir a Fase 1 em subcaminho isolado
+        working-directory: preview
+        env:
+          ASTRO_BASE: /realm-of-crests/previews/phase-1
+          PUBLIC_ROBOTS: noindex, nofollow
+        run: npm run check
+
+      - name: Compor produção e prévia
+        run: |
+          mkdir -p site/previews/phase-1
+          cp -R production/dist/. site/
+          cp -R preview/dist/. site/previews/phase-1/
+
+      - name: Empacotar GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}previews/phase-1/
+    steps:
+      - name: Publicar prévia temporária
+        id: deployment
+        uses: actions/deploy-pages@v4

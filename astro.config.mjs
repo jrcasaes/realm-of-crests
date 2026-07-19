@@ -5,7 +5,7 @@ import { defineConfig } from 'astro/config';
 // SITE = 'https://SEU-USUARIO.github.io' (seu usuário do GitHub)
 // BASE = '/realm-of-crests' (o nome exato do repositório)
 const SITE = 'https://jrcasaes.github.io';
-const BASE = '/realm-of-crests';
+const BASE = process.env.ASTRO_BASE || '/realm-of-crests';
 // ─────────────────────────────────────────────────────────────────
 
 export default defineConfig({

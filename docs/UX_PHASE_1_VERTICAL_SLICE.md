@@ -37,3 +37,9 @@ Transformar o Atlas de uma ilustração com links em um instrumento de exploraç
 ## Limite desta entrega
 
 Este recorte não adiciona áudio, WebGL, gamificação persistente nem tracking. Esses recursos devem entrar somente depois que mapa, leitura e navegação forem aprovados em revisão visual humana.
+
+## Prévia temporária
+
+O workflow `preview-phase1.yml` recompõe a raiz pública diretamente da `main` e adiciona este recorte somente em `/realm-of-crests/previews/phase-1/`. A prévia recebe `noindex, nofollow` e não altera a branch `main`.
+
+Depois da revisão, uma nova execução do workflow oficial `deploy.yml` da `main` remove o subcaminho temporário.
