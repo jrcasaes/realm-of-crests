@@ -7,7 +7,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "validate": "node scripts/validate-phase0.mjs",
+    "validate:canon": "node scripts/validate-phase0.mjs",
+    "validate:experience": "node scripts/validate-phase1.mjs",
+    "validate": "npm run validate:canon && npm run validate:experience",
     "check": "npm run validate && npm run build"
   },
   "dependencies": {

@@ -12,6 +12,7 @@ interface Props {
 
 const { title, description = 'Codex oficial do universo Realm of Crests — dezenove reinos, dezenove Guardiões.' } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const robots = import.meta.env.PUBLIC_ROBOTS || 'index, follow, max-image-preview:large';
 const canonicalPath = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
 const canonicalUrl = new URL(canonicalPath, Astro.site);
 ---
@@ -21,7 +22,7 @@ const canonicalUrl = new URL(canonicalPath, Astro.site);
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="robots" content={robots} />
     <link rel="canonical" href={canonicalUrl} />
     <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -34,10 +35,11 @@ const canonicalUrl = new URL(canonicalPath, Astro.site);
     <ClientRouter />
   </head>
   <body>
+    <a class="skip-link" href="#conteudo-principal">Ir para o conteúdo principal</a>
     <EmberField />
     <div class="grain" aria-hidden="true" transition:persist="grain"></div>
     <Header />
-    <main>
+    <main id="conteudo-principal">
       <slot />
     </main>
     <Footer />
