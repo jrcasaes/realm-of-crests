@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CrestRitual from '../../components/CrestRitual.astro';
+import { fervorVectorAsset } from '../../lib/fervor.js';
+import { pilgrimageFervors, pilgrimageMilestones, pilgrimageRealms, ritualQuestions } from '../../lib/pilgrimage.js';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<BaseLayout
+  title="Ritual do Crest — Realm of Crests"
+  description="Descubra uma rota de afinidade entre os oito Fervores e organize sua jornada pelos dezenove Reinos, sem atribuição canônica."
+>
+  <section class="ritual-hero" aria-labelledby="ritual-hero-title">
+    <div class="ritual-hero-glyphs" aria-hidden="true">
+      {pilgrimageFervors.map((fervor, index) => (
+        <img
+          src={fervorVectorAsset(fervor.id, base)}
+          alt=""
+          width="1000"
+          height="1000"
+          style={`--index:${index}; --accent:${fervor.accent};`}
+        />
+      ))}
+    </div>
+    <div class="ritual-hero-core" aria-hidden="true"><span></span><i></i></div>
+    <div class="ritual-hero-wash" aria-hidden="true"></div>
+    <div class="wrap ritual-hero-content">
+      <span class="rubric">a rota não escolhe por você</span>
+      <h1 id="ritual-hero-title">RITUAL<br /><em>DO CREST</em></h1>
+      <p>Entre oito Fervores, suas escolhas desenham uma marca de percurso. Ela não declara quem você é dentro do cânone — apenas indica por onde começar a escutar o Realm.</p>
+      <a href="#ritual-title">Iniciar a leitura <span aria-hidden="true">↓</span></a>
+      <small>sem conta · sem pontuação · sem resposta correta</small>
+    </div>
+  </section>
+
+  <CrestRitual
+    profiles={pilgrimageFervors}
+    questions={ritualQuestions}
+    realms={pilgrimageRealms}
+    milestones={pilgrimageMilestones}
+    base={base}
+  />
+</BaseLayout>
+
+<style>
+  .ritual-hero { position: relative; display: grid; min-height: min(82svh, 880px); place-items: center; overflow: hidden; isolation: isolate; border-bottom: 1px solid rgba(201,163,92,.26); }
+  .ritual-hero-glyphs { position: absolute; z-index: -4; inset: 0; }
+  .ritual-hero-glyphs img { position: absolute; top: 50%; left: 50%; width: clamp(130px, 18vw, 260px); height: auto; opacity: .11; filter: drop-shadow(0 0 18px var(--accent)); transform: translate(-50%, -50%) rotate(calc(var(--index) * 45deg)) translateY(clamp(-360px, -28vw, -210px)) rotate(calc(var(--index) * -45deg)); }
+  .ritual-hero-core { position: absolute; z-index: -3; top: 50%; left: 50%; width: min(46vw, 520px); aspect-ratio: 1; border: 1px solid rgba(201,163,92,.26); border-radius: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 100px rgba(201,163,92,.08), inset 0 0 80px rgba(201,163,92,.04); }
+  .ritual-hero-core::before, .ritual-hero-core::after { content: ''; position: absolute; inset: 12%; border: 1px dashed rgba(201,163,92,.18); border-radius: 50%; }
+  .ritual-hero-core::after { inset: 28%; border-style: solid; transform: rotate(45deg); border-radius: 0; }
+  .ritual-hero-core span, .ritual-hero-core i { position: absolute; top: 50%; left: 50%; width: 74%; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); transform: translate(-50%, -50%); opacity: .35; }
+  .ritual-hero-core i { transform: translate(-50%, -50%) rotate(90deg); }
+  .ritual-hero-wash { position: absolute; z-index: -2; inset: 0; background: radial-gradient(circle at center, rgba(12,10,8,.35), rgba(12,10,8,.72) 48%, var(--ink) 82%), linear-gradient(180deg, transparent 45%, var(--ink)); }
+  .ritual-hero-content { padding-block: 6rem; text-align: center; }
+  .ritual-hero .rubric { color: var(--gold); text-shadow: 0 2px 12px #000; }
+  .ritual-hero h1 { margin-top: .7rem; color: var(--parchment); font-size: clamp(3rem, 9vw, 7rem); letter-spacing: .14em; text-shadow: 0 10px 45px #000; }
+  .ritual-hero h1 em { color: var(--gold); font-style: normal; }
+  .ritual-hero p { max-width: 62ch; margin: 1.3rem auto 0; color: var(--parchment-dim); font-size: clamp(1rem, 1.6vw, 1.16rem); font-style: italic; text-shadow: 0 2px 14px #000; }
+  .ritual-hero a { display: inline-flex; gap: .8rem; align-items: center; margin-top: 1.5rem; padding: .7rem 1rem; border: 1px solid var(--gold); color: var(--ink); background: var(--gold); font-family: var(--font-display); font-size: .62rem; letter-spacing: .13em; text-transform: uppercase; }
+  .ritual-hero small { display: block; margin-top: .8rem; color: var(--parchment-faint); letter-spacing: .09em; }
+  @media (max-width: 700px) { .ritual-hero { min-height: 72svh; } .ritual-hero-glyphs { transform: scale(.72); } .ritual-hero-core { width: 78vw; } }
+  @media (prefers-reduced-motion: no-preference) { .ritual-hero-core::before { animation: ritual-orbit 24s linear infinite; } .ritual-hero-core::after { animation: ritual-diamond 14s ease-in-out infinite alternate; } }
+  @keyframes ritual-orbit { to { transform: rotate(360deg); } }
+  @keyframes ritual-diamond { to { transform: rotate(135deg) scale(.86); } }
+</style>

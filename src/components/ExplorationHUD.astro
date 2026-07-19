@@ -70,6 +70,12 @@ const registry = realms
       <span aria-hidden="true">→</span>
     </a>
 
+    <a class="exploration-ritual" href={`${base}/ritual/`}>
+      <span aria-hidden="true">◇</span>
+      <span><strong data-pilgrimage-label>Definir rota de afinidade</strong><small data-pilgrimage-copy>ritual opcional · não canônico</small></span>
+      <i aria-hidden="true">→</i>
+    </a>
+
     <div class="atmosphere-control">
       <div>
         <strong>Ambiência do Realm</strong>
@@ -87,6 +93,7 @@ const registry = realms
   type ExplorationState = { version: 1; visited: string[]; lastRealm: string | null; lastPath: string | null; updatedAt: string | null };
 
   const STORAGE_KEY = 'roc.exploration.v1';
+  const PILGRIMAGE_KEY = 'roc.pilgrimage.v1';
   const EMPTY_STATE: ExplorationState = { version: 1, visited: [], lastRealm: null, lastPath: null, updatedAt: null };
 
   function readExplorationState(registry: RealmRegistryEntry[]): ExplorationState {
@@ -140,6 +147,25 @@ const registry = realms
     });
   }
 
+  function renderPilgrimageState() {
+    const root = document.querySelector<HTMLElement>('[data-exploration-hud]');
+    if (!root) return;
+    let primary = '';
+    let secondary = '';
+    try {
+      const parsed = JSON.parse(localStorage.getItem(PILGRIMAGE_KEY) || 'null');
+      if (parsed?.version === 1 && typeof parsed.primary === 'string' && typeof parsed.secondary === 'string') {
+        primary = parsed.primary;
+        secondary = parsed.secondary;
+      }
+    } catch { /* afinidade local indisponível */ }
+    const label = root.querySelector<HTMLElement>('[data-pilgrimage-label]');
+    const copy = root.querySelector<HTMLElement>('[data-pilgrimage-copy]');
+    if (label) label.textContent = primary ? 'Crest de Jornada desperto' : 'Definir rota de afinidade';
+    if (copy) copy.textContent = primary ? `${primary} · ${secondary}` : 'ritual opcional · não canônico';
+    root.classList.toggle('has-pilgrimage', Boolean(primary));
+  }
+
   function registerRealm(slug: string, path?: string) {
     const root = document.querySelector<HTMLElement>('[data-exploration-hud]');
     if (!root) return;
@@ -161,6 +187,7 @@ const registry = realms
     const match = window.location.pathname.match(/\/reinos\/([^/]+)\/?$/);
     if (match) registerRealm(match[1], window.location.pathname);
     else renderExplorationState();
+    renderPilgrimageState();
     if (root.dataset.bound) return;
     root.dataset.bound = 'true';
     const trigger = root.querySelector<HTMLButtonElement>('.exploration-trigger')!;
@@ -231,6 +258,9 @@ const registry = realms
     window.addEventListener('roc:realm-visited', ((event: CustomEvent<{ slug?: string; path?: string }>) => {
       if (event.detail?.slug) registerRealm(event.detail.slug, event.detail.path);
     }) as EventListener);
+    window.addEventListener('roc:exploration-reset', renderExplorationState);
+    window.addEventListener('roc:pilgrimage-updated', renderPilgrimageState);
+    window.addEventListener('storage', () => { renderExplorationState(); renderPilgrimageState(); });
   }
   document.addEventListener('astro:page-load', bindExplorationHUD);
 </script>
@@ -262,6 +292,13 @@ const registry = realms
   .exploration-sigils a.is-visited { border-color: rgba(226,183,107,.66); color: var(--gold); background: radial-gradient(circle, rgba(255,122,61,.2), rgba(201,163,92,.05)); box-shadow: 0 0 10px rgba(255,122,61,.08); }
   .exploration-continue { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .75rem .85rem; border: 1px solid rgba(201,163,92,.38); color: var(--gold); background: rgba(201,163,92,.05); font-family: var(--font-display); font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; }
   .exploration-continue:hover { border-color: var(--gold); background: rgba(201,163,92,.1); }
+  .exploration-ritual { position: relative; display: grid; grid-template-columns: 26px 1fr auto; gap: .55rem; align-items: center; margin-top: .55rem; padding: .55rem .7rem; border: 1px solid var(--edge); color: var(--parchment-dim); background: rgba(0,0,0,.18); }
+  .exploration-ritual > span:first-child { color: var(--gold); font-size: 1.1rem; }
+  .exploration-ritual > span:nth-child(2) { display: grid; line-height: 1.2; }
+  .exploration-ritual strong { color: var(--parchment); font-size: .76rem; font-weight: 500; }
+  .exploration-ritual small { margin-top: .15rem; color: var(--parchment-faint); font-size: .64rem; text-transform: capitalize; }
+  .exploration-ritual i { color: var(--gold); font-style: normal; }
+  .has-pilgrimage .exploration-ritual { border-color: rgba(201,163,92,.42); background: rgba(201,163,92,.06); }
   .atmosphere-control { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: .8rem; padding-top: .8rem; border-top: 1px solid var(--edge); }
   .atmosphere-control > div { display: grid; line-height: 1.2; }
   .atmosphere-control strong { color: var(--parchment); font-size: .78rem; font-weight: 500; }

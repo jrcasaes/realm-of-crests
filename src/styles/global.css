@@ -150,7 +150,7 @@ main { position: relative; z-index: 1; }
   color: var(--gold);
 }
 
-.site-nav { display: flex; gap: 2rem; }
+.site-nav { display: flex; gap: clamp(.8rem, 1.6vw, 2rem); }
 .site-nav a {
   font-variant: small-caps;
   letter-spacing: 0.18em;

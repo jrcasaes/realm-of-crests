@@ -99,6 +99,15 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           </div>
           <span class="journey-route-arrow" aria-hidden="true">→</span>
         </a>
+        <a class="journey-route route-ritual" href={`${base}/ritual/`} data-home-reveal style={`--route-image: url("${base}/assets/fervor/glyph_legacy_light.webp")`}>
+          <span class="journey-route-index">IV</span>
+          <div>
+            <span class="rubric">afinidade e memória</span>
+            <h3>RITUAL DO CREST</h3>
+            <p>Trace uma rota pessoal entre os oito Fervores e organize os sigilos encontrados nesta travessia.</p>
+          </div>
+          <span class="journey-route-arrow" aria-hidden="true">→</span>
+        </a>
       </nav>
     </div>
   </section>
@@ -247,13 +256,16 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   .journey-progress-track { height: 2px; background: rgba(201,163,92,.12); }
   .journey-progress-track i { display: block; width: 0; height: 100%; background: linear-gradient(90deg, var(--gold), var(--ember)); transition: width .45s ease; }
   .journey-progress > a { display: flex; align-items: center; gap: 1rem; color: var(--gold); font-family: var(--font-display); font-size: .58rem; letter-spacing: .12em; text-transform: uppercase; }
-  .journey-routes { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--edge); }
+  .journey-routes { display: grid; grid-template-columns: repeat(2, 1fr); border: 1px solid var(--edge); }
   .journey-route { position: relative; display: grid; min-height: 330px; grid-template-rows: auto 1fr auto; padding: 1.5rem; overflow: hidden; color: inherit; background: linear-gradient(155deg, rgba(30,25,19,.75), rgba(12,10,8,.9)); }
   .journey-route + .journey-route { border-left: 1px solid var(--edge); }
   .journey-route::before { content: ''; position: absolute; inset: 0; opacity: .13; transition: opacity .35s, transform .7s; }
   .journey-route.route-atlas::before { background: linear-gradient(var(--ink), transparent), var(--route-image) center/cover; }
   .journey-route.route-guardians::before { background: linear-gradient(var(--ink), transparent), var(--route-image) center 25%/cover; }
   .journey-route.route-systems::before { background: radial-gradient(circle, rgba(226,183,107,.5), transparent 50%), linear-gradient(145deg, #261b0e, #0c0a08); }
+  .journey-route.route-ritual::before { background: radial-gradient(circle, rgba(201,163,92,.2), transparent 48%), var(--route-image) center/42% no-repeat; }
+  .journey-route:nth-child(odd) { border-left: 0; }
+  .journey-route:nth-child(n+3) { border-top: 1px solid var(--edge); }
   .journey-route:hover::before { opacity: .28; transform: scale(1.035); }
   .journey-route > * { position: relative; z-index: 1; }
   .journey-route-index { color: var(--gold); font-family: var(--font-display); font-size: .7rem; }
@@ -295,6 +307,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   [data-home-reveal].is-visible { opacity: 1; transform: none; }
   .journey-route:nth-child(2) { transition-delay: .08s; }
   .journey-route:nth-child(3) { transition-delay: .16s; }
+  .journey-route:nth-child(4) { transition-delay: .24s; }
 
   @media (max-width: 900px) {
     .journey-routes { grid-template-columns: 1fr; }

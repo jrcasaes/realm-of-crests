@@ -5,16 +5,18 @@ const isRealms = path.includes('/reinos');
 const isSystems = path.includes('/sistemas');
 const isAtlas = path.includes('/atlas');
 const isGuardians = path.includes('/guardioes');
+const isRitual = path.includes('/ritual');
 ---
 <header class="site-header">
   <div class="wrap">
     <a class="brand" href={`${base}/`}>REALM OF CRESTS</a>
     <nav class="site-nav" aria-label="Navegação principal">
-      <a href={`${base}/`} aria-current={!isRealms && !isSystems && !isAtlas && !isGuardians ? 'page' : undefined}>Manifesto</a>
+      <a href={`${base}/`} aria-current={!isRealms && !isSystems && !isAtlas && !isGuardians && !isRitual ? 'page' : undefined}>Manifesto</a>
       <a href={`${base}/reinos/`} aria-current={isRealms ? 'page' : undefined}>Os Dezenove Reinos</a>
       <a href={`${base}/guardioes/`} aria-current={isGuardians ? 'page' : undefined}>Guardiões</a>
       <a href={`${base}/sistemas/`} aria-current={isSystems ? 'page' : undefined}>Sistemas</a>
       <a href={`${base}/atlas/`} aria-current={isAtlas ? 'page' : undefined}>Atlas</a>
+      <a href={`${base}/ritual/`} aria-current={isRitual ? 'page' : undefined}>Ritual</a>
     </nav>
   </div>
 </header>
