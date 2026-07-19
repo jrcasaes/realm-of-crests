@@ -108,6 +108,15 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           </div>
           <span class="journey-route-arrow" aria-hidden="true">→</span>
         </a>
+        <a class="journey-route route-journal" href={`${base}/diario/`} data-home-reveal style={`--route-image: url("${base}/assets/fervor/glyph_faith_light.webp")`}>
+          <span class="journey-route-index">V</span>
+          <div>
+            <span class="rubric">retenção e memória privada</span>
+            <h3>DIÁRIO DA EMBERLINE</h3>
+            <p>Guarde impressões dos Reinos visitados, desperte fragmentos de leitura e escolha como o Codex deve respirar.</p>
+          </div>
+          <span class="journey-route-arrow" aria-hidden="true">→</span>
+        </a>
       </nav>
     </div>
   </section>
@@ -264,6 +273,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   .journey-route.route-guardians::before { background: linear-gradient(var(--ink), transparent), var(--route-image) center 25%/cover; }
   .journey-route.route-systems::before { background: radial-gradient(circle, rgba(226,183,107,.5), transparent 50%), linear-gradient(145deg, #261b0e, #0c0a08); }
   .journey-route.route-ritual::before { background: radial-gradient(circle, rgba(201,163,92,.2), transparent 48%), var(--route-image) center/42% no-repeat; }
+  .journey-route.route-journal { grid-column: 1 / -1; min-height: 270px; }
+  .journey-route.route-journal::before { background: linear-gradient(90deg, rgba(12,10,8,.88), rgba(12,10,8,.35)), var(--route-image) 84% center/24% no-repeat; }
   .journey-route:nth-child(odd) { border-left: 0; }
   .journey-route:nth-child(n+3) { border-top: 1px solid var(--edge); }
   .journey-route:hover::before { opacity: .28; transform: scale(1.035); }
@@ -308,11 +319,13 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   .journey-route:nth-child(2) { transition-delay: .08s; }
   .journey-route:nth-child(3) { transition-delay: .16s; }
   .journey-route:nth-child(4) { transition-delay: .24s; }
+  .journey-route:nth-child(5) { transition-delay: .32s; }
 
   @media (max-width: 900px) {
     .journey-routes { grid-template-columns: 1fr; }
     .journey-route { min-height: 240px; }
     .journey-route + .journey-route { border-left: 0; border-top: 1px solid var(--edge); }
+    .journey-route.route-journal { grid-column: auto; }
     .origin-grid { grid-template-columns: 1fr; }
     .origin-visual { top: 1rem; z-index: 2; height: 48vh; min-height: 340px; }
     .origin-chapters > header { min-height: 45vh; }

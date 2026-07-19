@@ -3,6 +3,7 @@
 <script>
   const canvas = document.querySelector<HTMLCanvasElement>('.embers');
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const serene = () => document.documentElement.dataset.rocMotion === 'serene';
 
   if (canvas && !reduced) {
     const ctx = canvas.getContext('2d')!;
@@ -32,6 +33,11 @@
     }
 
     function frame(t: number) {
+      if (serene()) {
+        ctx.clearRect(0, 0, w, h);
+        requestAnimationFrame(frame);
+        return;
+      }
       ctx.clearRect(0, 0, w, h);
       for (let i = 0; i < embers.length; i++) {
         const e = embers[i];
