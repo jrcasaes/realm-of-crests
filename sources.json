@@ -5,7 +5,7 @@
   "authority": {
     "registry": {
       "title": "roc-source-registry (master operacional)",
-      "version_at_sync": "1.2.9",
+      "version_at_sync": "1.2.10",
       "location": "Google Drive / 00_Governanca_e_Indices",
       "note": "Sempre consultar a versao vigente no Drive; este campo registra apenas a sincronizacao mais recente."
     },
@@ -14,12 +14,13 @@
     },
     "loreMaster": {
       "title": "REALM_OF_CRESTS_LORE_MASTER_CANON",
-      "version_at_sync": "3.0.5",
+      "version_at_sync": "3.0.6",
       "mutability": "CONSTITUTIONAL_FROZEN_BY_VERSION"
     },
     "activeSources": {
       "title": "RoC_Fontes_Ativas_para_Producao",
-      "version_at_sync": "1.2.9"
+      "version_at_sync": "1.2.10",
+      "visibility": "INTERNAL_SOURCE_NOT_LINKED_PUBLICLY"
     },
     "statusPolicy": {
       "title": "RoC_Politica_de_Status_Rotulacao_e_Retencao",
@@ -27,17 +28,18 @@
     },
     "masterIndex": {
       "title": "RoC_Indice_Mestre_do_Drive",
-      "version_at_sync": "1.2.9"
+      "version_at_sync": "1.2.10",
+      "visibility": "INTERNAL_SOURCE_NOT_LINKED_PUBLICLY"
     },
     "guardiansDossier": {
       "title": "RoC_Dossie_Canonico_Guardioes_19",
-      "version_at_sync": "2.5",
+      "version_at_sync": "2.6",
       "note": "Ficha operacional; nao cria lei."
     },
     "storyBible": {
-      "title": "Realm_of_Crests_Story_Bible_Master_v2_1_CC28C_APPROVED",
-      "version_at_sync": "2.1",
-      "mutability": "DERIVED_REFERENCE_CC28C"
+      "title": "Realm_of_Crests_Story_Bible_Master_v2_2_CC31_APPROVED",
+      "version_at_sync": "2.2",
+      "mutability": "DERIVED_REFERENCE_CC31"
     }
   },
   "contentCompliance": {
@@ -74,9 +76,17 @@
         "corintia.guardianEcho": "O Primeiro Juramento",
         "palesterra.guardianVulgo": "O Senhor das Presas"
       }
+    },
+    "cc31": {
+      "rule": "A matriz dominante/secundária dos dezenove e o estatuto ontológico do Legado são vinculantes.",
+      "legacy": "Excepcional e herdado; não é uma classe universal de raridade nem superioridade automática.",
+      "currentCohort": {
+        "dominant": ["Nego"],
+        "secondary": ["Admiral", "Eldric"]
+      }
     }
   },
-  "lastSync": "2026-07-17",
+  "lastSync": "2026-07-18",
   "glyphRasterFullLock": {
     "scope": "RASTER_8X5_ONLY",
     "families": 8,

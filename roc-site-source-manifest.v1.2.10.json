@@ -1,17 +1,19 @@
 {
   "project": "Realm of Crests",
   "artifact": "site-operational-package",
-  "manifestVersion": "1.2.9",
-  "generatedDate": "2026-07-17",
+  "manifestVersion": "1.2.10",
+  "generatedDate": "2026-07-18",
   "status": "DERIVED_OPERATIONAL_ACTIVE",
   "createsCanon": false,
   "authority": {
-    "loreMaster": "REALM_OF_CRESTS_LORE_MASTER_CANON_v3.0.5.docx",
-    "dossier": "RoC_Dossie_Canonico_Guardioes_19_v2.5.docx",
-    "storyBible": "Realm_of_Crests_Story_Bible_Master_v2_1_CC28C_APPROVED.html",
-    "registry": "roc-source-registry.v1.2.9.json",
-    "activeSourcesView": "RoC_Fontes_Ativas_para_Producao_v1.2.9",
-    "masterIndexView": "RoC_Indice_Mestre_do_Drive_v1.2.9"
+    "loreMaster": "REALM_OF_CRESTS_LORE_MASTER_CANON_v3.0.6.docx",
+    "dossier": "RoC_Dossie_Canonico_Guardioes_19_v2.6.docx",
+    "storyBible": "Realm_of_Crests_Story_Bible_Master_v2_2_CC31_APPROVED.html",
+    "registry": "roc-source-registry.v1.2.10.json",
+    "activeSourcesView": "RoC_Fontes_Ativas_para_Producao_v1.2.10",
+    "masterIndexView": "RoC_Indice_Mestre_do_Drive_v1.2.10",
+    "cc27": "RoC_CC-27_Sistema_Canonico_Marcas_e_Glifos_de_Fervor_v1.3.docx",
+    "cc31": "RoC_CC-31_Matriz_Canonica_de_Fervores_e_Estatuto_do_Legado_v1.0.docx"
   },
   "supportingSources": [
     {
@@ -50,6 +52,17 @@
     },
     "verification": "PASS"
   },
+  "cc31": {
+    "status": "CANONICAL_COMPLEMENTARY_ACTIVE",
+    "legacyClassification": "EXCEPTIONAL_INHERITED_ONTOLOGICAL",
+    "legacyRarityLabel": false,
+    "currentCohort": {
+      "dominant": ["Nego"],
+      "secondary": ["Admiral", "Eldric"]
+    },
+    "updatedGuardians": ["Tuskar", "Paollo", "Villa", "Saciros", "Florius", "Eldric"],
+    "verification": "PASS_19_OF_19"
+  },
   "c09": {
     "canonicalSpelling": "Vaskor",
     "prohibitedVariant": "Vaskos",
@@ -77,7 +90,7 @@
     "deletions": 0
   },
   "deployment": {
-    "drivePackage": "SYNCHRONIZED_AND_VALIDATED_REGISTRY_1.2.9",
+    "drivePackage": "SYNCHRONIZED_AND_VALIDATED_REGISTRY_1.2.10",
     "github": "PUBLIC_VERIFIED"
   },
   "publicMetadata": "SANITIZED_NO_PRIVATE_DRIVE_IDS",
@@ -86,8 +99,8 @@
     "httpStatus": 200,
     "realmRoutes": 19,
     "cc28cForbiddenHits": 0,
-    "canonVersion": "3.0.5",
-    "dossierVersion": "2.5",
-    "verifiedDate": "2026-07-17"
+    "canonVersion": "3.0.6",
+    "dossierVersion": "2.6",
+    "verifiedDate": "2026-07-18"
   }
 }
