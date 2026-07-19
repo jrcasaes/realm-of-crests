@@ -34,10 +34,11 @@ const canonicalUrl = new URL(canonicalPath, Astro.site);
     <ClientRouter />
   </head>
   <body>
+    <a class="skip-link" href="#conteudo-principal">Ir para o conteúdo principal</a>
     <EmberField />
     <div class="grain" aria-hidden="true" transition:persist="grain"></div>
     <Header />
-    <main>
+    <main id="conteudo-principal">
       <slot />
     </main>
     <Footer />

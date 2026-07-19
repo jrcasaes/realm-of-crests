@@ -83,6 +83,24 @@ a:focus-visible, button:focus-visible {
   outline-offset: 3px;
 }
 
+.skip-link {
+  position: fixed;
+  z-index: 100;
+  top: .75rem;
+  left: .75rem;
+  padding: .65rem .9rem;
+  border: 1px solid var(--gold);
+  color: var(--ink);
+  background: var(--parchment);
+  font-family: var(--font-display);
+  font-size: .68rem;
+  letter-spacing: .08em;
+  transform: translateY(calc(-100% - 1.5rem));
+  transition: transform .2s ease;
+}
+
+.skip-link:focus { color: var(--ink); transform: translateY(0); }
+
 /* Rótulo utilitário — versalete espaçado, o "carimbo de arquivo" */
 .rubric {
   font-family: var(--font-body);
@@ -140,6 +158,35 @@ main { position: relative; z-index: 1; }
   color: var(--parchment-dim);
 }
 .site-nav a:hover, .site-nav a[aria-current="page"] { color: var(--amber); }
+
+@media (max-width: 760px) {
+  .site-header .wrap {
+    width: 100%;
+    align-items: stretch;
+    flex-direction: column;
+    gap: .65rem;
+    padding-block: .85rem 0;
+  }
+
+  .brand { padding-inline: 1rem; text-align: center; }
+
+  .site-nav {
+    gap: 0;
+    overflow-x: auto;
+    padding: 0 .35rem .65rem;
+    scrollbar-width: none;
+    scroll-snap-type: x proximity;
+  }
+
+  .site-nav::-webkit-scrollbar { display: none; }
+
+  .site-nav a {
+    flex: 0 0 auto;
+    padding: .35rem .65rem;
+    font-size: .72rem;
+    scroll-snap-align: center;
+  }
+}
 
 /* ── Hero / manifesto ──────────────────────────────────────────── */
 
