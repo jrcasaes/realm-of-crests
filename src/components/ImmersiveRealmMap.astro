@@ -261,8 +261,8 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
     let current = 0;
     let imageRequest = 0;
 
-    function selectRealm(index: number, options: { focusPin?: boolean; updateHash?: boolean } = {}) {
-      const { focusPin = false, updateHash = true } = options;
+    function selectRealm(index: number, options: { focusPin?: boolean; updateHash?: boolean; recordVisit?: boolean } = {}) {
+      const { focusPin = false, updateHash = true, recordVisit = false } = options;
       current = (index + entries.length) % entries.length;
       const entry = entries[current];
       const number = String(entry.mapNumber).padStart(2, '0');
@@ -303,28 +303,33 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
 
       if (updateHash) history.replaceState(null, '', `#reino-${entry.slug}`);
       if (focusPin) pins[current]?.focus({ preventScroll: true });
+      if (recordVisit) {
+        window.dispatchEvent(new CustomEvent('roc:realm-visited', {
+          detail: { slug: entry.slug, path: entry.realmHref },
+        }));
+      }
     }
 
     pins.forEach((pin, index) => {
-      pin.addEventListener('click', () => selectRealm(index));
+      pin.addEventListener('click', () => selectRealm(index, { recordVisit: true }));
       pin.addEventListener('focus', () => selectRealm(index, { updateHash: false }));
       pin.addEventListener('pointerenter', (event) => {
         if (event.pointerType === 'mouse') selectRealm(index, { updateHash: false });
       });
     });
-    listItems.forEach((item, index) => item.addEventListener('click', () => selectRealm(index)));
-    root.querySelector('#atlas-previous-realm')?.addEventListener('click', () => selectRealm(current - 1));
-    root.querySelector('#atlas-next-realm')?.addEventListener('click', () => selectRealm(current + 1));
+    listItems.forEach((item, index) => item.addEventListener('click', () => selectRealm(index, { recordVisit: true })));
+    root.querySelector('#atlas-previous-realm')?.addEventListener('click', () => selectRealm(current - 1, { recordVisit: true }));
+    root.querySelector('#atlas-next-realm')?.addEventListener('click', () => selectRealm(current + 1, { recordVisit: true }));
 
     root.addEventListener('keydown', (event) => {
       const target = event.target as HTMLElement;
       if (!target.matches('[data-atlas-index], [data-atlas-list-index]')) return;
       if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key)) return;
       event.preventDefault();
-      if (event.key === 'Home') selectRealm(0, { focusPin: target.hasAttribute('data-atlas-index') });
-      else if (event.key === 'End') selectRealm(entries.length - 1, { focusPin: target.hasAttribute('data-atlas-index') });
-      else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') selectRealm(current - 1, { focusPin: target.hasAttribute('data-atlas-index') });
-      else selectRealm(current + 1, { focusPin: target.hasAttribute('data-atlas-index') });
+      if (event.key === 'Home') selectRealm(0, { focusPin: target.hasAttribute('data-atlas-index'), recordVisit: true });
+      else if (event.key === 'End') selectRealm(entries.length - 1, { focusPin: target.hasAttribute('data-atlas-index'), recordVisit: true });
+      else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') selectRealm(current - 1, { focusPin: target.hasAttribute('data-atlas-index'), recordVisit: true });
+      else selectRealm(current + 1, { focusPin: target.hasAttribute('data-atlas-index'), recordVisit: true });
       if (target.hasAttribute('data-atlas-list-index')) listItems[current]?.focus({ preventScroll: true });
     });
 

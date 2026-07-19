@@ -1,40 +1,168 @@
 ---
 import { canonLabel } from '../lib/canon.js';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import OrnamentDivider from '../components/OrnamentDivider.astro';
 import RealmCard from '../components/RealmCard.astro';
 import realms from '../data/realms.json';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
-<BaseLayout title="Realm of Crests — O Codex dos Dezenove Reinos">
-  <section class="hero-banner">
+
+<BaseLayout
+  title="Realm of Crests — Atravesse os Dezenove Reinos"
+  description="Entre no universo de Realm of Crests, explore o Atlas dos dezenove Reinos e construa seu registro local de descobertas."
+>
+  <section class="entry-gate" aria-labelledby="entry-title" data-home-journey>
     <img
+      class="entry-gate-image"
       src={`${base}/assets/heroes/hero_victoria.webp`}
       srcset={`${base}/assets/heroes/hero_victoria.webp 1688w, ${base}/assets/heroes/hero_victoria_2x.webp 3376w`}
       sizes="100vw"
-      alt="O Silêncio do Desfiladeiro — o Obelisco de basalto aceso em brasas âmbar diante da Fortaleza escavada no cânion"
+      alt="Fortaleza do Desfiladeiro e Obelisco de Victória sob um céu em brasas"
       width="3376"
       height="1440"
       fetchpriority="high"
     />
-    <div class="hero-inner">
-      <span class="rubric">codex oficial · {canonLabel}</span>
-      <h1>REALM <span class="gilt">of</span> CRESTS</h1>
-      <p class="manifesto">
-        Dezenove reinos. Dezenove Guardiões. Cada trono sustentado por uma Emberline
-        que não pode se romper — e cada Guardião moldado pelo Fervor de seu povo,
-        sob o peso da Sovereign Gravity. Este é o arquivo do mundo: abra os folios.
+    <div class="entry-vignette" aria-hidden="true"></div>
+    <div class="entry-ember" aria-hidden="true"></div>
+
+    <div class="wide-wrap entry-content">
+      <p class="entry-kicker"><span></span> codex oficial · {canonLabel} <span></span></p>
+      <h1 id="entry-title">REALM <i>OF</i> CRESTS</h1>
+      <p class="entry-oath">
+        Dezenove Reinos sustentam uma única fronteira.<br />Cada Crest é lei. Cada Guardião, uma consequência.
+      </p>
+      <div class="entry-actions">
+        <a class="gate-primary" href={`${base}/atlas/#atlas-explorer`}>
+          <span>Entrar no Realm</span><i aria-hidden="true">→</i>
+        </a>
+        <a class="gate-secondary" href={`${base}/atlas/`} data-exploration-continue>
+          <span data-exploration-label>Iniciar pelo Atlas</span>
+        </a>
+      </div>
+      <p class="entry-memory">
+        <strong><span data-exploration-count>0</span>/19</strong>
+        <span>Reinos em sua memória local</span>
       </p>
     </div>
-    <span class="hero-credit">O SILÊNCIO DO DESFILADEIRO · v2.0 · APROVADO</span>
+
+    <a class="entry-scroll" href="#limiar">
+      <span>atravesse o limiar</span>
+      <i aria-hidden="true"></i>
+    </a>
+    <span class="entry-credit">O SILÊNCIO DO DESFILADEIRO · v2.0 · APROVADO</span>
   </section>
 
-  <OrnamentDivider />
-
-  <section class="realms-section">
+  <section class="journey-hub" id="limiar" aria-labelledby="journey-title">
     <div class="wrap">
-      <span class="rubric">os dezenove reinos</span>
+      <header class="journey-heading" data-home-reveal>
+        <span class="rubric">sua travessia começa por uma escolha</span>
+        <h2 id="journey-title">NÃO LEIA O MUNDO.<br /><span>ADENTRE-O.</span></h2>
+        <p>O Codex se abre em rotas. Você escolhe o primeiro vestígio; o registro guarda somente o que foi realmente descoberto.</p>
+      </header>
+
+      <div class="journey-progress" data-home-reveal>
+        <div>
+          <span class="journey-progress-number"><span data-exploration-count>0</span><small>/19</small></span>
+          <p><strong>Reinos registrados</strong><br />neste navegador</p>
+        </div>
+        <span class="journey-progress-track" aria-hidden="true"><i data-exploration-progress></i></span>
+        <a href={`${base}/atlas/`} data-exploration-continue>
+          <span data-exploration-label>Iniciar pelo Atlas</span><span aria-hidden="true">↗</span>
+        </a>
+      </div>
+
+      <nav class="journey-routes" aria-label="Rotas de entrada no Codex">
+        <a class="journey-route route-atlas" href={`${base}/atlas/`} data-home-reveal style={`--route-image: url("${base}/assets/maps/map_continent.webp")`}>
+          <span class="journey-route-index">I</span>
+          <div>
+            <span class="rubric">exploração territorial</span>
+            <h3>ATLAS</h3>
+            <p>Toque os dezenove selos e percorra um continente marcado por rotas, vontades e Ruína.</p>
+          </div>
+          <span class="journey-route-arrow" aria-hidden="true">→</span>
+        </a>
+        <a class="journey-route route-guardians" href={`${base}/guardioes/`} data-home-reveal style={`--route-image: url("${base}/assets/guardians/WEB_RoC_Nego_Retrato_v2.0.jpg")`}>
+          <span class="journey-route-index">II</span>
+          <div>
+            <span class="rubric">dossiês vivos</span>
+            <h3>GUARDIÕES</h3>
+            <p>Conheça as presenças moldadas pelo povo, pelo Fervor e pela gravidade de cada Reino.</p>
+          </div>
+          <span class="journey-route-arrow" aria-hidden="true">→</span>
+        </a>
+        <a class="journey-route route-systems" href={`${base}/sistemas/`} data-home-reveal>
+          <span class="journey-route-index">III</span>
+          <div>
+            <span class="rubric">leis do universo</span>
+            <h3>SISTEMAS</h3>
+            <p>Decifre Crest, Fervor, Emberlines e Sovereign Gravity antes que seus efeitos apareçam.</p>
+          </div>
+          <span class="journey-route-arrow" aria-hidden="true">→</span>
+        </a>
+      </nav>
+    </div>
+  </section>
+
+  <section class="origin-sequence" aria-labelledby="origin-title" data-origin-sequence>
+    <div class="wide-wrap origin-grid">
+      <div class="origin-visual" aria-hidden="true">
+        <figure class="origin-layer is-active" data-origin-layer="0">
+          <img src={`${base}/assets/fervor/glyph_legacy_light.webp`} alt="" loading="lazy" width="1024" height="1024" />
+          <span class="origin-halo"></span>
+          <figcaption>o selo</figcaption>
+        </figure>
+        <figure class="origin-layer" data-origin-layer="1">
+          <img src={`${base}/assets/guardians/WEB_RoC_Nego_Retrato_v2.0.jpg`} alt="" loading="lazy" width="1024" height="1536" />
+          <figcaption>a presença</figcaption>
+        </figure>
+        <figure class="origin-layer" data-origin-layer="2">
+          <img src={`${base}/assets/maps/map_continent.webp`} alt="" loading="lazy" width="1688" height="1125" />
+          <figcaption>a fronteira</figcaption>
+        </figure>
+      </div>
+
+      <div class="origin-chapters">
+        <header data-origin-chapter="0">
+          <span class="rubric">antes da jornada · três verdades</span>
+          <h2 id="origin-title">O QUE SUSTENTA<br />UM REINO?</h2>
+        </header>
+
+        <article data-origin-chapter="0">
+          <span class="origin-number">01</span>
+          <span class="rubric">crest</span>
+          <h3>NÃO É UM ORNAMENTO.<br /><em>É UMA LEI TERRITORIAL.</em></h3>
+          <p>O Crest condensa identidade, soberania e memória. Quando ele se manifesta, o Reino reconhece a si mesmo.</p>
+          <a href={`${base}/sistemas/`}>Abrir os sistemas <span aria-hidden="true">→</span></a>
+        </article>
+
+        <article data-origin-chapter="1">
+          <span class="origin-number">02</span>
+          <span class="rubric">guardião</span>
+          <h3>NÃO GOVERNA DE FORA.<br /><em>ELE EMERGE DO POVO.</em></h3>
+          <p>Cada Guardião é moldado pela Kingdom Will, atravessado pelo Fervor e pressionado pela gravidade de seu domínio.</p>
+          <a href={`${base}/guardioes/`}>Entrar nos dossiês <span aria-hidden="true">→</span></a>
+        </article>
+
+        <article data-origin-chapter="2">
+          <span class="origin-number">03</span>
+          <span class="rubric">ruína</span>
+          <h3>TODO MAPA TERMINA<br /><em>ONDE A MEMÓRIA FALHA.</em></h3>
+          <p>Na Fronteira da Ruína, a realidade enfraquece, os ecos se perdem e nenhuma rota continua sendo promessa.</p>
+          <a href={`${base}/atlas/`}>Examinar a fronteira <span aria-hidden="true">→</span></a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="realms-vault" aria-labelledby="realms-title">
+    <div class="wrap">
+      <header class="realms-vault-heading" data-home-reveal>
+        <div>
+          <span class="rubric">dezenove destinos · nenhuma ordem obrigatória</span>
+          <h2 id="realms-title">ESCOLHA UM SELO</h2>
+        </div>
+        <a href={`${base}/atlas/`}>Ver no Atlas <span aria-hidden="true">↗</span></a>
+      </header>
       <ul class="realm-grid">
         {realms.map((realm) => <RealmCard realm={realm} />)}
       </ul>
@@ -43,22 +171,153 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 </BaseLayout>
 
 <script>
-  function bindReveal() {
-    const items = document.querySelectorAll('.reveal:not(.is-visible)');
-    if (!items.length) return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry, i) => {
-          if (entry.isIntersecting) {
-            (entry.target as HTMLElement).style.transitionDelay = `${(i % 6) * 60}ms`;
-            entry.target.classList.add('is-visible');
-            io.unobserve(entry.target);
-          }
+  function bindHomeJourney() {
+    const root = document.querySelector<HTMLElement>('[data-home-journey]');
+    if (!root || root.dataset.bound) return;
+    root.dataset.bound = 'true';
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const revealItems = Array.from(document.querySelectorAll<HTMLElement>('[data-home-reveal]:not(.is-visible), .reveal:not(.is-visible)'));
+    if (reducedMotion) revealItems.forEach((item) => item.classList.add('is-visible'));
+    else {
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-visible');
+          revealObserver.unobserve(entry.target);
         });
-      },
-      { threshold: 0.12 }
-    );
-    items.forEach((el) => io.observe(el));
+      }, { threshold: .14 });
+      revealItems.forEach((item) => revealObserver.observe(item));
+    }
+
+    const sequence = document.querySelector<HTMLElement>('[data-origin-sequence]');
+    if (!sequence) return;
+    const chapters = Array.from(sequence.querySelectorAll<HTMLElement>('[data-origin-chapter]'));
+    const layers = Array.from(sequence.querySelectorAll<HTMLElement>('[data-origin-layer]'));
+    const activate = (index: string) => layers.forEach((layer) => layer.classList.toggle('is-active', layer.dataset.originLayer === index));
+    if ('IntersectionObserver' in window) {
+      const chapterObserver = new IntersectionObserver((entries) => {
+        const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible) activate((visible.target as HTMLElement).dataset.originChapter || '0');
+      }, { rootMargin: '-24% 0px -44% 0px', threshold: [0, .2, .5] });
+      chapters.forEach((chapter) => chapterObserver.observe(chapter));
+    }
   }
-  document.addEventListener('astro:page-load', bindReveal);
+
+  document.addEventListener('astro:page-load', bindHomeJourney);
 </script>
+
+<style>
+  .entry-gate { position: relative; display: grid; min-height: calc(100svh - 74px); place-items: center; overflow: hidden; isolation: isolate; border-bottom: 1px solid rgba(201,163,92,.2); }
+  .entry-gate-image { position: absolute; z-index: -4; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; animation: entry-breathe 15s ease-out both; }
+  .entry-vignette { position: absolute; z-index: -3; inset: 0; background: linear-gradient(180deg, rgba(12,10,8,.36), rgba(12,10,8,.05) 35%, rgba(12,10,8,.68) 85%, var(--ink)), radial-gradient(circle at center, transparent 0 28%, rgba(0,0,0,.58) 100%); }
+  .entry-ember { position: absolute; z-index: -2; left: 50%; top: 51%; width: min(70vw, 960px); aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgba(255,122,61,.14), rgba(226,183,107,.035) 36%, transparent 69%); mix-blend-mode: screen; transform: translate(-50%, -50%); animation: ember-pulse 4.8s ease-in-out infinite alternate; }
+  @keyframes entry-breathe { from { transform: scale(1.09); filter: saturate(.7) brightness(.72); } to { transform: scale(1.025); filter: saturate(.88) brightness(.82); } }
+  @keyframes ember-pulse { to { opacity: .62; transform: translate(-50%, -50%) scale(1.13); } }
+  .entry-content { padding-block: clamp(5rem, 12vh, 9rem); text-align: center; }
+  .entry-kicker { display: flex; align-items: center; justify-content: center; gap: 1rem; margin: 0 0 1.1rem; color: var(--gold); font-variant: small-caps; letter-spacing: .28em; font-size: .7rem; text-shadow: 0 2px 12px #000; }
+  .entry-kicker span { width: clamp(26px, 5vw, 70px); height: 1px; background: linear-gradient(90deg, transparent, var(--gold)); }
+  .entry-kicker span:last-child { transform: rotate(180deg); }
+  .entry-content h1 { color: var(--parchment); font-size: clamp(2.6rem, 8.8vw, 7.9rem); letter-spacing: clamp(.08em, 1vw, .16em); line-height: .9; text-shadow: 0 8px 40px rgba(0,0,0,.9); }
+  .entry-content h1 i { color: var(--gold); font-family: var(--font-body); font-size: .42em; font-weight: 400; letter-spacing: .05em; }
+  .entry-oath { margin: clamp(1.5rem, 3vh, 2.4rem) auto 0; color: var(--parchment); font-size: clamp(1rem, 2vw, 1.35rem); font-style: italic; line-height: 1.5; text-shadow: 0 3px 18px #000; }
+  .entry-actions { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 2rem; }
+  .gate-primary { display: inline-flex; align-items: center; gap: 2rem; padding: .9rem 1.2rem; border: 1px solid var(--gold); color: var(--ink); background: linear-gradient(135deg, var(--parchment), var(--gold)); box-shadow: 0 12px 32px rgba(0,0,0,.4), 0 0 28px rgba(201,163,92,.12); font-family: var(--font-display); font-size: .68rem; letter-spacing: .16em; text-transform: uppercase; }
+  .gate-primary:hover { color: var(--ink); filter: brightness(1.12); transform: translateY(-2px); }
+  .gate-primary i { font: normal 1rem var(--font-body); }
+  .gate-secondary { padding: .85rem .2rem; border-bottom: 1px solid rgba(230,217,184,.45); color: var(--parchment); font-family: var(--font-display); font-size: .62rem; letter-spacing: .11em; text-transform: uppercase; }
+  .entry-memory { display: flex; align-items: baseline; justify-content: center; gap: .6rem; margin: 1.3rem 0 0; color: var(--parchment-dim); font-size: .72rem; letter-spacing: .08em; }
+  .entry-memory strong { color: var(--gold); font-family: var(--font-display); font-size: .74rem; }
+  .entry-scroll { position: absolute; bottom: 1.15rem; left: 50%; display: grid; gap: .35rem; justify-items: center; color: var(--parchment-dim); font-size: .6rem; letter-spacing: .2em; text-transform: uppercase; transform: translateX(-50%); }
+  .entry-scroll i { width: 1px; height: 28px; background: linear-gradient(var(--gold), transparent); }
+  .entry-credit { position: absolute; right: 1rem; bottom: 1rem; color: rgba(230,217,184,.36); font-size: .48rem; letter-spacing: .14em; }
+
+  .journey-hub { padding-block: clamp(5rem, 10vw, 9rem); background: radial-gradient(circle at 50% 30%, rgba(201,163,92,.055), transparent 48%); }
+  .journey-heading { max-width: 760px; margin-inline: auto; text-align: center; }
+  .journey-heading .rubric { color: var(--gold); }
+  .journey-heading h2 { margin-top: .9rem; color: var(--parchment); font-size: clamp(2rem, 5.5vw, 4rem); letter-spacing: .1em; }
+  .journey-heading h2 span { color: var(--gold); }
+  .journey-heading p { max-width: 60ch; margin: 1.25rem auto 0; color: var(--parchment-dim); font-size: 1.08rem; font-style: italic; }
+  .journey-progress { display: grid; grid-template-columns: auto 1fr auto; gap: 1.4rem; align-items: center; max-width: 930px; margin: 3rem auto; padding: 1.1rem 1.3rem; border-block: 1px solid var(--edge); }
+  .journey-progress > div { display: flex; align-items: center; gap: .9rem; }
+  .journey-progress-number { color: var(--gold); font-family: var(--font-display); font-size: 2rem; line-height: 1; }
+  .journey-progress-number small { color: var(--parchment-faint); font-size: .65rem; }
+  .journey-progress p { margin: 0; color: var(--parchment-faint); font-size: .72rem; line-height: 1.25; }
+  .journey-progress p strong { color: var(--parchment); font-weight: 500; }
+  .journey-progress-track { height: 2px; background: rgba(201,163,92,.12); }
+  .journey-progress-track i { display: block; width: 0; height: 100%; background: linear-gradient(90deg, var(--gold), var(--ember)); transition: width .45s ease; }
+  .journey-progress > a { display: flex; align-items: center; gap: 1rem; color: var(--gold); font-family: var(--font-display); font-size: .58rem; letter-spacing: .12em; text-transform: uppercase; }
+  .journey-routes { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--edge); }
+  .journey-route { position: relative; display: grid; min-height: 330px; grid-template-rows: auto 1fr auto; padding: 1.5rem; overflow: hidden; color: inherit; background: linear-gradient(155deg, rgba(30,25,19,.75), rgba(12,10,8,.9)); }
+  .journey-route + .journey-route { border-left: 1px solid var(--edge); }
+  .journey-route::before { content: ''; position: absolute; inset: 0; opacity: .13; transition: opacity .35s, transform .7s; }
+  .journey-route.route-atlas::before { background: linear-gradient(var(--ink), transparent), var(--route-image) center/cover; }
+  .journey-route.route-guardians::before { background: linear-gradient(var(--ink), transparent), var(--route-image) center 25%/cover; }
+  .journey-route.route-systems::before { background: radial-gradient(circle, rgba(226,183,107,.5), transparent 50%), linear-gradient(145deg, #261b0e, #0c0a08); }
+  .journey-route:hover::before { opacity: .28; transform: scale(1.035); }
+  .journey-route > * { position: relative; z-index: 1; }
+  .journey-route-index { color: var(--gold); font-family: var(--font-display); font-size: .7rem; }
+  .journey-route > div { align-self: end; }
+  .journey-route .rubric { color: var(--parchment-dim); font-size: .64rem; }
+  .journey-route h3 { margin-top: .4rem; color: var(--parchment); font-size: 1.45rem; }
+  .journey-route p { margin: .75rem 0 1.1rem; color: var(--parchment-dim); font-size: .88rem; line-height: 1.45; }
+  .journey-route-arrow { color: var(--gold); font-size: 1.2rem; }
+
+  .origin-sequence { padding-block: clamp(5rem, 10vw, 9rem); border-block: 1px solid var(--edge); background: #090806; }
+  .origin-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(420px, .8fr); gap: clamp(3rem, 7vw, 8rem); align-items: start; }
+  .origin-visual { position: sticky; top: 4vh; height: 92vh; min-height: 620px; overflow: hidden; border: 1px solid rgba(201,163,92,.22); background: radial-gradient(circle, rgba(201,163,92,.08), transparent 48%), var(--ink); }
+  .origin-visual::after { content: ''; position: absolute; inset: 0; border: 1px solid rgba(201,163,92,.1); margin: 8px; pointer-events: none; }
+  .origin-layer { position: absolute; inset: 0; margin: 0; opacity: 0; transform: scale(1.035); transition: opacity .8s ease, transform 1.2s ease; }
+  .origin-layer.is-active { opacity: 1; transform: scale(1); }
+  .origin-layer img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.72) contrast(1.08) brightness(.72); }
+  .origin-layer:first-child img { object-fit: contain; padding: 20%; filter: sepia(.35) saturate(.9) brightness(.95); }
+  .origin-layer:first-child { background: radial-gradient(circle, rgba(255,122,61,.11), transparent 52%); }
+  .origin-halo { position: absolute; inset: 22%; border: 1px solid rgba(201,163,92,.2); border-radius: 50%; box-shadow: 0 0 50px rgba(201,163,92,.08); }
+  .origin-layer figcaption { position: absolute; left: 1.2rem; bottom: 1rem; color: var(--parchment-dim); font-variant: small-caps; letter-spacing: .28em; font-size: .66rem; }
+  .origin-chapters > header { min-height: 58vh; display: flex; flex-direction: column; justify-content: center; }
+  .origin-chapters > header .rubric { color: var(--gold); }
+  .origin-chapters > header h2 { margin-top: 1rem; color: var(--parchment); font-size: clamp(2rem, 4vw, 3.5rem); }
+  .origin-chapters article { min-height: 78vh; display: flex; flex-direction: column; justify-content: center; border-top: 1px solid var(--edge); }
+  .origin-number { display: block; margin-bottom: 2rem; color: var(--gold); font-family: var(--font-display); font-size: .72rem; letter-spacing: .2em; }
+  .origin-chapters article .rubric { color: var(--parchment-faint); }
+  .origin-chapters h3 { margin-top: .65rem; color: var(--parchment); font-size: clamp(1.45rem, 3vw, 2.3rem); letter-spacing: .08em; line-height: 1.25; }
+  .origin-chapters h3 em { color: var(--gold); font-style: normal; }
+  .origin-chapters article p { max-width: 49ch; margin-top: 1.3rem; color: var(--parchment-dim); }
+  .origin-chapters article a { align-self: flex-start; margin-top: 1rem; padding-bottom: .35rem; border-bottom: 1px solid rgba(201,163,92,.5); color: var(--gold); font-family: var(--font-display); font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; }
+
+  .realms-vault { padding-block: clamp(5rem, 9vw, 8rem); }
+  .realms-vault-heading { display: flex; align-items: end; justify-content: space-between; gap: 2rem; margin-bottom: 2.5rem; }
+  .realms-vault-heading .rubric { color: var(--gold); }
+  .realms-vault-heading h2 { margin-top: .5rem; color: var(--parchment); font-size: clamp(1.8rem, 4vw, 3rem); }
+  .realms-vault-heading > a { padding-bottom: .3rem; border-bottom: 1px solid var(--gold); font-family: var(--font-display); font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; }
+
+  [data-home-reveal] { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; }
+  [data-home-reveal].is-visible { opacity: 1; transform: none; }
+  .journey-route:nth-child(2) { transition-delay: .08s; }
+  .journey-route:nth-child(3) { transition-delay: .16s; }
+
+  @media (max-width: 900px) {
+    .journey-routes { grid-template-columns: 1fr; }
+    .journey-route { min-height: 240px; }
+    .journey-route + .journey-route { border-left: 0; border-top: 1px solid var(--edge); }
+    .origin-grid { grid-template-columns: 1fr; }
+    .origin-visual { top: 1rem; z-index: 2; height: 48vh; min-height: 340px; }
+    .origin-chapters > header { min-height: 45vh; }
+    .origin-chapters article { min-height: 68vh; }
+  }
+  @media (max-width: 660px) {
+    .entry-gate { min-height: 84svh; }
+    .entry-content { padding: 4rem 1rem 6rem; }
+    .entry-actions { flex-direction: column; }
+    .entry-scroll, .entry-credit { display: none; }
+    .journey-progress { grid-template-columns: 1fr auto; }
+    .journey-progress-track { grid-column: 1 / -1; grid-row: 2; }
+    .journey-progress > a { grid-column: 2; grid-row: 1; max-width: 130px; text-align: right; }
+    .realms-vault-heading { align-items: start; flex-direction: column; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .entry-gate-image, .entry-ember { animation: none; }
+    [data-home-reveal] { opacity: 1; transform: none; }
+    .origin-layer { transition: none; }
+  }
+</style>
