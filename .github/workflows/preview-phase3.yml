@@ -41,7 +41,9 @@ jobs:
 
       - name: Baixar a Fase 3
         uses: actions/checkout@v4
-        with: { ref: ${{ github.event.pull_request.head.sha }}, path: phase3 }
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          path: phase3
 
       - name: Preparar Node
         uses: actions/setup-node@v4
