@@ -1,5 +1,19 @@
 # Realm of Crests — Registro de versões do site
 
+## v1.2.12 — 2026-07-19
+
+Status: **Fase 0 validada em branch; implantação pública pendente**.
+
+- Ativa os masters SVG, os derivados monocromáticos e os PDFs técnicos v1.0 dos oito Fervores.
+- Sincroniza os dois ponteiros públicos do site com o `roc-source-registry v1.2.12`.
+- Remove o bloqueio acidental de indexação e acrescenta URL canônica a todas as páginas.
+- Introduz um gate local repetível para os 19 Reinos, 19 Guardiões, 57 hotspots, CC-28C, CC-31 e ativos vetoriais.
+- Publica o manifesto operacional v1.2.12 sem declarar antecipadamente a verificação pública.
+
+Gate local: **PASS** — validação de conteúdo íntegra e 46 páginas compiladas.
+
+Verificação pública: **PENDENTE** — somente após aprovação e integração na `main`.
+
 ## v1.2.11 — 2026-07-19
 
 Status: **publicado e verificado**.

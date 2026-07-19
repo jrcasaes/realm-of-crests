@@ -12,6 +12,8 @@ interface Props {
 
 const { title, description = 'Codex oficial do universo Realm of Crests — dezenove reinos, dezenove Guardiões.' } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const canonicalPath = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
+const canonicalUrl = new URL(canonicalPath, Astro.site);
 ---
 <!doctype html>
 <html lang="pt-BR">
@@ -19,8 +21,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <!-- MODO PRÉ-LANÇAMENTO: remova a linha abaixo quando o site for lançado ao público -->
-    <meta name="robots" content="noindex, nofollow" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href={canonicalUrl} />
     <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
