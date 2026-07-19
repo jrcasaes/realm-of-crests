@@ -60,17 +60,17 @@ jobs:
 
       - name: Construir Fase 1
         working-directory: phase1
-        env: { ASTRO_BASE: /realm-of-crests/previews/phase-1, PUBLIC_ROBOTS: noindex, nofollow }
+        env: { ASTRO_BASE: /realm-of-crests/previews/phase-1, PUBLIC_ROBOTS: "noindex, nofollow" }
         run: npm ci && npm run check
 
       - name: Construir Fase 2
         working-directory: phase2
-        env: { ASTRO_BASE: /realm-of-crests/previews/phase-2, PUBLIC_ROBOTS: noindex, nofollow }
+        env: { ASTRO_BASE: /realm-of-crests/previews/phase-2, PUBLIC_ROBOTS: "noindex, nofollow" }
         run: npm ci && npm run check
 
       - name: Construir Fase 3
         working-directory: phase3
-        env: { ASTRO_BASE: /realm-of-crests/previews/phase-3, PUBLIC_ROBOTS: noindex, nofollow }
+        env: { ASTRO_BASE: /realm-of-crests/previews/phase-3, PUBLIC_ROBOTS: "noindex, nofollow" }
         run: npm ci && npm run check
 
       - name: Compor produção e prévias
