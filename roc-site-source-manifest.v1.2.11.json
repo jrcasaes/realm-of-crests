@@ -91,7 +91,7 @@
     "cc31CriticalFervorMatrix": "PASS"
   },
   "deployment": {
-    "github": "READY_FOR_PUBLICATION"
+    "github": "PUBLIC_VERIFIED"
   },
   "publicMetadata": "SANITIZED_NO_PRIVATE_DRIVE_IDS",
   "publicVerification": {
@@ -101,9 +101,12 @@
     "cc28cForbiddenHits": 0,
     "canonVersion": "3.0.6",
     "dossierVersion": "2.6",
-    "verifiedDate": "2026-07-18",
-    "verifiedRelease": "1.2.10",
+    "verifiedDate": "2026-07-19",
+    "verifiedRelease": "1.2.11",
     "targetRelease": "1.2.11",
-    "targetStatus": "PENDING_POST_DEPLOY_VERIFICATION"
+    "targetStatus": "PUBLIC_VERIFIED",
+    "verifiedPublicUrls": 40,
+    "fervorRegistryLabel": "1.2.11",
+    "legacyCohortVerification": "PASS"
   }
 }
