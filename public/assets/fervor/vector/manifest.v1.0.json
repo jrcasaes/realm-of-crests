@@ -1,0 +1,33 @@
+{
+  "project": "Realm of Crests",
+  "assetSet": "fervor-vector-masters",
+  "version": "1.0",
+  "createdDate": "2026-07-19",
+  "status": "DERIVED_TECHNICAL_ACTIVE",
+  "canonicalBasis": "RoC_CC-27_Sistema_Canonico_Marcas_e_Glifos_de_Fervor_v1.3",
+  "rasterMatrix": {
+    "status": "FULL_LOCK_RASTER",
+    "families": 8,
+    "materialsPerFamily": 5,
+    "assets": 40,
+    "replaced": false
+  },
+  "vectorScope": {
+    "masters": 8,
+    "monoDark": 8,
+    "monoLight": 8,
+    "vectorPdf": 8,
+    "transparentPng4096": 16,
+    "viewBox": "0 0 1000 1000"
+  },
+  "families": [
+    {"id":"legacy","pt":"Legado","master":"masters/RoC_Glyph_Legacy_Master_v1.0.svg","dark":"mono-dark/RoC_Glyph_Legacy_Mono_Dark_v1.0.svg","light":"mono-light/RoC_Glyph_Legacy_Mono_Light_v1.0.svg"},
+    {"id":"rage","pt":"Raiva","master":"masters/RoC_Glyph_Rage_Master_v1.0.svg","dark":"mono-dark/RoC_Glyph_Rage_Mono_Dark_v1.0.svg","light":"mono-light/RoC_Glyph_Rage_Mono_Light_v1.0.svg"},
+    {"id":"faith","pt":"Fé","master":"masters/RoC_Glyph_Faith_Master_v1.0.svg","dark":"mono-dark/RoC_Glyph_Faith_Mono_Dark_v1.0.svg","light":"mono-light/RoC_Glyph_Faith_Mono_Light_v1.0.svg"},
+    {"id":"hope","pt":"Esperança","master":"masters/RoC_Glyph_Hope_Master_v1.0.svg","dark":"mono-dark/RoC_Glyph_Hope_Mono_Dark_v1.0.svg","light":"mono-light/RoC_Glyph_Hope_Mono_Light_v1.0.svg"},
+    {"id":"grief","pt":"Luto","master":"masters/RoC_Glyph_Grief_Master_v1.0.svg","dark":"mono-dark/RoC_Glyph_Grief_Mono_Dark_v1.0.svg","light":"mono-light/RoC_Glyph_Grief_Mono_Light_v1.0.svg"},
+    {"id":"vengeance","pt":"Vingança","master":"masters/RoC_Glyph_Vengeance_Master_v1.0.svg","dark":"mono-dark/RoC_Glyph_Vengeance_Mono_Dark_v1.0.svg","light":"mono-light/RoC_Glyph_Vengeance_Mono_Light_v1.0.svg"},
+    {"id":"pride","pt":"Orgulho","master":"masters/RoC_Glyph_Pride_Master_v1.0.svg","dark":"mono-dark/RoC_Glyph_Pride_Mono_Dark_v1.0.svg","light":"mono-light/RoC_Glyph_Pride_Mono_Light_v1.0.svg"},
+    {"id":"unity","pt":"Unidade","master":"masters/RoC_Glyph_Unity_Master_v1.0.svg","dark":"mono-dark/RoC_Glyph_Unity_Mono_Dark_v1.0.svg","light":"mono-light/RoC_Glyph_Unity_Mono_Light_v1.0.svg"}
+  ]
+}

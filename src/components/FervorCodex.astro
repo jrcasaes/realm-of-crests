@@ -1,7 +1,7 @@
 ---
 import fervors from '../data/fervors.json';
 import realms from '../data/realms.json';
-import { parseFervorField } from '../lib/fervor.js';
+import { fervorVectorAsset, parseFervorField } from '../lib/fervor.js';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const materials = [
@@ -44,7 +44,7 @@ const asset = (fervor, material) => `${base}/assets/fervor/glyph_${fervor}_${mat
         data-fervor={fervor.id}
         style={`--fervor-accent:${fervor.accent}`}
       >
-        <img src={asset(fervor.id, 'light')} alt="" width="900" height="900" loading={index === 0 ? 'eager' : 'lazy'} />
+        <img src={fervorVectorAsset(fervor.id, base)} alt="" width="1000" height="1000" loading={index === 0 ? 'eager' : 'lazy'} />
         <span>
           <strong>{fervor.name}</strong>
           <small>{fervor.pt}</small>
@@ -153,7 +153,7 @@ const asset = (fervor, material) => `${base}/assets/fervor/glyph_${fervor}_${mat
     </div>
   </details>
 
-  <p class="fervor-authority rubric">autoridade: cc-27 v1.3 · cc-31 v1.0 · matriz raster 8 × 5 full lock · masters vetoriais fora deste marco</p>
+  <p class="fervor-authority rubric">autoridade: cc-27 v1.3 · cc-31 v1.0 · matriz raster 8 × 5 full lock · masters vetoriais v1.0 derivados técnicos ativos</p>
 </section>
 
 <script define:vars={{ codex, materials, base }}>

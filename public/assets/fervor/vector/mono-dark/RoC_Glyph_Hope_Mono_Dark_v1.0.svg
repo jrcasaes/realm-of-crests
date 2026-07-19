@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" role="img" aria-labelledby="title desc" color="#0B0A08">
+  <title id="title">Glifo de Esperança — monocromático escuro</title>
+  <desc id="desc">Origem inferior que se divide em três partículas ascendentes.</desc>
+  <g id="glyph-hope" fill="none" stroke="#0B0A08" stroke-width="38" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="500" cy="770" r="58"/>
+    <path d="M500 712V610M500 610L350 445M500 610L650 445"/>
+    <path d="M500 160L570 235L500 310L430 235ZM310 345L365 400L310 455L255 400ZM690 345L745 400L690 455L635 400Z"/>
+  </g>
+</svg>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" role="img" aria-labelledby="title desc" color="#F5E6BE">
+  <title id="title">Glifo de Luto — monocromático claro</title>
+  <desc id="desc">Prumo facetado com topo amplo, ponta descendente, eixo vertical e camada de sedimento.</desc>
+  <g id="glyph-grief" fill="none" stroke="#F5E6BE" stroke-width="42" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M280 215H720M500 300L690 485L620 735L500 850L380 735L310 485Z"/>
+    <path d="M500 315V825M365 590H635" stroke-width="32"/>
+  </g>
+</svg>

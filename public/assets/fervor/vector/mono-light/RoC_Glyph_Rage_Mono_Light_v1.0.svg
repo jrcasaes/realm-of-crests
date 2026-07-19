@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" role="img" aria-labelledby="title desc" color="#F5E6BE">
+  <title id="title">Glifo de Raiva — monocromático claro</title>
+  <desc id="desc">Núcleo comprimido que expele rupturas radiais assimétricas.</desc>
+  <g id="glyph-rage" fill="none" stroke="#F5E6BE" stroke-width="42" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M444 452L205 330M473 425L395 175M535 438L670 270M562 505L825 585M514 565L550 825M447 538L250 715"/>
+    <circle cx="500" cy="500" r="62" fill="#F5E6BE" stroke="none"/>
+  </g>
+</svg>

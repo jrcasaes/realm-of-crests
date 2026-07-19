@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" role="img" aria-labelledby="title desc" color="#F5E6BE">
+  <title id="title">Glifo de Unidade — monocromático claro</title>
+  <desc id="desc">Três origens rastreáveis convergem para um circuito coletivo fechado, sem origem dominante.</desc>
+  <g id="glyph-unity" fill="none" stroke="#F5E6BE" stroke-width="40" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="500" cy="520" r="220"/>
+    <path d="M344 364L250 275M656 364L750 275M500 740V780"/>
+    <circle cx="250" cy="230" r="45"/>
+    <circle cx="750" cy="230" r="45"/>
+    <circle cx="500" cy="825" r="45"/>
+    <circle cx="344" cy="364" r="22" fill="#F5E6BE" stroke="none"/>
+    <circle cx="656" cy="364" r="22" fill="#F5E6BE" stroke="none"/>
+    <circle cx="500" cy="740" r="22" fill="#F5E6BE" stroke="none"/>
+  </g>
+</svg>

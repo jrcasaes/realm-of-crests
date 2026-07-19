@@ -35,6 +35,25 @@ const SLUGS = {
   esperanca: 'hope',
 };
 
+const VECTOR_FAMILY_NAMES = {
+  legacy: 'Legacy',
+  rage: 'Rage',
+  grief: 'Grief',
+  vengeance: 'Vengeance',
+  pride: 'Pride',
+  unity: 'Unity',
+  faith: 'Faith',
+  hope: 'Hope',
+};
+
+/** Retorna o master monocromático claro usado como ícone funcional no site. */
+export function fervorVectorAsset(id, base = '') {
+  const family = VECTOR_FAMILY_NAMES[id];
+  return family
+    ? `${base}/assets/fervor/vector/mono-light/RoC_Glyph_${family}_Mono_Light_v1.0.svg`
+    : '';
+}
+
 /** Extrai a assinatura do Fervor dominante a partir do campo `fervor` do reino. */
 export function fervorSignature(fervorField) {
   const m = /Fervor de ([\wÀ-ú]+)\s*\(dominante\)/i.exec(fervorField || '');

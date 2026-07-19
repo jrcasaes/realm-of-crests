@@ -5,7 +5,7 @@
   "authority": {
     "registry": {
       "title": "roc-source-registry",
-      "version_at_sync": "1.2.11"
+      "version_at_sync": "1.2.12"
     },
     "loreMaster": {
       "title": "REALM_OF_CRESTS_LORE_MASTER_CANON",
@@ -73,7 +73,14 @@
     "materialsPerFamily": 5,
     "activeAssets": 40,
     "verification": "PASS_40_OF_40",
-    "vectorMastersStatus": "PENDING_NOT_INFERRED",
-    "note": "PNG não substitui master SVG; masters SVG e monocromáticos permanecem pendentes."
+    "vectorMastersStatus": "DERIVED_TECHNICAL_ACTIVE_V1.0",
+    "vectorAssets": {
+      "svgMasters": 8,
+      "monochromeSvg": 16,
+      "vectorPdf": 8,
+      "transparentPng4096": 16,
+      "basis": "CC-27 v1.3 + Guia de Produção Digital v1.2"
+    },
+    "note": "Os masters vetoriais v1.0 codificam a topologia-base e não substituem nem ampliam o FULL LOCK da matriz raster 8 × 5."
   }
 }

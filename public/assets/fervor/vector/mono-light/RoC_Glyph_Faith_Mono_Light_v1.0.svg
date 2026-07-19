@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" role="img" aria-labelledby="title desc" color="#F5E6BE">
+  <title id="title">Glifo de Fé — monocromático claro</title>
+  <desc id="desc">Ponto preenchido e centrado dentro de um círculo íntegro.</desc>
+  <g id="glyph-faith" fill="none" stroke="#F5E6BE" stroke-width="52">
+    <circle cx="500" cy="500" r="300"/>
+    <circle cx="500" cy="500" r="64" fill="#F5E6BE" stroke="none"/>
+  </g>
+</svg>

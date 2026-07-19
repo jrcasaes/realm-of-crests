@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" role="img" aria-labelledby="title desc" color="#0B0A08">
+  <title id="title">Glifo de Vingança — mestre vetorial</title>
+  <desc id="desc">Quatro registros verticais atravessados por um quinto traço diagonal de fixação.</desc>
+  <g id="glyph-vengeance" fill="none" stroke="currentColor" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M300 300V735M430 300V735M570 300V735M700 300V735" stroke-width="40"/>
+    <path d="M225 760L785 255" stroke-width="52"/>
+  </g>
+</svg>

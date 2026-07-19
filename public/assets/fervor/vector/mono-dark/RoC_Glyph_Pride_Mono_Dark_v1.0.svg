@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" role="img" aria-labelledby="title desc" color="#0B0A08">
+  <title id="title">Glifo de Orgulho — monocromático escuro</title>
+  <desc id="desc">Arco inferior aberto para cima, pilar central e duas testemunhas laterais.</desc>
+  <g id="glyph-pride" fill="none" stroke="#0B0A08" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M240 610Q500 850 760 610" stroke-width="50"/>
+    <path d="M500 210V535" stroke-width="42"/>
+    <circle cx="500" cy="535" r="30" fill="#0B0A08" stroke="none"/>
+    <path d="M310 310V430M690 310V430" stroke-width="36"/>
+  </g>
+</svg>

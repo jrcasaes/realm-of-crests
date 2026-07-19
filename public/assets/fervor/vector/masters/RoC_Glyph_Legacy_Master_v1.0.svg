@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" role="img" aria-labelledby="title desc" color="#0B0A08">
+  <title id="title">Glifo de Legado — mestre vetorial</title>
+  <desc id="desc">Três ciclos concêntricos fechados e unidos, sem início ou fim visível.</desc>
+  <g id="glyph-legacy" fill="none" stroke="currentColor" stroke-width="40" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="500" cy="500" r="145"/>
+    <circle cx="500" cy="500" r="245"/>
+    <circle cx="500" cy="500" r="345"/>
+    <path d="M500 155V355M500 645V845M155 500H355M645 500H845"/>
+  </g>
+</svg>
