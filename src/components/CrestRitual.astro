@@ -1,0 +1,464 @@
+---
+interface Props {
+  profiles: any[];
+  questions: any[];
+  realms: any[];
+  milestones: any[];
+  base: string;
+}
+
+const { profiles, questions, realms, milestones, base } = Astro.props;
+const safeJson = (value: unknown) => JSON.stringify(value).replace(/</g, '\\u003c');
+---
+
+<div
+  class="crest-ritual"
+  data-crest-ritual
+  data-base={base}
+  data-total={questions.length}
+>
+  <script type="application/json" data-ritual-profiles set:html={safeJson(profiles)}></script>
+  <script type="application/json" data-ritual-questions set:html={safeJson(questions)}></script>
+  <script type="application/json" data-ritual-realms set:html={safeJson(realms)}></script>
+
+  <section class="ritual-chamber" aria-labelledby="ritual-title">
+    <header class="ritual-heading">
+      <div>
+        <span class="rubric">instrumento de orientação · não canônico</span>
+        <h2 id="ritual-title">RITUAL DE AFINIDADE</h2>
+        <p>Seis escolhas revelam uma rota de leitura entre os oito Fervores. O resultado orienta sua exploração; não atribui facção, poder ou identidade oficial.</p>
+      </div>
+      <div class="ritual-privacy"><span aria-hidden="true">◇</span><p><strong>Somente neste navegador</strong><br />nenhuma conta · nenhum envio</p></div>
+    </header>
+
+    <div class="ritual-stage" data-ritual-stage>
+      <div class="ritual-progress" aria-live="polite">
+        <span data-ritual-progress-copy>Escolha 1 de {questions.length}</span>
+        <span class="ritual-progress-track" aria-hidden="true"><i data-ritual-progress-bar></i></span>
+      </div>
+
+      <form data-ritual-form>
+        {questions.map((question, questionIndex) => (
+          <fieldset data-ritual-question={questionIndex} hidden={questionIndex !== 0}>
+            <legend>
+              <span class="rubric">{question.eyebrow}</span>
+              <strong>{question.prompt}</strong>
+            </legend>
+            <div class="ritual-options">
+              {question.options.map((option, optionIndex) => (
+                <label>
+                  <input type="radio" name={question.id} value={option.id} data-scores={option.scores.join(',')} />
+                  <span class="ritual-option-index">{String.fromCharCode(65 + optionIndex)}</span>
+                  <span>{option.text}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+        ))}
+
+        <div class="ritual-controls">
+          <button type="button" data-ritual-previous disabled>← escolha anterior</button>
+          <button type="button" data-ritual-next disabled>continuar →</button>
+        </div>
+      </form>
+    </div>
+
+    <section class="ritual-result" data-ritual-result hidden aria-labelledby="ritual-result-title">
+      <div class="journey-crest" data-journey-crest>
+        <svg viewBox="0 0 320 320" role="img" aria-labelledby="journey-crest-title journey-crest-description" data-journey-crest-svg>
+          <title id="journey-crest-title">Crest de Jornada</title>
+          <desc id="journey-crest-description">Marca geométrica não canônica gerada a partir da rota de afinidade.</desc>
+          <circle class="crest-orbit orbit-outer" cx="160" cy="160" r="142" />
+          <circle class="crest-orbit orbit-inner" cx="160" cy="160" r="104" />
+          <g class="crest-rays">
+            {Array.from({ length: 8 }, (_, index) => <path d="M160 20 L170 88 L160 108 L150 88 Z" transform={`rotate(${index * 45} 160 160)`} />)}
+          </g>
+          <path class="crest-secondary" d="M160 58 L238 160 L160 262 L82 160 Z" />
+          <path class="crest-primary" d="M160 92 L206 160 L160 228 L114 160 Z" />
+          <circle class="crest-core" cx="160" cy="160" r="21" />
+          <path class="crest-mark" d="M160 139 L169 157 L188 160 L169 166 L160 184 L151 166 L132 160 L151 157 Z" />
+        </svg>
+        <span>marca de percurso · sem autoridade canônica</span>
+      </div>
+
+      <div class="ritual-reading">
+        <span class="rubric">sua rota de leitura</span>
+        <h3 id="ritual-result-title"><span data-primary-name></span> <i>atravessado por</i> <span data-secondary-name></span></h3>
+        <div class="ritual-signatures">
+          <article><small>Fervor dominante da rota</small><strong data-primary-label></strong><p data-primary-concept></p></article>
+          <article><small>Fervor secundário da rota</small><strong data-secondary-label></strong><p data-secondary-concept></p></article>
+        </div>
+        <p class="ritual-disclaimer">Esta leitura combina respostas editoriais com conceitos públicos dos Fervores. Ela não transforma o visitante em Guardião, não reconhece um Crest territorial e não altera o cânone.</p>
+        <div class="ritual-result-actions">
+          <button type="button" data-copy-result>Copiar leitura</button>
+          <button type="button" data-download-crest>Baixar marca SVG</button>
+          <button type="button" data-redo-ritual>Refazer ritual</button>
+        </div>
+        <p class="ritual-action-status" data-ritual-action-status aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section class="suggested-routes" data-suggested-routes hidden aria-labelledby="suggested-title">
+      <header><span class="rubric">afinidade orienta · território confirma</span><h3 id="suggested-title">TRÊS ROTAS PARA CONTINUAR</h3><p>As sugestões aproximam sua leitura dos Fervores públicos de cada Reino. Visitar um folio continua sendo uma escolha deliberada.</p></header>
+      <div data-route-cards></div>
+    </section>
+  </section>
+
+  <section class="traveler-inventory" aria-labelledby="inventory-title">
+    <header class="inventory-heading">
+      <div><span class="rubric">memória territorial existente</span><h2 id="inventory-title">INVENTÁRIO DE SIGILOS</h2><p>O inventário reflete apenas os Reinos realmente abertos nesta jornada. O ritual não concede sigilos.</p></div>
+      <p class="inventory-count"><strong data-inventory-count>0</strong><span>/19<br />registrados</span></p>
+    </header>
+
+    <ol class="inventory-grid" aria-label="Inventário dos dezenove Reinos">
+      {realms.map((realm) => (
+        <li data-inventory-realm={realm.slug}>
+          <a href={`${base}/reinos/${realm.slug}/`} aria-label={`${realm.realm}: ainda não registrado`}>
+            <span class="inventory-emblem"><img src={`${base}/assets/emblems/${realm.emblem}`} alt="" width="256" height="256" loading="lazy" /></span>
+            <span class="inventory-folio">{String(realm.order).padStart(2, '0')}</span>
+            <strong>{realm.realm}</strong>
+            <small data-inventory-state>não registrado</small>
+          </a>
+        </li>
+      ))}
+    </ol>
+
+    <div class="journey-milestones" aria-labelledby="milestones-title">
+      <header><span class="rubric">marcos, não pontuação</span><h3 id="milestones-title">VESTÍGIOS DA TRAVESSIA</h3></header>
+      <ol>
+        {milestones.map((milestone) => (
+          <li data-milestone={milestone.count}>
+            <span>{milestone.count}/19</span><div><strong>{milestone.title}</strong><p>{milestone.copy}</p></div><i data-milestone-state>adormecido</i>
+          </li>
+        ))}
+      </ol>
+    </div>
+
+    <div class="journey-control">
+      <div><span class="rubric">controle de dados</span><p>Você pode apagar separadamente a afinidade ou toda a memória territorial guardada neste navegador.</p></div>
+      <div><button type="button" data-clear-affinity>Apagar afinidade</button><button type="button" data-open-clear-dialog>Apagar jornada territorial</button></div>
+    </div>
+  </section>
+
+  <dialog class="clear-dialog" data-clear-dialog aria-labelledby="clear-dialog-title">
+    <form method="dialog">
+      <span class="rubric">ação local irreversível</span>
+      <h2 id="clear-dialog-title">APAGAR A JORNADA?</h2>
+      <p>Os dezenove sigilos voltarão ao estado não registrado. Isso não remove conteúdo do site nem altera o ritual de afinidade.</p>
+      <div><button value="cancel">Cancelar</button><button value="confirm" data-confirm-clear-journey>Apagar memória territorial</button></div>
+    </form>
+  </dialog>
+</div>
+
+<script>
+  type Profile = { id: string; name: string; label: string; concept: string; accent: string };
+  type Question = { id: string; options: { id: string; scores: string[] }[] };
+  type Realm = { order: number; slug: string; realm: string; guardian: string; essence: string; dominant: string; secondary: string; emblem: string };
+  type PilgrimageState = { version: 1; answers: Record<string, string>; primary: string; secondary: string; completedAt: string };
+  const PILGRIMAGE_KEY = 'roc.pilgrimage.v1';
+  const EXPLORATION_KEY = 'roc.exploration.v1';
+
+  function bindCrestRitual() {
+    const root = document.querySelector<HTMLElement>('[data-crest-ritual]');
+    if (!root || root.dataset.bound) return;
+    root.dataset.bound = 'true';
+    const readJson = <T,>(selector: string): T => JSON.parse(root.querySelector<HTMLScriptElement>(selector)?.textContent || '[]');
+    const profiles = readJson<Profile[]>('[data-ritual-profiles]');
+    const questions = readJson<Question[]>('[data-ritual-questions]');
+    const realms = readJson<Realm[]>('[data-ritual-realms]');
+    const profileById = new Map(profiles.map((profile) => [profile.id, profile]));
+    const fieldsets = Array.from(root.querySelectorAll<HTMLFieldSetElement>('[data-ritual-question]'));
+    const form = root.querySelector<HTMLFormElement>('[data-ritual-form]')!;
+    const stage = root.querySelector<HTMLElement>('[data-ritual-stage]')!;
+    const result = root.querySelector<HTMLElement>('[data-ritual-result]')!;
+    const routesSection = root.querySelector<HTMLElement>('[data-suggested-routes]')!;
+    const previous = root.querySelector<HTMLButtonElement>('[data-ritual-previous]')!;
+    const next = root.querySelector<HTMLButtonElement>('[data-ritual-next]')!;
+    const status = root.querySelector<HTMLElement>('[data-ritual-action-status]')!;
+    let current = 0;
+
+    const readPilgrimage = (): PilgrimageState | null => {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(PILGRIMAGE_KEY) || 'null');
+        if (!parsed || parsed.version !== 1 || !profileById.has(parsed.primary) || !profileById.has(parsed.secondary)) return null;
+        return parsed;
+      } catch { return null; }
+    };
+    const readVisited = () => {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(EXPLORATION_KEY) || 'null');
+        const known = new Set(realms.map((realm) => realm.slug));
+        return new Set<string>(Array.isArray(parsed?.visited) ? parsed.visited.filter((slug: unknown) => typeof slug === 'string' && known.has(slug)) : []);
+      } catch { return new Set<string>(); }
+    };
+
+    function showQuestion(index: number) {
+      current = Math.max(0, Math.min(index, questions.length - 1));
+      fieldsets.forEach((fieldset, fieldsetIndex) => { fieldset.hidden = fieldsetIndex !== current; });
+      previous.disabled = current === 0;
+      const selected = fieldsets[current]?.querySelector<HTMLInputElement>('input:checked');
+      next.disabled = !selected;
+      next.textContent = current === questions.length - 1 ? 'revelar a rota →' : 'continuar →';
+      root.querySelector<HTMLElement>('[data-ritual-progress-copy]')!.textContent = `Escolha ${current + 1} de ${questions.length}`;
+      root.querySelector<HTMLElement>('[data-ritual-progress-bar]')!.style.width = `${((current + 1) / questions.length) * 100}%`;
+      fieldsets[current]?.querySelector<HTMLElement>('legend')?.focus?.();
+    }
+
+    function calculateResult() {
+      const scores = new Map(profiles.map((profile) => [profile.id, 0]));
+      const answers: Record<string, string> = {};
+      questions.forEach((question) => {
+        const input = form.querySelector<HTMLInputElement>(`input[name="${question.id}"]:checked`);
+        if (!input) return;
+        answers[question.id] = input.value;
+        const ids = (input.dataset.scores || '').split(',');
+        scores.set(ids[0], (scores.get(ids[0]) || 0) + 2);
+        scores.set(ids[1], (scores.get(ids[1]) || 0) + 1);
+      });
+      const ranked = profiles.slice().sort((a, b) => (scores.get(b.id) || 0) - (scores.get(a.id) || 0) || profiles.indexOf(a) - profiles.indexOf(b));
+      return { version: 1 as const, answers, primary: ranked[0].id, secondary: ranked[1].id, completedAt: new Date().toISOString() };
+    }
+
+    function recommendedRealms(state: PilgrimageState) {
+      const visited = readVisited();
+      return realms.slice().sort((a, b) => {
+        const score = (realm: Realm) =>
+          (realm.dominant === state.primary ? 8 : 0) + (realm.dominant === state.secondary ? 5 : 0) +
+          (realm.secondary === state.primary ? 3 : 0) + (realm.secondary === state.secondary ? 2 : 0) +
+          (visited.has(realm.slug) ? -20 : 0);
+        return score(b) - score(a) || a.order - b.order;
+      }).slice(0, 3);
+    }
+
+    function renderResult(state: PilgrimageState, persist = true) {
+      const primary = profileById.get(state.primary)!;
+      const secondary = profileById.get(state.secondary)!;
+      if (persist) {
+        try { localStorage.setItem(PILGRIMAGE_KEY, JSON.stringify(state)); } catch { /* armazenamento indisponível */ }
+        window.dispatchEvent(new CustomEvent('roc:pilgrimage-updated', { detail: state }));
+      }
+      stage.hidden = true;
+      result.hidden = false;
+      routesSection.hidden = false;
+      const crest = root.querySelector<HTMLElement>('[data-journey-crest]')!;
+      crest.style.setProperty('--primary', primary.accent);
+      crest.style.setProperty('--secondary', secondary.accent);
+      root.querySelector<HTMLElement>('[data-primary-name]')!.textContent = primary.name;
+      root.querySelector<HTMLElement>('[data-secondary-name]')!.textContent = secondary.name;
+      root.querySelector<HTMLElement>('[data-primary-label]')!.textContent = primary.label;
+      root.querySelector<HTMLElement>('[data-secondary-label]')!.textContent = secondary.label;
+      root.querySelector<HTMLElement>('[data-primary-concept]')!.textContent = primary.concept;
+      root.querySelector<HTMLElement>('[data-secondary-concept]')!.textContent = secondary.concept;
+      const routeCards = root.querySelector<HTMLElement>('[data-route-cards]')!;
+      routeCards.replaceChildren(...recommendedRealms(state).map((realm) => {
+        const link = document.createElement('a');
+        link.href = `${root.dataset.base || ''}/reinos/${realm.slug}/`;
+        link.innerHTML = `<img src="${root.dataset.base || ''}/assets/emblems/${realm.emblem}" alt="" width="256" height="256"><span><small>${String(realm.order).padStart(2, '0')} · ${realm.dominant === state.primary ? 'ressonância dominante' : 'ressonância combinada'}</small><strong>${realm.realm}</strong><em>${realm.essence}</em><i>Abrir folio →</i></span>`;
+        return link;
+      }));
+      if (persist) result.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+    }
+
+    function renderInventory() {
+      const visited = readVisited();
+      root.querySelector<HTMLElement>('[data-inventory-count]')!.textContent = String(visited.size);
+      root.querySelectorAll<HTMLElement>('[data-inventory-realm]').forEach((item) => {
+        const realm = realms.find((entry) => entry.slug === item.dataset.inventoryRealm);
+        const active = visited.has(item.dataset.inventoryRealm || '');
+        item.classList.toggle('is-registered', active);
+        const link = item.querySelector('a');
+        const label = item.querySelector<HTMLElement>('[data-inventory-state]');
+        if (label) label.textContent = active ? 'registrado' : 'não registrado';
+        if (link && realm) link.setAttribute('aria-label', `${realm.realm}: ${active ? 'registrado' : 'ainda não registrado'}`);
+      });
+      root.querySelectorAll<HTMLElement>('[data-milestone]').forEach((item) => {
+        const unlocked = visited.size >= Number(item.dataset.milestone);
+        item.classList.toggle('is-awake', unlocked);
+        const marker = item.querySelector<HTMLElement>('[data-milestone-state]');
+        if (marker) marker.textContent = unlocked ? 'desperto' : 'adormecido';
+      });
+    }
+
+    form.addEventListener('change', () => { next.disabled = !fieldsets[current]?.querySelector('input:checked'); });
+    previous.addEventListener('click', () => showQuestion(current - 1));
+    next.addEventListener('click', () => {
+      if (current < questions.length - 1) showQuestion(current + 1);
+      else renderResult(calculateResult());
+    });
+    root.querySelector('[data-redo-ritual]')?.addEventListener('click', () => {
+      result.hidden = true; routesSection.hidden = true; stage.hidden = false; status.textContent = ''; showQuestion(0);
+      stage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    root.querySelector('[data-copy-result]')?.addEventListener('click', async () => {
+      const state = readPilgrimage(); if (!state) return;
+      const primary = profileById.get(state.primary)!; const secondary = profileById.get(state.secondary)!;
+      const copy = `Minha rota em Realm of Crests: ${primary.name} atravessado por ${secondary.name}. Crest de Jornada não canônico.`;
+      try { await navigator.clipboard.writeText(copy); status.textContent = 'Leitura copiada.'; }
+      catch { status.textContent = 'Não foi possível acessar a área de transferência.'; }
+    });
+    root.querySelector('[data-download-crest]')?.addEventListener('click', () => {
+      const svg = root.querySelector<SVGElement>('[data-journey-crest-svg]'); if (!svg) return;
+      const state = readPilgrimage(); if (!state) return;
+      const primary = profileById.get(state.primary)!; const secondary = profileById.get(state.secondary)!;
+      const exportSvg = svg.cloneNode(true) as SVGElement;
+      exportSvg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+      exportSvg.setAttribute('style', 'background:#0c0a08');
+      exportSvg.querySelectorAll('.crest-orbit, .crest-secondary, .crest-primary').forEach((node) => node.setAttribute('fill', 'none'));
+      exportSvg.querySelector('.orbit-outer')?.setAttribute('stroke', secondary.accent);
+      exportSvg.querySelector('.orbit-outer')?.setAttribute('stroke-dasharray', '2 10');
+      exportSvg.querySelector('.orbit-inner')?.setAttribute('stroke', primary.accent);
+      exportSvg.querySelectorAll('.crest-orbit').forEach((node) => node.setAttribute('stroke-width', '2'));
+      exportSvg.querySelectorAll('.crest-rays path').forEach((node) => { node.setAttribute('fill', secondary.accent); node.setAttribute('fill-opacity', '.6'); node.setAttribute('stroke', secondary.accent); });
+      exportSvg.querySelector('.crest-secondary')?.setAttribute('stroke', secondary.accent);
+      exportSvg.querySelector('.crest-secondary')?.setAttribute('stroke-width', '4');
+      exportSvg.querySelector('.crest-primary')?.setAttribute('stroke', primary.accent);
+      exportSvg.querySelector('.crest-primary')?.setAttribute('stroke-width', '6');
+      exportSvg.querySelector('.crest-core')?.setAttribute('fill', '#0c0a08');
+      exportSvg.querySelector('.crest-core')?.setAttribute('stroke', primary.accent);
+      exportSvg.querySelector('.crest-core')?.setAttribute('stroke-width', '4');
+      exportSvg.querySelector('.crest-mark')?.setAttribute('fill', primary.accent);
+      const source = `<?xml version="1.0" encoding="UTF-8"?>\n${exportSvg.outerHTML}`;
+      const href = URL.createObjectURL(new Blob([source], { type: 'image/svg+xml' }));
+      const link = document.createElement('a'); link.href = href; link.download = 'crest-de-jornada-nao-canonico.svg'; link.click(); URL.revokeObjectURL(href);
+      status.textContent = 'Marca SVG preparada.';
+    });
+    root.querySelector('[data-clear-affinity]')?.addEventListener('click', () => {
+      localStorage.removeItem(PILGRIMAGE_KEY); form.reset(); result.hidden = true; routesSection.hidden = true; stage.hidden = false; showQuestion(0);
+      window.dispatchEvent(new CustomEvent('roc:pilgrimage-updated')); stage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    const dialog = root.querySelector<HTMLDialogElement>('[data-clear-dialog]')!;
+    root.querySelector('[data-open-clear-dialog]')?.addEventListener('click', () => dialog.showModal());
+    root.querySelector('[data-confirm-clear-journey]')?.addEventListener('click', () => {
+      localStorage.removeItem(EXPLORATION_KEY); renderInventory(); window.dispatchEvent(new CustomEvent('roc:exploration-reset'));
+    });
+    window.addEventListener('roc:realm-visited', renderInventory);
+    window.addEventListener('roc:exploration-reset', renderInventory);
+    window.addEventListener('storage', renderInventory);
+
+    renderInventory();
+    const saved = readPilgrimage();
+    if (saved) {
+      Object.entries(saved.answers || {}).forEach(([name, value]) => {
+        const input = form.querySelector<HTMLInputElement>(`input[name="${name}"][value="${value}"]`); if (input) input.checked = true;
+      });
+      renderResult(saved, false);
+    } else showQuestion(0);
+  }
+  document.addEventListener('astro:page-load', bindCrestRitual);
+</script>
+
+<style>
+  .crest-ritual { padding-bottom: 7rem; }
+  .ritual-chamber, .traveler-inventory { width: min(1320px, calc(100% - 4rem)); margin-inline: auto; }
+  .ritual-heading, .inventory-heading { display: flex; align-items: end; justify-content: space-between; gap: 3rem; padding: clamp(4rem, 8vw, 7rem) 0 2rem; }
+  .ritual-heading > div:first-child, .inventory-heading > div { max-width: 720px; }
+  .ritual-heading .rubric, .inventory-heading .rubric, .suggested-routes .rubric, .journey-milestones .rubric, .journey-control .rubric { color: var(--gold); }
+  .ritual-heading h2, .inventory-heading h2 { margin-top: .55rem; color: var(--parchment); font-size: clamp(2rem, 5vw, 3.7rem); }
+  .ritual-heading p, .inventory-heading p { margin: .8rem 0 0; color: var(--parchment-dim); }
+  .ritual-privacy { display: flex; align-items: center; gap: .7rem; flex: 0 0 auto; padding: .8rem 1rem; border: 1px solid var(--edge); color: var(--parchment-faint); }
+  .ritual-privacy > span { color: var(--gold); font-size: 1.4rem; }
+  .ritual-privacy p { margin: 0; font-size: .72rem; line-height: 1.3; }
+  .ritual-privacy strong { color: var(--parchment-dim); font-weight: 500; }
+  .ritual-stage { padding: clamp(1.2rem, 4vw, 3rem); border: 1px solid rgba(201,163,92,.3); background: radial-gradient(circle at 50% 0%, rgba(201,163,92,.08), transparent 35%), var(--codex); }
+  .ritual-stage[hidden], .ritual-result[hidden], .suggested-routes[hidden] { display: none; }
+  .ritual-progress { display: grid; grid-template-columns: auto minmax(120px, 360px); justify-content: space-between; gap: 1rem; align-items: center; color: var(--parchment-faint); font-size: .72rem; letter-spacing: .1em; }
+  .ritual-progress-track { height: 2px; overflow: hidden; background: var(--edge); }
+  .ritual-progress-track i { display: block; height: 100%; background: linear-gradient(90deg, var(--gold), var(--ember)); transition: width .4s ease; }
+  .ritual-stage fieldset { margin: 0; padding: clamp(2rem, 5vw, 4rem) 0 1.5rem; border: 0; }
+  .ritual-stage fieldset[hidden] { display: none; }
+  .ritual-stage legend { width: 100%; padding: 0; text-align: center; }
+  .ritual-stage legend .rubric { display: block; color: var(--gold); }
+  .ritual-stage legend strong { display: block; max-width: 25ch; margin: .8rem auto 0; color: var(--parchment); font-family: var(--font-display); font-size: clamp(1.35rem, 3vw, 2.1rem); line-height: 1.3; }
+  .ritual-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: .8rem; max-width: 980px; margin: 2.4rem auto 0; }
+  .ritual-options label { position: relative; display: grid; grid-template-columns: 36px 1fr; gap: .8rem; align-items: center; min-height: 100px; padding: 1rem; border: 1px solid var(--edge); color: var(--parchment-dim); background: rgba(12,10,8,.6); cursor: pointer; }
+  .ritual-options label:hover, .ritual-options label:has(input:checked) { border-color: var(--gold); color: var(--parchment); background: rgba(201,163,92,.07); }
+  .ritual-options input { position: absolute; opacity: 0; }
+  .ritual-options label:has(input:focus-visible) { outline: 2px solid var(--amber); outline-offset: 3px; }
+  .ritual-option-index { display: grid; width: 34px; aspect-ratio: 1; place-items: center; border: 1px solid var(--edge); border-radius: 50%; color: var(--gold); font-family: var(--font-display); font-size: .62rem; }
+  .ritual-options label:has(input:checked) .ritual-option-index { color: var(--ink); background: var(--gold); }
+  .ritual-controls { display: flex; justify-content: space-between; gap: 1rem; max-width: 980px; margin: 0 auto; }
+  .ritual-controls button, .ritual-result-actions button, .journey-control button { padding: .65rem .85rem; border: 1px solid var(--edge); color: var(--parchment-dim); background: var(--ink); font: small-caps .7rem var(--font-body); letter-spacing: .1em; cursor: pointer; }
+  .ritual-controls button:last-child { border-color: var(--gold); color: var(--gold); }
+  button:disabled { opacity: .35; cursor: not-allowed; }
+  .ritual-result { scroll-margin-top: 2rem; display: grid; grid-template-columns: minmax(280px, .8fr) minmax(0, 1.2fr); gap: clamp(2rem, 6vw, 6rem); align-items: center; padding: clamp(3rem, 7vw, 6rem); border: 1px solid rgba(201,163,92,.34); background: radial-gradient(circle at 20% 50%, color-mix(in srgb, var(--primary, var(--gold)) 14%, transparent), transparent 32%), var(--codex); }
+  .journey-crest { --primary: var(--gold); --secondary: var(--crimson); text-align: center; }
+  .journey-crest svg { width: min(100%, 430px); height: auto; overflow: visible; filter: drop-shadow(0 0 20px color-mix(in srgb, var(--primary) 28%, transparent)); }
+  .crest-orbit, .crest-secondary, .crest-primary { fill: none; stroke-width: 2; }
+  .orbit-outer { stroke: color-mix(in srgb, var(--secondary) 50%, var(--edge)); stroke-dasharray: 2 10; }
+  .orbit-inner { stroke: color-mix(in srgb, var(--primary) 70%, var(--edge)); }
+  .crest-rays path { fill: color-mix(in srgb, var(--secondary) 65%, transparent); stroke: var(--secondary); stroke-width: 1; }
+  .crest-secondary { stroke: var(--secondary); stroke-width: 4; }
+  .crest-primary { stroke: var(--primary); stroke-width: 6; }
+  .crest-core { fill: var(--ink); stroke: var(--primary); stroke-width: 4; }
+  .crest-mark { fill: var(--primary); }
+  .journey-crest > span { color: var(--parchment-faint); font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; }
+  .ritual-reading .rubric { color: var(--gold); }
+  .ritual-reading h3 { margin-top: .7rem; color: var(--parchment); font-size: clamp(1.6rem, 4vw, 3rem); }
+  .ritual-reading h3 span { color: var(--gold); }
+  .ritual-reading h3 i { display: block; margin: .25rem 0; color: var(--parchment-faint); font: italic 1rem var(--font-body); letter-spacing: .04em; }
+  .ritual-signatures { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; margin-top: 1.5rem; background: var(--edge); }
+  .ritual-signatures article { padding: 1rem; background: var(--ink); }
+  .ritual-signatures small { color: var(--parchment-faint); }
+  .ritual-signatures strong { display: block; margin-top: .25rem; color: var(--gold); font-family: var(--font-display); text-transform: uppercase; }
+  .ritual-signatures p { margin: .5rem 0 0; color: var(--parchment-dim); font-size: .86rem; }
+  .ritual-disclaimer { margin: 1.2rem 0 0; padding-left: .8rem; border-left: 1px solid var(--gold); color: var(--parchment-faint); font-size: .76rem; }
+  .ritual-result-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
+  .ritual-result-actions button:first-child { border-color: var(--gold); color: var(--gold); }
+  .ritual-action-status { min-height: 1.2em; margin: .5rem 0 0; color: var(--gold); font-size: .72rem; }
+  .suggested-routes { padding: clamp(4rem, 8vw, 7rem) 0; }
+  .suggested-routes header { max-width: 720px; }
+  .suggested-routes h3, .journey-milestones h3 { margin-top: .5rem; color: var(--parchment); font-size: clamp(1.5rem, 3vw, 2.3rem); }
+  .suggested-routes header p { margin-top: .7rem; color: var(--parchment-dim); }
+  [data-route-cards] { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 2rem; }
+  [data-route-cards] a { display: grid; grid-template-columns: 110px 1fr; gap: 1rem; align-items: center; padding: 1rem; border: 1px solid var(--edge); color: var(--parchment-dim); background: var(--codex); }
+  [data-route-cards] a:hover { border-color: var(--gold); }
+  [data-route-cards] img { width: 100%; height: auto; }
+  [data-route-cards] span { display: grid; }
+  [data-route-cards] small { color: var(--gold); font-variant: small-caps; }
+  [data-route-cards] strong { color: var(--parchment); font-family: var(--font-display); }
+  [data-route-cards] em { color: var(--parchment-faint); font-size: .76rem; }
+  [data-route-cards] i { margin-top: .5rem; color: var(--gold); font-size: .7rem; font-style: normal; }
+  .traveler-inventory { border-top: 1px solid var(--edge); }
+  .inventory-count { display: flex; align-items: center; gap: .5rem; margin: 0; }
+  .inventory-count strong { color: var(--gold); font-family: var(--font-display); font-size: 3rem; line-height: 1; }
+  .inventory-count span { color: var(--parchment-faint); font-size: .7rem; line-height: 1.2; }
+  .inventory-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: .7rem; margin: 0; padding: 0; list-style: none; }
+  .inventory-grid li { min-width: 0; }
+  .inventory-grid a { position: relative; display: grid; min-height: 190px; place-items: center; padding: .8rem; overflow: hidden; border: 1px solid var(--edge); color: var(--parchment-faint); background: var(--codex); text-align: center; }
+  .inventory-grid a:hover { border-color: var(--gold); }
+  .inventory-emblem { display: block; width: 84px; opacity: .17; filter: grayscale(1); transition: opacity .3s ease, filter .3s ease; }
+  .inventory-emblem img { display: block; width: 100%; height: auto; }
+  .inventory-folio { position: absolute; top: .45rem; left: .55rem; font-family: var(--font-display); font-size: .55rem; }
+  .inventory-grid strong { margin-top: .35rem; overflow: hidden; color: var(--parchment-faint); font-family: var(--font-display); font-size: .72rem; letter-spacing: .08em; text-overflow: ellipsis; white-space: nowrap; }
+  .inventory-grid small { font-size: .62rem; }
+  .inventory-grid .is-registered a { border-color: rgba(201,163,92,.42); color: var(--gold); background: radial-gradient(circle at 50% 35%, rgba(201,163,92,.12), var(--codex) 65%); }
+  .inventory-grid .is-registered .inventory-emblem { opacity: .9; filter: none; }
+  .inventory-grid .is-registered strong { color: var(--parchment); }
+  .journey-milestones { padding: clamp(4rem, 8vw, 6rem) 0; }
+  .journey-milestones ol { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin: 2rem 0 0; padding: 1px; background: var(--edge); list-style: none; }
+  .journey-milestones li { position: relative; display: grid; grid-template-columns: 50px 1fr; gap: .8rem; padding: 1rem; background: var(--ink); opacity: .5; }
+  .journey-milestones li > span { display: grid; width: 48px; aspect-ratio: 1; place-items: center; border: 1px solid var(--edge); border-radius: 50%; color: var(--parchment-faint); font-family: var(--font-display); font-size: .6rem; }
+  .journey-milestones strong { color: var(--parchment-dim); font-family: var(--font-display); font-size: .72rem; }
+  .journey-milestones p { margin: .3rem 0 0; color: var(--parchment-faint); font-size: .72rem; line-height: 1.35; }
+  .journey-milestones i { grid-column: 2; color: var(--parchment-faint); font-size: .62rem; font-style: normal; letter-spacing: .1em; }
+  .journey-milestones .is-awake { opacity: 1; background: linear-gradient(145deg, rgba(201,163,92,.08), var(--ink)); }
+  .journey-milestones .is-awake > span { border-color: var(--gold); color: var(--gold); }
+  .journey-milestones .is-awake strong, .journey-milestones .is-awake i { color: var(--gold); }
+  .journey-control { display: flex; align-items: center; justify-content: space-between; gap: 2rem; padding: 1.2rem; border: 1px solid var(--edge); background: rgba(23,19,15,.65); }
+  .journey-control p { max-width: 620px; margin: .45rem 0 0; color: var(--parchment-faint); font-size: .78rem; }
+  .journey-control > div:last-child { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: end; }
+  .journey-control button:last-child { border-color: rgba(142,35,35,.8); color: #cf7f72; }
+  .clear-dialog { width: min(520px, calc(100% - 2rem)); padding: 0; border: 1px solid var(--crimson); color: var(--parchment); background: var(--codex); }
+  .clear-dialog::backdrop { background: rgba(0,0,0,.75); backdrop-filter: blur(5px); }
+  .clear-dialog form { padding: 1.5rem; }
+  .clear-dialog .rubric { color: #cf7f72; }
+  .clear-dialog h2 { margin-top: .5rem; color: var(--parchment); font-size: 1.4rem; }
+  .clear-dialog p { margin-top: .8rem; color: var(--parchment-dim); }
+  .clear-dialog form > div { display: flex; justify-content: end; gap: .6rem; margin-top: 1rem; }
+  .clear-dialog button { padding: .6rem .8rem; border: 1px solid var(--edge); color: var(--parchment-dim); background: var(--ink); cursor: pointer; }
+  .clear-dialog button:last-child { border-color: var(--crimson); color: #cf7f72; }
+  @media (max-width: 1000px) { [data-route-cards] { grid-template-columns: 1fr; } .inventory-grid { grid-template-columns: repeat(4, 1fr); } .journey-milestones ol { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 760px) { .ritual-chamber, .traveler-inventory { width: min(100% - 2rem, 1320px); } .ritual-heading, .inventory-heading, .journey-control { align-items: start; flex-direction: column; } .ritual-options, .ritual-result, .ritual-signatures { grid-template-columns: 1fr; } .ritual-progress { grid-template-columns: 1fr; } .inventory-grid { grid-template-columns: repeat(3, 1fr); } .journey-control > div:last-child { justify-content: start; } }
+  @media (max-width: 480px) { .inventory-grid { grid-template-columns: repeat(2, 1fr); } .journey-milestones ol { grid-template-columns: 1fr; } .ritual-controls { align-items: stretch; flex-direction: column-reverse; } .ritual-controls button { width: 100%; } }
+  @media (prefers-reduced-motion: reduce) { .ritual-progress-track i, .inventory-emblem { transition: none; } }
+</style>
