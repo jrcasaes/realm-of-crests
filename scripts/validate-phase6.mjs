@@ -13,6 +13,8 @@ const embers = read('src/components/EmberField.astro');
 const atlas = read('src/components/ImmersiveRealmMap.astro');
 const realmExplorer = read('src/components/RealmAtlasExplorer.astro');
 const explorationHud = read('src/components/ExplorationHUD.astro');
+const journalPage = read('src/pages/diario/index.astro');
+const journal = read('src/components/EmberlineJournal.astro');
 const robots = read('src/pages/robots.txt.js');
 const sitemap = read('src/pages/sitemap.xml.js');
 const manifest = json('public/site.webmanifest');
@@ -68,6 +70,12 @@ const performanceContracts = [
 for (const [source, token, label] of performanceContracts) pass(source.includes(token), `Contrato de desempenho ausente: ${label}.`);
 pass(!realmExplorer.includes('preload(1)'), 'O atlas soberano não deve pré-carregar panoramas pesados sem intenção.');
 pass(explorationHud.includes('lastPath: currentLastPath'), 'A continuidade territorial deve migrar caminhos persistidos para a base da versão atual.');
+pass(journal.includes('height: auto') && journal.includes('object-fit: contain'), 'Os emblemas do Diário devem preservar sua proporção quadrada.');
+pass(globalCss.includes('place-items: center') && globalCss.includes('padding-top: 0.08em'), 'A numeração dos pontos de paisagem deve permanecer centralizada.');
+pass(journalPage.includes('fervors_cycle.webp') && !journalPage.includes('journal-orbit'), 'O Diário deve usar o ciclo dos oito Fervores sem girar um glifo estático.');
+pass(journalPage.includes('connection?.saveData') && journalPage.includes("rocMotion === 'serene'"), 'A animação dos Fervores deve respeitar economia de dados e modo Sereno.');
+const fervorAnimation = resolve(root, 'public/assets/fervor/fervors_cycle.webp');
+pass(existsSync(fervorAnimation) && statSync(fervorAnimation).size <= 700_000, 'A animação dos Fervores está ausente ou excede o orçamento de 700 kB.');
 
 const scanRoots = ['src', 'scripts', 'docs', '.github'];
 const textExtensions = /\.(?:astro|css|js|mjs|json|md|ya?ml)$/i;

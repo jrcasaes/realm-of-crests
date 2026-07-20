@@ -332,7 +332,7 @@ const safeJson = (value: unknown) => JSON.stringify(value).replace(/</g, '\\u003
   .journal-entries ol { display: flex; flex-direction: column; gap: 1rem; padding: 0; list-style: none; }
   .journal-entries li article { display: grid; grid-template-columns: 150px 1fr; border: 1px solid var(--edge); background: linear-gradient(135deg, rgba(201,163,92,.05), var(--codex)); }
   .journal-entry-emblem { position: relative; display: grid; place-items: center; min-height: 240px; overflow: hidden; border-right: 1px solid var(--edge); background: #090806; }
-  .journal-entry-emblem img { width: 112px; opacity: .8; filter: drop-shadow(0 0 18px rgba(201,163,92,.14)); }
+  .journal-entry-emblem img { display: block; width: min(112px, calc(100% - 2rem)); height: auto; aspect-ratio: 1; object-fit: contain; opacity: .8; filter: drop-shadow(0 0 18px rgba(201,163,92,.14)); }
   .journal-entry-emblem span { position: absolute; right: .7rem; bottom: .55rem; color: var(--gold); font: .65rem var(--font-display); }
   .journal-entry-body { padding: 1.4rem 1.6rem; }
   .journal-entry-body h4 { margin-top: .2rem; color: var(--parchment); font-size: 1.35rem; }
