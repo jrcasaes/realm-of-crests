@@ -28,26 +28,38 @@ interface Props {
 
 const { entries, base } = Astro.props;
 const initial = entries[0];
-const atlasData = entries.map(({ mapNumber, x, y, realm, guardian }) => ({
-  mapNumber,
-  x,
-  y,
-  slug: realm.slug,
-  realm: realm.realm,
-  trueName: realm.trueName,
-  essence: realm.essence,
-  fervor: realm.fervor,
-  gravity: realm.gravity,
-  temple: realm.temple,
-  biome: realm.biome,
-  guardian: guardian.name,
-  guardianSlug: guardian.slug,
-  epithet: guardian.epithet,
-  panorama: `${base}/assets/realms/${realm.panoramaAsset}`,
-  emblem: `${base}/assets/emblems/emblem_${realm.slug}.webp`,
-  realmHref: `${base}/reinos/${realm.slug}/`,
-  guardianHref: `${base}/guardioes/${guardian.slug}/`,
-}));
+const atlasPanoramaPath = (asset: string, width: 960 | 1536) => {
+  const stem = asset.replace(/\.[^.]+$/, '');
+  return `${base}/assets/atlas/realms/${width}/${stem}.webp`;
+};
+const atlasData = entries.map(({ mapNumber, x, y, realm, guardian }) => {
+  const panorama960 = atlasPanoramaPath(realm.panoramaAsset, 960);
+  const panorama1536 = atlasPanoramaPath(realm.panoramaAsset, 1536);
+  return {
+    mapNumber,
+    x,
+    y,
+    slug: realm.slug,
+    realm: realm.realm,
+    trueName: realm.trueName,
+    essence: realm.essence,
+    fervor: realm.fervor,
+    gravity: realm.gravity,
+    temple: realm.temple,
+    biome: realm.biome,
+    guardian: guardian.name,
+    guardianSlug: guardian.slug,
+    epithet: guardian.epithet,
+    panorama: panorama960,
+    panoramaSrcset: `${panorama960} 960w, ${panorama1536} 1536w`,
+    emblem: `${base}/assets/atlas/emblems/emblem_${realm.slug}.webp`,
+    realmHref: `${base}/reinos/${realm.slug}/`,
+    guardianHref: `${base}/guardioes/${guardian.slug}/`,
+  };
+});
+const initialPanorama = atlasData[0].panorama;
+const initialPanoramaSrcset = atlasData[0].panoramaSrcset;
+const initialEmblem = atlasData[0].emblem;
 const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
 ---
 
@@ -141,20 +153,23 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
           <img
             class="atlas-dossier-panorama"
             id="atlas-panorama"
-            src={`${base}/assets/realms/${initial.realm.panoramaAsset}`}
+            src={initialPanorama}
+            srcset={initialPanoramaSrcset}
+            sizes="(min-width: 1080px) 360px, 96vw"
             alt={`Panorama editorial de ${initial.realm.trueName}`}
-            width="1915"
-            height="821"
+            width="1536"
+            height="659"
+            fetchpriority="high"
             decoding="async"
           />
           <div class="atlas-dossier-visual-wash" aria-hidden="true"></div>
           <img
             class="atlas-dossier-emblem"
             id="atlas-emblem"
-            src={`${base}/assets/emblems/emblem_${initial.realm.slug}.webp`}
+            src={initialEmblem}
             alt=""
-            width="132"
-            height="132"
+            width="256"
+            height="256"
             decoding="async"
             onerror={`this.onerror=null;this.src='${base}/assets/emblems/placeholder.svg'`}
           />
@@ -230,6 +245,7 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
     guardianSlug: string;
     epithet: string;
     panorama: string;
+    panoramaSrcset: string;
     emblem: string;
     realmHref: string;
     guardianHref: string;
@@ -278,17 +294,34 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
     let imageRequest = 0;
     let transitionTimer = 0;
     let transitionFrame = 0;
-    const imageCache = new Map<string, Promise<void>>();
+    type CachedImage = { image: HTMLImageElement | null; promise: Promise<void> };
+    const imageCache = new Map<string, CachedImage>();
+    const PANORAMA_SIZES = '(min-width: 1080px) 360px, 96vw';
     const HOVER_INTENT_MS = 80;
     const TRANSITION_MS = 440;
 
-    function preloadImage(src: string) {
-      const cached = imageCache.get(src);
-      if (cached) return cached;
+    function preloadImage(
+      src: string,
+      { srcset = '', sizes = '', priority = 'auto' }: {
+        srcset?: string;
+        sizes?: string;
+        priority?: 'high' | 'low' | 'auto';
+      } = {},
+    ) {
+      const key = `${src}|${srcset}|${sizes}`;
+      const cached = imageCache.get(key);
+      if (cached) {
+        if (priority === 'high' && cached.image) cached.image.fetchPriority = 'high';
+        return cached.promise;
+      }
 
+      const incoming = new Image();
+      incoming.decoding = 'async';
+      incoming.fetchPriority = priority;
+      if (sizes) incoming.sizes = sizes;
+      if (srcset) incoming.srcset = srcset;
+      const record: CachedImage = { image: incoming, promise: Promise.resolve() };
       const promise = new Promise<void>((resolve, reject) => {
-        const incoming = new Image();
-        incoming.decoding = 'async';
         incoming.onload = async () => {
           try { await incoming.decode(); } catch { /* onload já confirma um frame utilizável */ }
           resolve();
@@ -296,12 +329,26 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
         incoming.onerror = () => reject(new Error(`Falha ao carregar ${src}`));
         incoming.src = src;
       }).catch((error) => {
-        imageCache.delete(src);
+        imageCache.delete(key);
         throw error;
+      }).finally(() => {
+        record.image = null;
       });
 
-      imageCache.set(src, promise);
+      record.promise = promise;
+      imageCache.set(key, record);
       return promise;
+    }
+
+    function preloadAtlasEntry(entry: AtlasClientEntry, priority: 'high' | 'low' | 'auto' = 'auto') {
+      return Promise.all([
+        preloadImage(entry.panorama, {
+          srcset: entry.panoramaSrcset,
+          sizes: PANORAMA_SIZES,
+          priority,
+        }),
+        preloadImage(entry.emblem, { priority }),
+      ]);
     }
 
     function clearPendingState() {
@@ -362,6 +409,8 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
       listItems.forEach((item, itemIndex) => item.setAttribute('aria-selected', String(itemIndex === current)));
       listItems[current]?.scrollIntoView({ block: 'nearest', inline: 'center', behavior: reducedMotion ? 'auto' : 'smooth' });
 
+      panorama.sizes = PANORAMA_SIZES;
+      panorama.srcset = entry.panoramaSrcset;
       panorama.src = entry.panorama;
       panorama.alt = `Panorama editorial de ${entry.trueName}`;
       emblem.src = entry.emblem;
@@ -411,7 +460,7 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
       hoverSelection = hover ? next : -1;
       markPending(next);
       const request = ++imageRequest;
-      Promise.all([preloadImage(entry.panorama), preloadImage(entry.emblem)]).then(() => {
+      preloadAtlasEntry(entry, 'high').then(() => {
         if (request !== imageRequest) return;
         commitRealm(next, { focusPin, updateHash, recordVisit });
       }).catch(() => {
@@ -422,7 +471,40 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
       });
     }
 
-    const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData === true;
+    const connection = (navigator as Navigator & {
+      connection?: { saveData?: boolean; effectiveType?: string };
+    }).connection;
+    const saveData = connection?.saveData === true;
+    const constrainedNetwork = saveData || /(^|-)2g$/.test(connection?.effectiveType || '');
+    const scheduleIdle = (callback: () => void) => {
+      const idleWindow = window as Window & {
+        requestIdleCallback?: (handler: () => void, options?: { timeout: number }) => number;
+      };
+      if (idleWindow.requestIdleCallback) idleWindow.requestIdleCallback(callback, { timeout: 600 });
+      else window.setTimeout(callback, 220);
+    };
+
+    function scheduleAtlasPrefetch(origin = current) {
+      if (constrainedNetwork) return;
+      const circularDistance = (index: number) => {
+        const distance = Math.abs(index - origin);
+        return Math.min(distance, entries.length - distance);
+      };
+      const queue = entries
+        .map((_, index) => index)
+        .filter((index) => index !== origin)
+        .sort((a, b) => circularDistance(a) - circularDistance(b));
+
+      const preloadBatch = () => {
+        const batch = queue.splice(0, 3);
+        if (!batch.length) return;
+        Promise.allSettled(batch.map((index) => preloadAtlasEntry(entries[index], 'low')))
+          .then(() => { if (queue.length) scheduleIdle(preloadBatch); });
+      };
+
+      scheduleIdle(preloadBatch);
+    }
+
     let hoverTimer = 0;
     pins.forEach((pin, index) => {
       pin.addEventListener('click', () => selectRealm(index, { recordVisit: true }));
@@ -571,6 +653,7 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
     const hashSlug = location.hash.replace('#reino-', '');
     const fromHash = entries.findIndex((entry) => entry.slug === hashSlug);
     if (fromHash >= 0) selectRealm(fromHash, { updateHash: false });
+    scheduleAtlasPrefetch(fromHash >= 0 ? fromHash : current);
   }
 
   document.addEventListener('astro:page-load', bindImmersiveAtlas);
@@ -723,6 +806,18 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
   .atlas-pin:focus-visible > strong,
   .atlas-pin[aria-pressed='true'] > strong { opacity: 1; transform: translate(-50%, 0); }
   .atlas-pin[aria-pressed='true']::before { opacity: .7; animation: atlas-signal 2.2s ease-out infinite; }
+  .atlas-pin[data-pending] {
+    color: var(--amber);
+    border-color: var(--amber);
+    background: rgba(8, 7, 6, .94);
+    box-shadow: 0 0 0 4px rgba(8, 7, 6, .72), 0 0 18px rgba(226, 183, 107, .52);
+  }
+  .atlas-pin[data-pending]::after { opacity: .85; animation: atlas-pending 1s ease-in-out infinite; }
+
+  @keyframes atlas-pending {
+    0%, 100% { transform: scale(.88); opacity: .35; }
+    50% { transform: scale(1.08); opacity: .9; }
+  }
 
   @keyframes atlas-signal {
     0% { transform: scale(.74); opacity: .75; }
@@ -784,6 +879,7 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
   .atlas-territory-list strong { overflow: hidden; font-family: var(--font-display); font-size: .62rem; letter-spacing: .08em; text-overflow: ellipsis; white-space: nowrap; }
   .atlas-territory-list button:hover,
   .atlas-territory-list button[aria-selected='true'] { color: var(--parchment); background: rgba(201, 163, 92, .1); box-shadow: inset 0 -2px var(--gold); }
+  .atlas-territory-list button[data-pending] { color: var(--amber); background: rgba(201, 163, 92, .04); box-shadow: inset 0 -1px rgba(226, 183, 107, .55); }
 
   .atlas-dossier { min-width: 0; background: radial-gradient(circle at 50% 0%, rgba(61, 45, 27, .35), transparent 38%), #0f0c09; }
   .atlas-dossier[aria-busy='true'] { cursor: progress; }
@@ -855,7 +951,8 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .atlas-pin[aria-pressed='true']::before { animation: none; }
+    .atlas-pin[aria-pressed='true']::before,
+    .atlas-pin[data-pending]::after { animation: none; }
     .atlas-dossier-scene.is-entering,
     .atlas-dossier-scene.is-outgoing { animation: none; }
     .atlas-territory-list { scroll-behavior: auto; }

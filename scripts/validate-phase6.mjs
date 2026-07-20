@@ -6,6 +6,22 @@ const read = (path) => readFileSync(resolve(root, path), 'utf8');
 const json = (path) => JSON.parse(read(path));
 const failures = [];
 const pass = (condition, message) => { if (!condition) failures.push(message); };
+const assetSet = (directory, extension) => {
+  const absolute = resolve(root, directory);
+  if (!existsSync(absolute)) return { files: [], size: 0 };
+  const files = readdirSync(absolute).filter((name) => name.endsWith(extension));
+  return {
+    files,
+    size: files.reduce((total, name) => total + statSync(join(absolute, name)).size, 0),
+  };
+};
+const validWebpSet = (directory, files) => files.every((name) => {
+  const buffer = readFileSync(resolve(root, directory, name));
+  return buffer.length >= 20
+    && buffer.toString('ascii', 0, 4) === 'RIFF'
+    && buffer.toString('ascii', 8, 12) === 'WEBP'
+    && buffer.readUInt32LE(4) + 8 === buffer.length;
+});
 
 const layout = read('src/layouts/BaseLayout.astro');
 const globalCss = read('src/styles/global.css');
@@ -65,13 +81,25 @@ const performanceContracts = [
   [atlas, 'connection?.saveData', 'economia de dados do Atlas'],
   [atlas, 'HOVER_INTENT_MS = 80', 'intenção responsiva de hover do Atlas'],
   [atlas, "incoming.decoding = 'async'", 'decodificação assíncrona do Atlas'],
+  [atlas, "incoming.fetchPriority = priority", 'priorização adaptativa dos ativos do Atlas'],
+  [atlas, 'requestIdleCallback', 'prefetch ocioso dos panoramas otimizados'],
+  [atlas, 'panoramaSrcset', 'panoramas responsivos do Atlas'],
   [realmExplorer, "incoming.decoding = 'async'", 'decodificação assíncrona dos panoramas'],
 ];
 for (const [source, token, label] of performanceContracts) pass(source.includes(token), `Contrato de desempenho ausente: ${label}.`);
 pass(!realmExplorer.includes('preload(1)'), 'O atlas soberano não deve pré-carregar panoramas pesados sem intenção.');
-pass(atlas.includes("Promise.all([preloadImage(entry.panorama), preloadImage(entry.emblem)])"), 'Panorama e emblema do Atlas devem ser preparados como um par.');
+pass(atlas.includes("preloadAtlasEntry(entry, 'high')"), 'Panorama e emblema do Atlas devem ser preparados como um par prioritário.');
 pass(atlas.includes("outgoing.className = 'atlas-dossier-scene is-outgoing'") && atlas.includes("scene.classList.add('is-entering')"), 'O Atlas deve trocar a cena territorial com crossfade atômico.');
 pass(atlas.includes("request !== imageRequest") && atlas.includes('clearPendingState()'), 'Trocas rápidas do Atlas devem cancelar seleções obsoletas.');
+const atlasPanoramas960 = assetSet('public/assets/atlas/realms/960', '.webp');
+const atlasPanoramas1536 = assetSet('public/assets/atlas/realms/1536', '.webp');
+const atlasEmblems = assetSet('public/assets/atlas/emblems', '.webp');
+pass(atlasPanoramas960.files.length === 19 && atlasPanoramas960.size <= 1_500_000, 'Os 19 panoramas de 960 px devem permanecer abaixo de 1,5 MB.');
+pass(atlasPanoramas1536.files.length === 19 && atlasPanoramas1536.size <= 3_000_000, 'Os 19 panoramas de 1536 px devem permanecer abaixo de 3 MB.');
+pass(atlasEmblems.files.length === 19 && atlasEmblems.size <= 350_000, 'Os 19 emblemas do Atlas devem permanecer abaixo de 350 kB.');
+pass(validWebpSet('public/assets/atlas/realms/960', atlasPanoramas960.files), 'Há um panorama WebP de 960 px truncado ou inválido.');
+pass(validWebpSet('public/assets/atlas/realms/1536', atlasPanoramas1536.files), 'Há um panorama WebP de 1536 px truncado ou inválido.');
+pass(validWebpSet('public/assets/atlas/emblems', atlasEmblems.files), 'Há um emblema WebP do Atlas truncado ou inválido.');
 pass(explorationHud.includes('lastPath: currentLastPath'), 'A continuidade territorial deve migrar caminhos persistidos para a base da versão atual.');
 pass(journal.includes('height: auto') && journal.includes('object-fit: contain'), 'Os emblemas do Diário devem preservar sua proporção quadrada.');
 pass(globalCss.includes('place-items: center') && globalCss.includes('padding-top: 0.08em'), 'A numeração dos pontos de paisagem deve permanecer centralizada.');
