@@ -137,25 +137,28 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
 
     <aside class="atlas-dossier" id="atlas-dossier" aria-labelledby="atlas-dossier-title">
       <figure class="atlas-dossier-visual">
-        <img
-          id="atlas-panorama"
-          src={`${base}/assets/realms/${initial.realm.panoramaAsset}`}
-          alt={`Panorama editorial de ${initial.realm.trueName}`}
-          width="1915"
-          height="821"
-          decoding="async"
-        />
-        <div class="atlas-dossier-visual-wash" aria-hidden="true"></div>
-        <img
-          class="atlas-dossier-emblem"
-          id="atlas-emblem"
-          src={`${base}/assets/emblems/emblem_${initial.realm.slug}.webp`}
-          alt=""
-          width="132"
-          height="132"
-          decoding="async"
-          onerror={`this.onerror=null;this.src='${base}/assets/emblems/placeholder.svg'`}
-        />
+        <div class="atlas-dossier-scene" id="atlas-dossier-scene">
+          <img
+            class="atlas-dossier-panorama"
+            id="atlas-panorama"
+            src={`${base}/assets/realms/${initial.realm.panoramaAsset}`}
+            alt={`Panorama editorial de ${initial.realm.trueName}`}
+            width="1915"
+            height="821"
+            decoding="async"
+          />
+          <div class="atlas-dossier-visual-wash" aria-hidden="true"></div>
+          <img
+            class="atlas-dossier-emblem"
+            id="atlas-emblem"
+            src={`${base}/assets/emblems/emblem_${initial.realm.slug}.webp`}
+            alt=""
+            width="132"
+            height="132"
+            decoding="async"
+            onerror={`this.onerror=null;this.src='${base}/assets/emblems/placeholder.svg'`}
+          />
+        </div>
         <figcaption>INTERPRETAÇÃO EDITORIAL · APROVADA PARA O SITE</figcaption>
       </figure>
 
@@ -232,6 +235,13 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
     guardianHref: string;
   };
 
+  type AtlasSelectionOptions = {
+    focusPin?: boolean;
+    updateHash?: boolean;
+    recordVisit?: boolean;
+    hover?: boolean;
+  };
+
   function bindImmersiveAtlas() {
     const root = document.querySelector<HTMLElement>('[data-immersive-atlas]');
     if (!root || root.dataset.bound) return;
@@ -246,6 +256,7 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
     const canvas = root.querySelector<HTMLElement>('#atlas-map-canvas')!;
     const mapImage = root.querySelector<HTMLImageElement>('#atlas-map-image')!;
     const dossier = root.querySelector<HTMLElement>('#atlas-dossier')!;
+    const scene = root.querySelector<HTMLElement>('#atlas-dossier-scene')!;
     const panorama = root.querySelector<HTMLImageElement>('#atlas-panorama')!;
     const emblem = root.querySelector<HTMLImageElement>('#atlas-emblem')!;
     const liveStatus = root.querySelector<HTMLElement>('#atlas-live-status')!;
@@ -262,19 +273,51 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
     const realmLink = root.querySelector<HTMLAnchorElement>('#atlas-realm-link')!;
     const guardianLink = root.querySelector<HTMLAnchorElement>('#atlas-guardian-link')!;
     let current = 0;
+    let requested = current;
+    let hoverSelection = -1;
     let imageRequest = 0;
+    let transitionTimer = 0;
+    let transitionFrame = 0;
+    const imageCache = new Map<string, Promise<void>>();
+    const HOVER_INTENT_MS = 80;
+    const TRANSITION_MS = 440;
 
-    function selectRealm(index: number, options: { focusPin?: boolean; updateHash?: boolean; recordVisit?: boolean } = {}) {
-      const { focusPin = false, updateHash = true, recordVisit = false } = options;
-      current = (index + entries.length) % entries.length;
-      const entry = entries[current];
-      const number = String(entry.mapNumber).padStart(2, '0');
+    function preloadImage(src: string) {
+      const cached = imageCache.get(src);
+      if (cached) return cached;
 
-      pins.forEach((pin, pinIndex) => pin.setAttribute('aria-pressed', String(pinIndex === current)));
-      listItems.forEach((item, itemIndex) => item.setAttribute('aria-selected', String(itemIndex === current)));
-      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      listItems[current]?.scrollIntoView({ block: 'nearest', inline: 'center', behavior: reducedMotion ? 'auto' : 'smooth' });
+      const promise = new Promise<void>((resolve, reject) => {
+        const incoming = new Image();
+        incoming.decoding = 'async';
+        incoming.onload = async () => {
+          try { await incoming.decode(); } catch { /* onload já confirma um frame utilizável */ }
+          resolve();
+        };
+        incoming.onerror = () => reject(new Error(`Falha ao carregar ${src}`));
+        incoming.src = src;
+      }).catch((error) => {
+        imageCache.delete(src);
+        throw error;
+      });
 
+      imageCache.set(src, promise);
+      return promise;
+    }
+
+    function clearPendingState() {
+      pins.forEach((pin) => pin.removeAttribute('data-pending'));
+      listItems.forEach((item) => item.removeAttribute('data-pending'));
+      dossier.removeAttribute('aria-busy');
+    }
+
+    function markPending(index: number) {
+      pins.forEach((pin, pinIndex) => pin.toggleAttribute('data-pending', pinIndex === index && index !== current));
+      listItems.forEach((item, itemIndex) => item.toggleAttribute('data-pending', itemIndex === index && index !== current));
+      if (index !== current) dossier.setAttribute('aria-busy', 'true');
+      else dossier.removeAttribute('aria-busy');
+    }
+
+    function updateDossier(entry: AtlasClientEntry, number: string) {
       liveStatus.textContent = `${number} · ${entry.realm}`;
       progress.textContent = number;
       folio.textContent = `fólio territorial ${number}`;
@@ -288,22 +331,56 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
       biome.textContent = entry.biome;
       realmLink.href = entry.realmHref;
       guardianLink.href = entry.guardianHref;
+    }
 
+    function commitRealm(index: number, options: AtlasSelectionOptions) {
+      const { focusPin = false, updateHash = true, recordVisit = false } = options;
+      const entry = entries[index];
+      const number = String(entry.mapNumber).padStart(2, '0');
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      window.clearTimeout(transitionTimer);
+      window.cancelAnimationFrame(transitionFrame);
+      root.querySelectorAll('.atlas-dossier-scene.is-outgoing').forEach((node) => node.remove());
+      scene.classList.remove('is-entering', 'is-preparing');
+
+      let outgoing: HTMLElement | null = null;
+      if (!reducedMotion && index !== current) {
+        outgoing = scene.cloneNode(true) as HTMLElement;
+        outgoing.removeAttribute('id');
+        outgoing.querySelectorAll('[id]').forEach((node) => node.removeAttribute('id'));
+        outgoing.setAttribute('aria-hidden', 'true');
+        outgoing.className = 'atlas-dossier-scene is-outgoing';
+        scene.before(outgoing);
+        scene.classList.add('is-preparing');
+      }
+
+      current = index;
+      requested = index;
+      hoverSelection = -1;
+      pins.forEach((pin, pinIndex) => pin.setAttribute('aria-pressed', String(pinIndex === current)));
+      listItems.forEach((item, itemIndex) => item.setAttribute('aria-selected', String(itemIndex === current)));
+      listItems[current]?.scrollIntoView({ block: 'nearest', inline: 'center', behavior: reducedMotion ? 'auto' : 'smooth' });
+
+      panorama.src = entry.panorama;
+      panorama.alt = `Panorama editorial de ${entry.trueName}`;
       emblem.src = entry.emblem;
       emblem.alt = '';
-      dossier.classList.remove('is-changing');
-      void dossier.offsetWidth;
-      dossier.classList.add('is-changing');
+      updateDossier(entry, number);
+      clearPendingState();
 
-      const request = ++imageRequest;
-      const incoming = new Image();
-      incoming.decoding = 'async';
-      incoming.onload = () => {
-        if (request !== imageRequest) return;
-        panorama.src = entry.panorama;
-        panorama.alt = `Panorama editorial de ${entry.trueName}`;
-      };
-      incoming.src = entry.panorama;
+      if (outgoing) {
+        transitionFrame = requestAnimationFrame(() => {
+          transitionFrame = requestAnimationFrame(() => {
+            scene.classList.remove('is-preparing');
+            scene.classList.add('is-entering');
+          });
+        });
+        transitionTimer = window.setTimeout(() => {
+          outgoing?.remove();
+          scene.classList.remove('is-entering');
+        }, TRANSITION_MS);
+      }
 
       if (updateHash) history.replaceState(null, '', `#reino-${entry.slug}`);
       if (focusPin) pins[current]?.focus({ preventScroll: true });
@@ -314,6 +391,37 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
       }
     }
 
+    function selectRealm(index: number, options: AtlasSelectionOptions = {}) {
+      const { focusPin = false, updateHash = true, recordVisit = false, hover = false } = options;
+      const next = (index + entries.length) % entries.length;
+      const entry = entries[next];
+      if (next === current && requested === current) {
+        hoverSelection = -1;
+        if (updateHash) history.replaceState(null, '', `#reino-${entry.slug}`);
+        if (focusPin) pins[current]?.focus({ preventScroll: true });
+        if (recordVisit) {
+          window.dispatchEvent(new CustomEvent('roc:realm-visited', {
+            detail: { slug: entry.slug, path: entry.realmHref },
+          }));
+        }
+        return;
+      }
+
+      requested = next;
+      hoverSelection = hover ? next : -1;
+      markPending(next);
+      const request = ++imageRequest;
+      Promise.all([preloadImage(entry.panorama), preloadImage(entry.emblem)]).then(() => {
+        if (request !== imageRequest) return;
+        commitRealm(next, { focusPin, updateHash, recordVisit });
+      }).catch(() => {
+        if (request !== imageRequest) return;
+        requested = current;
+        hoverSelection = -1;
+        clearPendingState();
+      });
+    }
+
     const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData === true;
     let hoverTimer = 0;
     pins.forEach((pin, index) => {
@@ -322,13 +430,21 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
       pin.addEventListener('pointerenter', (event) => {
         if (event.pointerType !== 'mouse' || saveData) return;
         window.clearTimeout(hoverTimer);
-        hoverTimer = window.setTimeout(() => selectRealm(index, { updateHash: false }), 220);
+        hoverTimer = window.setTimeout(() => selectRealm(index, { updateHash: false, hover: true }), HOVER_INTENT_MS);
       });
-      pin.addEventListener('pointerleave', () => window.clearTimeout(hoverTimer));
+      pin.addEventListener('pointerleave', () => {
+        window.clearTimeout(hoverTimer);
+        if (hoverSelection === index && requested === index && requested !== current) {
+          imageRequest += 1;
+          requested = current;
+          hoverSelection = -1;
+          clearPendingState();
+        }
+      });
     });
     listItems.forEach((item, index) => item.addEventListener('click', () => selectRealm(index, { recordVisit: true })));
-    root.querySelector('#atlas-previous-realm')?.addEventListener('click', () => selectRealm(current - 1, { recordVisit: true }));
-    root.querySelector('#atlas-next-realm')?.addEventListener('click', () => selectRealm(current + 1, { recordVisit: true }));
+    root.querySelector('#atlas-previous-realm')?.addEventListener('click', () => selectRealm(requested - 1, { recordVisit: true }));
+    root.querySelector('#atlas-next-realm')?.addEventListener('click', () => selectRealm(requested + 1, { recordVisit: true }));
 
     root.addEventListener('keydown', (event) => {
       const target = event.target as HTMLElement;
@@ -337,9 +453,9 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
       event.preventDefault();
       if (event.key === 'Home') selectRealm(0, { focusPin: target.hasAttribute('data-atlas-index'), recordVisit: true });
       else if (event.key === 'End') selectRealm(entries.length - 1, { focusPin: target.hasAttribute('data-atlas-index'), recordVisit: true });
-      else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') selectRealm(current - 1, { focusPin: target.hasAttribute('data-atlas-index'), recordVisit: true });
-      else selectRealm(current + 1, { focusPin: target.hasAttribute('data-atlas-index'), recordVisit: true });
-      if (target.hasAttribute('data-atlas-list-index')) listItems[current]?.focus({ preventScroll: true });
+      else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') selectRealm(requested - 1, { focusPin: target.hasAttribute('data-atlas-index'), recordVisit: true });
+      else selectRealm(requested + 1, { focusPin: target.hasAttribute('data-atlas-index'), recordVisit: true });
+      if (target.hasAttribute('data-atlas-list-index')) listItems[requested]?.focus({ preventScroll: true });
     });
 
     let scale = 1;
@@ -670,13 +786,18 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
   .atlas-territory-list button[aria-selected='true'] { color: var(--parchment); background: rgba(201, 163, 92, .1); box-shadow: inset 0 -2px var(--gold); }
 
   .atlas-dossier { min-width: 0; background: radial-gradient(circle at 50% 0%, rgba(61, 45, 27, .35), transparent 38%), #0f0c09; }
+  .atlas-dossier[aria-busy='true'] { cursor: progress; }
   .atlas-dossier-visual { position: relative; aspect-ratio: 16 / 8.2; overflow: hidden; margin: 0; border-bottom: 1px solid var(--atlas-line); background: #050403; }
-  .atlas-dossier-visual > img:first-child { display: block; width: 100%; height: 100%; object-fit: cover; transition: opacity .35s ease, transform 1.4s cubic-bezier(.2,.7,.2,1); }
-  .atlas-dossier.is-changing .atlas-dossier-visual > img:first-child { animation: atlas-panorama-reveal .65s ease both; }
-  @keyframes atlas-panorama-reveal { from { opacity: .35; transform: scale(1.035); } to { opacity: 1; transform: scale(1); } }
+  .atlas-dossier-scene { position: absolute; inset: 0; transform-origin: center; }
+  .atlas-dossier-scene.is-preparing { opacity: 0; }
+  .atlas-dossier-scene.is-entering { animation: atlas-scene-enter .42s cubic-bezier(.2,.72,.2,1) both; }
+  .atlas-dossier-scene.is-outgoing { pointer-events: none; animation: atlas-scene-exit .42s cubic-bezier(.2,.72,.2,1) both; }
+  @keyframes atlas-scene-enter { from { opacity: 0; transform: scale(1.018); } to { opacity: 1; transform: scale(1); } }
+  @keyframes atlas-scene-exit { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(.992); } }
+  .atlas-dossier-panorama { display: block; width: 100%; height: 100%; object-fit: cover; }
   .atlas-dossier-visual-wash { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(8,7,6,.08), rgba(8,7,6,.15) 42%, rgba(8,7,6,.94)); }
   .atlas-dossier-emblem { position: absolute; left: 1rem; bottom: 1rem; width: clamp(64px, 8vw, 94px); height: auto; aspect-ratio: 1; object-fit: contain; filter: drop-shadow(0 7px 16px rgba(0,0,0,.8)); }
-  .atlas-dossier-visual figcaption { position: absolute; right: .8rem; bottom: .55rem; max-width: 54%; color: rgba(230,217,184,.68); font-family: var(--font-display); font-size: .47rem; letter-spacing: .13em; text-align: right; }
+  .atlas-dossier-visual figcaption { position: absolute; z-index: 3; right: .8rem; bottom: .55rem; max-width: 54%; color: rgba(230,217,184,.68); font-family: var(--font-display); font-size: .47rem; letter-spacing: .13em; text-align: right; }
   .atlas-dossier-body { padding: 1.35rem; }
   .atlas-dossier-heading .rubric { display: block; margin-bottom: .45rem; color: var(--gold); }
   .atlas-dossier-heading h3 { color: var(--parchment); font-size: clamp(1.25rem, 2.1vw, 1.8rem); letter-spacing: .08em; }
@@ -735,7 +856,8 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
 
   @media (prefers-reduced-motion: reduce) {
     .atlas-pin[aria-pressed='true']::before { animation: none; }
-    .atlas-dossier.is-changing .atlas-dossier-visual > img:first-child { animation: none; }
+    .atlas-dossier-scene.is-entering,
+    .atlas-dossier-scene.is-outgoing { animation: none; }
     .atlas-territory-list { scroll-behavior: auto; }
   }
 </style>

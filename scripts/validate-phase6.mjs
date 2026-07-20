@@ -63,12 +63,15 @@ const performanceContracts = [
   [embers, "document.addEventListener('visibilitychange'", 'pausa em aba oculta'],
   [embers, 'cancelAnimationFrame', 'cancelamento do loop visual'],
   [atlas, 'connection?.saveData', 'economia de dados do Atlas'],
-  [atlas, 'window.setTimeout(() => selectRealm', 'intenção de hover do Atlas'],
+  [atlas, 'HOVER_INTENT_MS = 80', 'intenção responsiva de hover do Atlas'],
   [atlas, "incoming.decoding = 'async'", 'decodificação assíncrona do Atlas'],
   [realmExplorer, "incoming.decoding = 'async'", 'decodificação assíncrona dos panoramas'],
 ];
 for (const [source, token, label] of performanceContracts) pass(source.includes(token), `Contrato de desempenho ausente: ${label}.`);
 pass(!realmExplorer.includes('preload(1)'), 'O atlas soberano não deve pré-carregar panoramas pesados sem intenção.');
+pass(atlas.includes("Promise.all([preloadImage(entry.panorama), preloadImage(entry.emblem)])"), 'Panorama e emblema do Atlas devem ser preparados como um par.');
+pass(atlas.includes("outgoing.className = 'atlas-dossier-scene is-outgoing'") && atlas.includes("scene.classList.add('is-entering')"), 'O Atlas deve trocar a cena territorial com crossfade atômico.');
+pass(atlas.includes("request !== imageRequest") && atlas.includes('clearPendingState()'), 'Trocas rápidas do Atlas devem cancelar seleções obsoletas.');
 pass(explorationHud.includes('lastPath: currentLastPath'), 'A continuidade territorial deve migrar caminhos persistidos para a base da versão atual.');
 pass(journal.includes('height: auto') && journal.includes('object-fit: contain'), 'Os emblemas do Diário devem preservar sua proporção quadrada.');
 pass(globalCss.includes('place-items: center') && globalCss.includes('padding-top: 0.08em'), 'A numeração dos pontos de paisagem deve permanecer centralizada.');
