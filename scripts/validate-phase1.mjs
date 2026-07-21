@@ -51,6 +51,10 @@ for (const [token, label] of requiredExperienceContracts) {
 
 pass(atlasPageSource.includes('<ImmersiveRealmMap'), 'A página do Atlas não está usando o explorador da Fase 1.');
 pass(atlasPageSource.includes('data-lore-reveal'), 'A sequência de lore não possui revelação progressiva.');
+pass(
+  /\.atlas-dossier-visual\s*\{[^}]*width:\s*100%;[^}]*height:\s*auto;/.test(explorerSource),
+  'O panorama do dossiê deve abandonar a altura herdada abaixo de 700 px.',
+);
 
 if (failures.length) {
   console.error('PHASE_1_EXPERIENCE_GATE: FAIL');

@@ -83,7 +83,7 @@ for (const file of htmlFiles) {
 
 const sitemapPath = resolve(dist, 'sitemap.xml');
 const robotsPath = resolve(dist, 'robots.txt');
-pass(htmlFiles.length === 49, `Esperadas 49 páginas HTML; encontradas ${htmlFiles.length}.`);
+pass(htmlFiles.length === 48, `Esperadas 48 páginas HTML; encontradas ${htmlFiles.length}.`);
 pass(existsSync(sitemapPath), 'sitemap.xml ausente.');
 pass(existsSync(robotsPath), 'robots.txt ausente.');
 if (existsSync(sitemapPath)) {

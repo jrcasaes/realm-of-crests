@@ -40,6 +40,11 @@ const journalContracts = [
 ];
 for (const [token, label] of journalContracts) pass(journalSource.includes(token), `Contrato ausente no Diário: ${label}.`);
 
+pass(
+  journalSource.includes('.journal-summary .journal-affinity strong'),
+  'O valor da afinidade precisa neutralizar a tipografia numérica dos contadores.',
+);
+
 pass(!journalSource.includes('localStorage.removeItem(EXPLORATION_KEY)'), 'Apagar o Diário não pode remover território.');
 pass(!journalSource.includes('localStorage.removeItem(PILGRIMAGE_KEY)'), 'Apagar o Diário não pode remover afinidade.');
 pass(!journalSource.includes('localStorage.setItem(EXPLORATION_KEY'), 'O Diário não pode conceder descoberta territorial.');

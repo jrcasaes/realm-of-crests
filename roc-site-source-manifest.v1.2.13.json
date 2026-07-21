@@ -66,13 +66,18 @@
     "productionBuild": "PASS_48_PAGES",
     "contentValidation": "PHASES_0_TO_6_PASS",
     "artifactAudit": "PASS_48_CANONICALS_LINKS_AND_ASSETS",
-    "responsiveQa": "PARTIAL_PUBLIC_PREVIEW",
+    "responsiveQa": "PASS_PUBLIC_PREVIEW",
     "responsiveQaDetails": {
       "desktop1366": "PASS",
+      "desktop1920": "PASS",
+      "mobile320": "PASS",
+      "mobile375": "PASS",
+      "mobile390": "PASS",
+      "tablet768": "PASS",
       "atlasTransitionRemigiaVictoria": "PASS",
       "mobileBreakpointContracts": "PASS",
-      "desktop1920Rendered": "PENDING",
-      "mobile320To768Rendered": "PENDING"
+      "atlasColdFirstHoverVictoria": "PASS_1286MS_REMOTE_END_TO_END",
+      "applicationConsoleErrors": 0
     }
   },
   "discoverability": {
@@ -80,7 +85,7 @@
     "canonicalLinks": "ENABLED"
   },
   "deployment": {
-    "github": "DEPLOYED_PHASE_6_PREVIEW_RUN_7_PASS",
+    "github": "DEPLOYED_PHASE_6_PREVIEW_RUN_15_PASS",
     "pullRequest": 8,
     "draft": true,
     "mainInvolved": false
@@ -90,7 +95,7 @@
     "url": "https://jrcasaes.github.io/realm-of-crests/previews/phase-6/",
     "lastVerifiedRelease": "1.2.13",
     "targetRelease": "1.2.13",
-    "targetStatus": "PUBLIC_PREVIEW_VERIFIED_DESKTOP_MOBILE_RENDER_PENDING",
+    "targetStatus": "PUBLIC_PREVIEW_VERIFIED_RELEASE_CANDIDATE",
     "publicVerificationRequiredAfterPush": false
   }
 }
