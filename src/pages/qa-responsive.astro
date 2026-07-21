@@ -15,13 +15,15 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
     <script is:inline>
       const allowed = new Set([320, 375, 390, 768, 1920]);
-      const requested = Number(new URLSearchParams(location.search).get('vp'));
+      const params = new URLSearchParams(location.search);
+      const requested = Number(params.get('vp'));
       const width = allowed.has(requested) ? requested : 320;
+      const run = params.get('run') || 'qa';
       const base = document.querySelector('.qa-responsive').dataset.base;
       const frame = document.createElement('iframe');
       frame.dataset.qaViewport = String(width);
       frame.title = `Atlas em ${width} pixels`;
-      frame.src = `${base}/atlas/?qa=responsive-${width}`;
+      frame.src = `${base}/atlas/?qa=responsive-${width}&run=${encodeURIComponent(run)}`;
       frame.style.width = `${width}px`;
       frame.style.height = '1050px';
       frame.addEventListener('load', () => {
