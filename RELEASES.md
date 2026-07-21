@@ -2,7 +2,7 @@
 
 ## v1.2.17 — 2026-07-21
 
-Status: **micropatch 7.1.2 em validação local; publicação pendente**.
+Status: **publicada e verificada em produção; fechamento operacional da Fase 7 concluído**.
 
 - Faz o quadro de Continuidade Viva responder à largura real do componente e colapsar para uma coluna abaixo de 900 px.
 - Acrescenta defesas de largura e quebra de texto para preservar leitura sob zoom elevado.
@@ -12,11 +12,13 @@ Status: **micropatch 7.1.2 em validação local; publicação pendente**.
 
 Gate local: **PASS** — 48 páginas, 48 canonicals, links/assets íntegros, 19 âncoras territoriais e gate dedicado de legibilidade aprovado.
 
-QA visual: **PENDENTE** — executar em 1024, 1366 e 1920 px, além de zoom de 125% e 150%, antes da integração.
+QA visual: **PASS** — 1024, 1366 e 1920 px, além dos equivalentes a zoom de 125% e 150%, sem overflow interno ou horizontal; San Paolo validado em 2 × 2 e Arena de Ferro confirmada sobre a estrutura correta.
+
+Verificação pública: **PASS** — PR #11 integrado por squash no commit `2870cb10d0c4707d7d16fbd830ee712321e02306`; Eldric, San Paolo e Galícia aprovados na raiz pública, sem imagens quebradas ou erros JavaScript da aplicação.
 
 ## v1.2.16 — 2026-07-21
 
-Status: **micropatch 7.1.1 validado localmente; publicação pendente**.
+Status: **publicada e verificada em produção**.
 
 - Separa **Continuar a travessia** de **Seguir uma ressonância** nos ecos contextuais.
 - Registra Guardiões vistos em memória local própria, sem alterar o progresso territorial.
@@ -27,11 +29,13 @@ Status: **micropatch 7.1.1 validado localmente; publicação pendente**.
 
 Gate local: **PASS** — 19 pontos de partida × 64 pares de afinidade, cobertura 19/19 sem repetição, sem autoindicação e sem ciclos A ↔ B.
 
-QA navegável: **PASS** — 22/22 verificações em 1366 × 768 e 1920 × 1080; memória de Guardiões, separação territorial, estado pós-cobertura, console e overflow aprovados.
+QA navegável: **PASS** — 98/98 verificações em 1366 × 768 e 1920 × 1080; travessia real dos 19 Guardiões, migração de estado legado, memória separada do progresso territorial, console e overflow aprovados.
+
+Verificação pública: **PASS** — PR #10 integrado por squash no commit `c356cae312eab71d0c4db2a613c4185532acec08`; Eldric e Admiral não formam retorno imediato, a navegação real até Hawks persiste após recarga e nenhum asset ou erro da aplicação foi detectado.
 
 ## v1.2.15 — 2026-07-21
 
-Status: **Fases 7.0 e 7.1 implementadas em candidato de prévia; integração na `main` pendente de QA e aprovação**.
+Status: **Fases 7.0 e 7.1 publicadas e verificadas em produção**.
 
 - Reconhece o Atlas concluído em 19/19 emblemas transparentes e preserva Botáfia sem qualquer alteração visual.
 - Substitui nos fólios territoriais a entrega dos PNGs pesados pelos WebPs responsivos já aprovados.
@@ -40,7 +44,9 @@ Status: **Fases 7.0 e 7.1 implementadas em candidato de prévia; integração na
 - Conecta Atlas, Reinos, Guardiões, Fervores e Diário sem pontuação, poder ou alteração do cânone.
 - Acrescenta demonstrações conceituais leves de Sovereign Gravity e Ascensão; o Códice 8 × 5 permanece como demonstração de Fervor.
 
-Gate local e QA: **PENDENTES**.
+Gate local e QA: **PASS** — 48 páginas e canonicals, 40/40 verificações centrais e 18/18 complementares; Primeira Travessia, continuidade contextual, Fragmentos, Diário, Gravity e Ascensão aprovados em 1366 × 768 e 1920 × 1080.
+
+Verificação pública: **PASS** — PR #9 integrado por squash no commit `285bec7a9d1f7ac69b16a187ac68354e9e52f6b8`; Primeira Travessia, Atlas, Botáfia, Diário e sistemas demonstráveis aprovados sem overflow, imagens quebradas ou erros JavaScript da aplicação.
 
 ## v1.2.14 — 2026-07-21
 
