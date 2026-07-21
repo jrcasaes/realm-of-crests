@@ -13,7 +13,7 @@ const realmPage = read('src/pages/reinos/[slug].astro');
 const galicia = realms.find((realm) => realm.slug === 'galicia');
 const arena = galicia?.visualHotspots?.find((hotspot) => hotspot.label === 'Arena de Ferro');
 
-pass(packageJson.version === '1.8.2', 'O micropatch 7.1.2 deve identificar o pacote 1.8.2.');
+pass(packageJson.version === '1.8.3', 'O gate 7.1.2 deve permanecer íntegro no pacote 1.8.3.');
 pass(packageJson.scripts?.['validate:legibility'] === 'node scripts/validate-phase7-1-2.mjs', 'O gate de legibilidade não está declarado.');
 pass(continuity.includes('container: continuity / inline-size'), 'O eco contextual não responde à largura do próprio componente.');
 pass(continuity.includes('@container continuity (max-width: 900px)'), 'O colapso intermediário do eco contextual está ausente.');

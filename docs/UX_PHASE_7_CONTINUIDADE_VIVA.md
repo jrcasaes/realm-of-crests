@@ -1,6 +1,6 @@
 # Fase 7 — Continuidade Viva
 
-Status: **concluída e verificada em produção**. Fases 7.0 e 7.1 e micropatches 7.1.1 e 7.1.2 publicados em 2026-07-21.
+Status: **Fases 7.0 e 7.1 encerradas em produção; micropatch visual 7.1.3 em validação**. Micropatches 7.1.1 e 7.1.2 publicados em 2026-07-21.
 
 Implementação de produção: `285bec7` (Fases 7.0–7.1), `c356cae` (7.1.1) e `2870cb1` (7.1.2). Registro operacional consolidado no manifesto v1.2.17.
 
@@ -40,6 +40,14 @@ Atlas, fólios territoriais e dossiês exibem uma recomendação explicada. A se
 - O marcador da **Arena de Ferro** em Galícia ancora a estrutura circular no primeiro plano à direita (`76% / 59%`).
 - O patch não altera panorama, cânone, relações de Fervor, emblemas ou memória de navegação.
 
+### Micropatch 7.1.3 — Nitidez dos Dossiês
+
+- O retrato principal dos dossiês deixa de receber filtros de saturação e brilho, preservando a mesma nitidez do Arquivo Vivo.
+- A cópia ampliada continua desfocada e escurecida apenas como camada atmosférica de fundo.
+- O véu escuro se concentra na área textual e na transição inferior, sem cobrir rosto e corpo no desktop.
+- Em telas compactas, a opacidade do retrato é reforçada enquanto o gradiente preserva a leitura do conteúdo sobreposto.
+- O patch se aplica ao template comum dos 19 Guardiões e não modifica nenhum arquivo de imagem ou dado canônico.
+
 ### Fragmentos vivos
 
 Os mesmos quatro fundamentos públicos do Diário reaparecem na bússola após 1, 5, 10 e 19 Reinos. Não há informação exclusiva, prêmio, poder ou pontuação.
@@ -64,11 +72,13 @@ Os mesmos quatro fundamentos públicos do Diário reaparecem na bússola após 1
 9. Eco contextual legível em 1024, 1366 e 1920 px, incluindo zoom de 125% e 150%.
 10. Fichas territoriais completas em 2 × 2 quando houver duas colunas, sem célula visual vazia.
 11. Arena de Ferro ancorada no edifício circular correto do panorama de Galícia.
+12. Retratos principais dos 19 dossiês sem filtros de brilho, saturação ou desfoque; desfoque permitido somente no fundo atmosférico.
 
 ## Resultado de validação
 
 - Fases 7.0–7.1: **PASS** — 40/40 verificações centrais, 18/18 complementares e smoke público do PR #9.
 - Micropatch 7.1.1: **PASS** — 98/98 verificações navegáveis, cobertura dos 19 Guardiões, migração e persistência aprovadas; smoke público do PR #10.
 - Micropatch 7.1.2: **PASS** — 1024, 1366 e 1920 px e zoom equivalente a 125% e 150%; smoke público do PR #11.
+- Micropatch 7.1.3: **GATE LOCAL PASS** — 48 páginas, 48 canonicals e contrato de nitidez aprovados; QA visual público pendente.
 - Estado final: 48 páginas e 48 canonicals, sem overflow horizontal, imagens quebradas ou erros JavaScript da aplicação nas rotas auditadas.
 - Escopo preservado: nenhum conteúdo canônico, panorama, emblema ou relação de Fervor foi alterado pelo fechamento operacional.
