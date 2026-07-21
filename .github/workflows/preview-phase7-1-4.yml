@@ -19,7 +19,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  group: pages-phase-7-1-4
   cancel-in-progress: false
 
 jobs:
