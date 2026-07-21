@@ -1,5 +1,19 @@
 # Realm of Crests — Registro de versões do site
 
+## v1.2.17 — 2026-07-21
+
+Status: **micropatch 7.1.2 em validação local; publicação pendente**.
+
+- Faz o quadro de Continuidade Viva responder à largura real do componente e colapsar para uma coluna abaixo de 900 px.
+- Acrescenta defesas de largura e quebra de texto para preservar leitura sob zoom elevado.
+- Completa a ficha dos 19 Reinos com a **Âncora territorial**, reutilizando o Templo canônico de cada território.
+- Reposiciona exclusivamente o marcador interpretativo da Arena de Ferro em Galícia para `76% / 59%`.
+- Preserva panoramas, cânone, Fervores, emblemas, Botáfia e memória de navegação.
+
+Gate local: **PASS** — 48 páginas, 48 canonicals, links/assets íntegros, 19 âncoras territoriais e gate dedicado de legibilidade aprovado.
+
+QA visual: **PENDENTE** — executar em 1024, 1366 e 1920 px, além de zoom de 125% e 150%, antes da integração.
+
 ## v1.2.16 — 2026-07-21
 
 Status: **micropatch 7.1.1 validado localmente; publicação pendente**.

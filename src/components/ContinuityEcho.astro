@@ -175,26 +175,30 @@ const safeJson = (value: unknown) => JSON.stringify(value).replace(/</g, '\\u003
 </script>
 
 <style>
-  .continuity-echo { margin-block: clamp(3rem, 7vw, 6rem); padding: clamp(1.4rem, 4vw, 2.5rem); border: 1px solid rgba(201,163,92,.36); background: radial-gradient(circle at 15% 0, rgba(201,163,92,.09), transparent 32%), linear-gradient(145deg, var(--codex-raised), var(--ink)); }
+  .continuity-echo { container: continuity / inline-size; margin-block: clamp(3rem, 7vw, 6rem); padding: clamp(1.4rem, 4vw, 2.5rem); border: 1px solid rgba(201,163,92,.36); background: radial-gradient(circle at 15% 0, rgba(201,163,92,.09), transparent 32%), linear-gradient(145deg, var(--codex-raised), var(--ink)); }
   .continuity-echo > header { display: grid; grid-template-columns: 1.2fr .8fr; gap: 2rem; align-items: end; }
   .continuity-echo .rubric { color: var(--gold); }
   .continuity-echo h2 { margin-top: .55rem; color: var(--parchment); font-size: clamp(1.45rem, 3.4vw, 2.5rem); }
   .continuity-echo > header > p { margin: 0; color: var(--parchment-dim); font-style: italic; }
   .continuity-grid { display: grid; grid-template-columns: 1.35fr .65fr; gap: 1px; margin-top: 1.7rem; background: var(--edge); }
   .continuity-grid.is-solo { grid-template-columns: 1fr; }
-  .continuity-grid > * { padding: 1.3rem; background: rgba(12,10,8,.88); }
-  .continuity-routes { display: grid; gap: 1px; padding: 0; background: var(--edge); }
-  .continuity-route { padding: 1.3rem; background: rgba(12,10,8,.94); }
+  .continuity-grid > * { min-width: 0; padding: 1.3rem; background: rgba(12,10,8,.88); }
+  .continuity-routes { display: grid; min-width: 0; gap: 1px; padding: 0; background: var(--edge); }
+  .continuity-route { min-width: 0; padding: 1.3rem; background: rgba(12,10,8,.94); }
   .continuity-route.is-resonance { background: rgba(23,19,15,.94); }
   .continuity-grid h3 { margin-top: .45rem; color: var(--parchment); font-size: 1.35rem; }
-  .continuity-grid p { margin-top: .65rem; color: var(--parchment-dim); }
+  .continuity-grid p { margin-top: .65rem; color: var(--parchment-dim); overflow-wrap: anywhere; }
   .continuity-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
-  .continuity-actions a, .continuity-grid aside a { padding: .55rem .7rem; border: 1px solid var(--edge); color: var(--gold); font-family: var(--font-display); font-size: .62rem; letter-spacing: .08em; text-transform: uppercase; }
+  .continuity-actions a, .continuity-grid aside a { min-width: 0; padding: .55rem .7rem; border: 1px solid var(--edge); color: var(--gold); font-family: var(--font-display); font-size: .62rem; letter-spacing: .08em; overflow-wrap: anywhere; text-transform: uppercase; }
   .continuity-actions a:first-child { color: var(--ink); background: var(--gold); border-color: var(--gold); }
   .continuity-grid aside a { display: inline-block; margin-top: .8rem; }
   .continuity-disclaimer { margin: 1rem 0 0; color: var(--parchment-faint); font-size: .72rem; }
   .mode-atlas { width: min(1120px, calc(100% - 3rem)); margin-inline: auto; }
   [data-continuity-fragment][hidden] { display: none; }
   [data-continuity-resonance][hidden] { display: none; }
+  @container continuity (max-width: 900px) {
+    .continuity-echo > header, .continuity-grid { grid-template-columns: minmax(0, 1fr); }
+    .continuity-echo > header { align-items: start; gap: 1rem; }
+  }
   @media (max-width: 760px) { .continuity-echo > header, .continuity-grid { grid-template-columns: 1fr; } .mode-atlas { width: min(100% - 1.5rem, 1120px); } }
 </style>
