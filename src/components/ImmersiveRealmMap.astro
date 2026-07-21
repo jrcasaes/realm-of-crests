@@ -1,0 +1,960 @@
+---
+interface AtlasEntry {
+  mapNumber: number;
+  x: number;
+  y: number;
+  realm: {
+    slug: string;
+    realm: string;
+    trueName: string;
+    essence: string;
+    fervor: string;
+    gravity: string;
+    temple: string;
+    biome: string;
+    panoramaAsset: string;
+  };
+  guardian: {
+    slug: string;
+    name: string;
+    epithet: string;
+  };
+}
+
+interface Props {
+  entries: AtlasEntry[];
+  base: string;
+}
+
+const { entries, base } = Astro.props;
+const initial = entries[0];
+const atlasPanoramaPath = (asset: string, width: 960 | 1536) => {
+  const stem = asset.replace(/\.[^.]+$/, '');
+  return `${base}/assets/atlas/realms/${width}/${stem}.webp`;
+};
+const atlasData = entries.map(({ mapNumber, x, y, realm, guardian }) => {
+  const panorama960 = atlasPanoramaPath(realm.panoramaAsset, 960);
+  const panorama1536 = atlasPanoramaPath(realm.panoramaAsset, 1536);
+  return {
+    mapNumber,
+    x,
+    y,
+    slug: realm.slug,
+    realm: realm.realm,
+    trueName: realm.trueName,
+    essence: realm.essence,
+    fervor: realm.fervor,
+    gravity: realm.gravity,
+    temple: realm.temple,
+    biome: realm.biome,
+    guardian: guardian.name,
+    guardianSlug: guardian.slug,
+    epithet: guardian.epithet,
+    panorama: panorama960,
+    panoramaSrcset: `${panorama960} 960w, ${panorama1536} 1536w`,
+    emblem: `${base}/assets/atlas/emblems/emblem_${realm.slug}.webp`,
+    realmHref: `${base}/reinos/${realm.slug}/`,
+    guardianHref: `${base}/guardioes/${guardian.slug}/`,
+  };
+});
+const initialPanorama = atlasData[0].panorama;
+const initialPanoramaSrcset = atlasData[0].panoramaSrcset;
+const initialEmblem = atlasData[0].emblem;
+const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
+---
+
+<section class="immersive-atlas" id="atlas-explorer" data-immersive-atlas aria-labelledby="atlas-explorer-title">
+  <header class="atlas-command">
+    <div>
+      <span class="rubric">instrumento cartográfico · interação canônica</span>
+      <h2 id="atlas-explorer-title">O CONTINENTE RESPONDE</h2>
+    </div>
+    <div class="atlas-command-status" aria-live="polite" aria-atomic="true">
+      <span>território em leitura</span>
+      <strong id="atlas-live-status">01 · {initial.realm.realm}</strong>
+    </div>
+  </header>
+
+  <div class="atlas-workspace">
+    <div class="atlas-map-column">
+      <div
+        class="atlas-map-viewport"
+        id="atlas-map-viewport"
+        tabindex="0"
+        aria-label="Mapa explorável dos dezenove Reinos. Use os marcadores ou o índice territorial."
+        aria-describedby="atlas-map-instructions"
+      >
+        <div class="atlas-map-canvas" id="atlas-map-canvas">
+          <img
+            id="atlas-map-image"
+            src={`${base}/assets/maps/map_continent.webp`}
+            data-hires={`${base}/assets/maps/map_continent_2x.webp`}
+            alt="Mapa Canônico do Continente de Realm of Crests, com dezenove Reinos, Solo Ancestral, Caminhos Sagrados e Fronteira da Ruína"
+            width="1536"
+            height="1024"
+            draggable="false"
+            decoding="async"
+          />
+          <nav class="atlas-pins" aria-label="Marcadores dos Reinos">
+            {entries.map(({ mapNumber, x, y, realm }, index) => (
+              <button
+                class="atlas-pin"
+                type="button"
+                style={`--pin-x:${x}%;--pin-y:${y}%;`}
+                data-atlas-index={index}
+                aria-label={`${String(mapNumber).padStart(2, '0')} · ${realm.realm}. Exibir dossiê.`}
+                aria-pressed={index === 0 ? 'true' : 'false'}
+              >
+                <span aria-hidden="true">{String(mapNumber).padStart(2, '0')}</span>
+                <strong aria-hidden="true">{realm.realm}</strong>
+              </button>
+            ))}
+          </nav>
+        </div>
+
+        <div class="atlas-map-vignette" aria-hidden="true"></div>
+
+        <div class="atlas-map-controls" aria-label="Controles do mapa">
+          <button type="button" id="atlas-zoom-in" aria-label="Aproximar mapa" title="Aproximar">+</button>
+          <button type="button" id="atlas-zoom-out" aria-label="Afastar mapa" title="Afastar">−</button>
+          <button type="button" id="atlas-zoom-reset" aria-label="Restaurar enquadramento" title="Restaurar enquadramento">⌖</button>
+        </div>
+
+        <p class="atlas-map-instructions" id="atlas-map-instructions">
+          <span class="desktop-instruction">CTRL + RODA PARA APROXIMAR · ARRASTE QUANDO AMPLIADO</span>
+          <span class="touch-instruction">TOQUE NOS SELOS · USE OS CONTROLES PARA APROXIMAR</span>
+        </p>
+      </div>
+
+      <div class="atlas-territory-index">
+        <header>
+          <span class="rubric">índice territorial</span>
+          <span><b id="atlas-progress">01</b> / 19</span>
+        </header>
+        <div class="atlas-territory-list" role="listbox" aria-label="Selecionar um Reino">
+          {entries.map(({ mapNumber, realm }, index) => (
+            <button
+              type="button"
+              role="option"
+              aria-selected={index === 0 ? 'true' : 'false'}
+              data-atlas-list-index={index}
+            >
+              <small>{String(mapNumber).padStart(2, '0')}</small>
+              <strong>{realm.realm}</strong>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <aside class="atlas-dossier" id="atlas-dossier" aria-labelledby="atlas-dossier-title">
+      <figure class="atlas-dossier-visual">
+        <div class="atlas-dossier-scene" id="atlas-dossier-scene">
+          <img
+            class="atlas-dossier-panorama"
+            id="atlas-panorama"
+            src={initialPanorama}
+            srcset={initialPanoramaSrcset}
+            sizes="(min-width: 1080px) 360px, 96vw"
+            alt={`Panorama editorial de ${initial.realm.trueName}`}
+            width="1536"
+            height="659"
+            fetchpriority="high"
+            decoding="async"
+          />
+          <div class="atlas-dossier-visual-wash" aria-hidden="true"></div>
+          <img
+            class="atlas-dossier-emblem"
+            id="atlas-emblem"
+            src={initialEmblem}
+            alt=""
+            width="256"
+            height="256"
+            decoding="async"
+            onerror={`this.onerror=null;this.src='${base}/assets/emblems/placeholder.svg'`}
+          />
+        </div>
+        <figcaption>INTERPRETAÇÃO EDITORIAL · APROVADA PARA O SITE</figcaption>
+      </figure>
+
+      <div class="atlas-dossier-body">
+        <header class="atlas-dossier-heading">
+          <span class="rubric" id="atlas-folio">fólio territorial 01</span>
+          <h3 id="atlas-dossier-title">{initial.realm.trueName}</h3>
+          <p id="atlas-epithet">“{initial.guardian.epithet}”</p>
+        </header>
+
+        <dl class="atlas-dossier-ledger">
+          <div>
+            <dt>Guardião</dt>
+            <dd id="atlas-guardian">{initial.guardian.name}</dd>
+          </div>
+          <div>
+            <dt>Essência</dt>
+            <dd id="atlas-essence">{initial.realm.essence}</dd>
+          </div>
+          <div>
+            <dt>Fervor</dt>
+            <dd id="atlas-fervor">{initial.realm.fervor}</dd>
+          </div>
+          <div>
+            <dt>Sovereign Gravity</dt>
+            <dd id="atlas-gravity">{initial.realm.gravity}</dd>
+          </div>
+        </dl>
+
+        <div class="atlas-dossier-lore">
+          <span class="rubric">âncora ritual</span>
+          <strong id="atlas-temple">{initial.realm.temple}</strong>
+          <p id="atlas-biome">{initial.realm.biome}</p>
+        </div>
+
+        <div class="atlas-dossier-actions">
+          <a id="atlas-realm-link" href={`${base}/reinos/${initial.realm.slug}/`}>Abrir fólio do Reino</a>
+          <a id="atlas-guardian-link" href={`${base}/guardioes/${initial.guardian.slug}/`}>Conhecer o Guardião</a>
+        </div>
+
+        <nav class="atlas-dossier-sequence" aria-label="Navegação sequencial entre Reinos">
+          <button type="button" id="atlas-previous-realm"><span aria-hidden="true">←</span> Reino anterior</button>
+          <button type="button" id="atlas-next-realm">Próximo Reino <span aria-hidden="true">→</span></button>
+        </nav>
+      </div>
+    </aside>
+  </div>
+
+  <footer class="atlas-coordinate-line" aria-hidden="true">
+    <span>MAPA CANÔNICO DO CONTINENTE · v1.1</span>
+    <span>ESCALA NARRATIVA · DISTÂNCIA MEDIDA POR ROTA</span>
+  </footer>
+
+  <script id="atlas-entry-data" type="application/json" set:html={serializedAtlas}></script>
+</section>
+
+<script>
+  type AtlasClientEntry = {
+    mapNumber: number;
+    slug: string;
+    realm: string;
+    trueName: string;
+    essence: string;
+    fervor: string;
+    gravity: string;
+    temple: string;
+    biome: string;
+    guardian: string;
+    guardianSlug: string;
+    epithet: string;
+    panorama: string;
+    panoramaSrcset: string;
+    emblem: string;
+    realmHref: string;
+    guardianHref: string;
+  };
+
+  type AtlasSelectionOptions = {
+    focusPin?: boolean;
+    updateHash?: boolean;
+    recordVisit?: boolean;
+    hover?: boolean;
+  };
+
+  function bindImmersiveAtlas() {
+    const root = document.querySelector<HTMLElement>('[data-immersive-atlas]');
+    if (!root || root.dataset.bound) return;
+    root.dataset.bound = 'true';
+
+    const dataNode = root.querySelector<HTMLScriptElement>('#atlas-entry-data');
+    if (!dataNode?.textContent) return;
+    const entries = JSON.parse(dataNode.textContent) as AtlasClientEntry[];
+    const pins = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-atlas-index]'));
+    const listItems = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-atlas-list-index]'));
+    const viewport = root.querySelector<HTMLElement>('#atlas-map-viewport')!;
+    const canvas = root.querySelector<HTMLElement>('#atlas-map-canvas')!;
+    const mapImage = root.querySelector<HTMLImageElement>('#atlas-map-image')!;
+    const dossier = root.querySelector<HTMLElement>('#atlas-dossier')!;
+    const scene = root.querySelector<HTMLElement>('#atlas-dossier-scene')!;
+    const panorama = root.querySelector<HTMLImageElement>('#atlas-panorama')!;
+    const emblem = root.querySelector<HTMLImageElement>('#atlas-emblem')!;
+    const liveStatus = root.querySelector<HTMLElement>('#atlas-live-status')!;
+    const progress = root.querySelector<HTMLElement>('#atlas-progress')!;
+    const folio = root.querySelector<HTMLElement>('#atlas-folio')!;
+    const title = root.querySelector<HTMLElement>('#atlas-dossier-title')!;
+    const epithet = root.querySelector<HTMLElement>('#atlas-epithet')!;
+    const guardian = root.querySelector<HTMLElement>('#atlas-guardian')!;
+    const essence = root.querySelector<HTMLElement>('#atlas-essence')!;
+    const fervor = root.querySelector<HTMLElement>('#atlas-fervor')!;
+    const gravity = root.querySelector<HTMLElement>('#atlas-gravity')!;
+    const temple = root.querySelector<HTMLElement>('#atlas-temple')!;
+    const biome = root.querySelector<HTMLElement>('#atlas-biome')!;
+    const realmLink = root.querySelector<HTMLAnchorElement>('#atlas-realm-link')!;
+    const guardianLink = root.querySelector<HTMLAnchorElement>('#atlas-guardian-link')!;
+    let current = 0;
+    let requested = current;
+    let hoverSelection = -1;
+    let imageRequest = 0;
+    let transitionTimer = 0;
+    let transitionFrame = 0;
+    type CachedImage = { image: HTMLImageElement | null; promise: Promise<void> };
+    const imageCache = new Map<string, CachedImage>();
+    const PANORAMA_SIZES = '(min-width: 1080px) 360px, 96vw';
+    const HOVER_INTENT_MS = 80;
+    const TRANSITION_MS = 440;
+
+    function preloadImage(
+      src: string,
+      { srcset = '', sizes = '', priority = 'auto' }: {
+        srcset?: string;
+        sizes?: string;
+        priority?: 'high' | 'low' | 'auto';
+      } = {},
+    ) {
+      const key = `${src}|${srcset}|${sizes}`;
+      const cached = imageCache.get(key);
+      if (cached) {
+        if (priority === 'high' && cached.image) cached.image.fetchPriority = 'high';
+        return cached.promise;
+      }
+
+      const incoming = new Image();
+      incoming.decoding = 'async';
+      incoming.fetchPriority = priority;
+      if (sizes) incoming.sizes = sizes;
+      if (srcset) incoming.srcset = srcset;
+      const record: CachedImage = { image: incoming, promise: Promise.resolve() };
+      const promise = new Promise<void>((resolve, reject) => {
+        incoming.onload = async () => {
+          try { await incoming.decode(); } catch { /* onload já confirma um frame utilizável */ }
+          resolve();
+        };
+        incoming.onerror = () => reject(new Error(`Falha ao carregar ${src}`));
+        incoming.src = src;
+      }).catch((error) => {
+        imageCache.delete(key);
+        throw error;
+      }).finally(() => {
+        record.image = null;
+      });
+
+      record.promise = promise;
+      imageCache.set(key, record);
+      return promise;
+    }
+
+    function preloadAtlasEntry(entry: AtlasClientEntry, priority: 'high' | 'low' | 'auto' = 'auto') {
+      return Promise.all([
+        preloadImage(entry.panorama, {
+          srcset: entry.panoramaSrcset,
+          sizes: PANORAMA_SIZES,
+          priority,
+        }),
+        preloadImage(entry.emblem, { priority }),
+      ]);
+    }
+
+    function clearPendingState() {
+      pins.forEach((pin) => pin.removeAttribute('data-pending'));
+      listItems.forEach((item) => item.removeAttribute('data-pending'));
+      dossier.removeAttribute('aria-busy');
+    }
+
+    function markPending(index: number) {
+      pins.forEach((pin, pinIndex) => pin.toggleAttribute('data-pending', pinIndex === index && index !== current));
+      listItems.forEach((item, itemIndex) => item.toggleAttribute('data-pending', itemIndex === index && index !== current));
+      if (index !== current) dossier.setAttribute('aria-busy', 'true');
+      else dossier.removeAttribute('aria-busy');
+    }
+
+    function updateDossier(entry: AtlasClientEntry, number: string) {
+      liveStatus.textContent = `${number} · ${entry.realm}`;
+      progress.textContent = number;
+      folio.textContent = `fólio territorial ${number}`;
+      title.textContent = entry.trueName;
+      epithet.textContent = `“${entry.epithet}”`;
+      guardian.textContent = entry.guardian;
+      essence.textContent = entry.essence;
+      fervor.textContent = entry.fervor;
+      gravity.textContent = entry.gravity;
+      temple.textContent = entry.temple;
+      biome.textContent = entry.biome;
+      realmLink.href = entry.realmHref;
+      guardianLink.href = entry.guardianHref;
+    }
+
+    function commitRealm(index: number, options: AtlasSelectionOptions) {
+      const { focusPin = false, updateHash = true, recordVisit = false } = options;
+      const entry = entries[index];
+      const number = String(entry.mapNumber).padStart(2, '0');
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      window.clearTimeout(transitionTimer);
+      window.cancelAnimationFrame(transitionFrame);
+      root.querySelectorAll('.atlas-dossier-scene.is-outgoing').forEach((node) => node.remove());
+      scene.classList.remove('is-entering', 'is-preparing');
+
+      let outgoing: HTMLElement | null = null;
+      if (!reducedMotion && index !== current) {
+        outgoing = scene.cloneNode(true) as HTMLElement;
+        outgoing.removeAttribute('id');
+        outgoing.querySelectorAll('[id]').forEach((node) => node.removeAttribute('id'));
+        outgoing.setAttribute('aria-hidden', 'true');
+        outgoing.className = 'atlas-dossier-scene is-outgoing';
+        scene.before(outgoing);
+        scene.classList.add('is-preparing');
+      }
+
+      current = index;
+      requested = index;
+      hoverSelection = -1;
+      pins.forEach((pin, pinIndex) => pin.setAttribute('aria-pressed', String(pinIndex === current)));
+      listItems.forEach((item, itemIndex) => item.setAttribute('aria-selected', String(itemIndex === current)));
+      listItems[current]?.scrollIntoView({ block: 'nearest', inline: 'center', behavior: reducedMotion ? 'auto' : 'smooth' });
+
+      panorama.sizes = PANORAMA_SIZES;
+      panorama.srcset = entry.panoramaSrcset;
+      panorama.src = entry.panorama;
+      panorama.alt = `Panorama editorial de ${entry.trueName}`;
+      emblem.src = entry.emblem;
+      emblem.alt = '';
+      updateDossier(entry, number);
+      clearPendingState();
+
+      if (outgoing) {
+        transitionFrame = requestAnimationFrame(() => {
+          transitionFrame = requestAnimationFrame(() => {
+            scene.classList.remove('is-preparing');
+            scene.classList.add('is-entering');
+          });
+        });
+        transitionTimer = window.setTimeout(() => {
+          outgoing?.remove();
+          scene.classList.remove('is-entering');
+        }, TRANSITION_MS);
+      }
+
+      if (updateHash) history.replaceState(null, '', `#reino-${entry.slug}`);
+      if (focusPin) pins[current]?.focus({ preventScroll: true });
+      if (recordVisit) {
+        window.dispatchEvent(new CustomEvent('roc:realm-visited', {
+          detail: { slug: entry.slug, path: entry.realmHref },
+        }));
+      }
+    }
+
+    function selectRealm(index: number, options: AtlasSelectionOptions = {}) {
+      const { focusPin = false, updateHash = true, recordVisit = false, hover = false } = options;
+      const next = (index + entries.length) % entries.length;
+      const entry = entries[next];
+      if (next === current && requested === current) {
+        hoverSelection = -1;
+        if (updateHash) history.replaceState(null, '', `#reino-${entry.slug}`);
+        if (focusPin) pins[current]?.focus({ preventScroll: true });
+        if (recordVisit) {
+          window.dispatchEvent(new CustomEvent('roc:realm-visited', {
+            detail: { slug: entry.slug, path: entry.realmHref },
+          }));
+        }
+        return;
+      }
+
+      requested = next;
+      hoverSelection = hover ? next : -1;
+      markPending(next);
+      const request = ++imageRequest;
+      preloadAtlasEntry(entry, 'high').then(() => {
+        if (request !== imageRequest) return;
+        commitRealm(next, { focusPin, updateHash, recordVisit });
+      }).catch(() => {
+        if (request !== imageRequest) return;
+        requested = current;
+        hoverSelection = -1;
+        clearPendingState();
+      });
+    }
+
+    const connection = (navigator as Navigator & {
+      connection?: { saveData?: boolean; effectiveType?: string };
+    }).connection;
+    const saveData = connection?.saveData === true;
+    const constrainedNetwork = saveData || /(^|-)2g$/.test(connection?.effectiveType || '');
+    const scheduleIdle = (callback: () => void) => {
+      const idleWindow = window as Window & {
+        requestIdleCallback?: (handler: () => void, options?: { timeout: number }) => number;
+      };
+      if (idleWindow.requestIdleCallback) idleWindow.requestIdleCallback(callback, { timeout: 600 });
+      else window.setTimeout(callback, 220);
+    };
+
+    function scheduleAtlasPrefetch(origin = current) {
+      if (constrainedNetwork) return;
+      const circularDistance = (index: number) => {
+        const distance = Math.abs(index - origin);
+        return Math.min(distance, entries.length - distance);
+      };
+      const queue = entries
+        .map((_, index) => index)
+        .filter((index) => index !== origin)
+        .sort((a, b) => circularDistance(a) - circularDistance(b));
+
+      const preloadBatch = () => {
+        const batch = queue.splice(0, 3);
+        if (!batch.length) return;
+        Promise.allSettled(batch.map((index) => preloadAtlasEntry(entries[index], 'low')))
+          .then(() => { if (queue.length) scheduleIdle(preloadBatch); });
+      };
+
+      scheduleIdle(preloadBatch);
+    }
+
+    let hoverTimer = 0;
+    pins.forEach((pin, index) => {
+      pin.addEventListener('click', () => selectRealm(index, { recordVisit: true }));
+      pin.addEventListener('focus', () => selectRealm(index, { updateHash: false }));
+      pin.addEventListener('pointerenter', (event) => {
+        if (event.pointerType !== 'mouse' || saveData) return;
+        window.clearTimeout(hoverTimer);
+        hoverTimer = window.setTimeout(() => selectRealm(index, { updateHash: false, hover: true }), HOVER_INTENT_MS);
+      });
+      pin.addEventListener('pointerleave', () => {
+        window.clearTimeout(hoverTimer);
+        if (hoverSelection === index && requested === index && requested !== current) {
+          imageRequest += 1;
+          requested = current;
+          hoverSelection = -1;
+          clearPendingState();
+        }
+      });
+    });
+    listItems.forEach((item, index) => item.addEventListener('click', () => selectRealm(index, { recordVisit: true })));
+    root.querySelector('#atlas-previous-realm')?.addEventListener('click', () => selectRealm(requested - 1, { recordVisit: true }));
+    root.querySelector('#atlas-next-realm')?.addEventListener('click', () => selectRealm(requested + 1, { recordVisit: true }));
+
+    root.addEventListener('keydown', (event) => {
+      const target = event.target as HTMLElement;
+      if (!target.matches('[data-atlas-index], [data-atlas-list-index]')) return;
+      if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key)) return;
+      event.preventDefault();
+      if (event.key === 'Home') selectRealm(0, { focusPin: target.hasAttribute('data-atlas-index'), recordVisit: true });
+      else if (event.key === 'End') selectRealm(entries.length - 1, { focusPin: target.hasAttribute('data-atlas-index'), recordVisit: true });
+      else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') selectRealm(requested - 1, { focusPin: target.hasAttribute('data-atlas-index'), recordVisit: true });
+      else selectRealm(requested + 1, { focusPin: target.hasAttribute('data-atlas-index'), recordVisit: true });
+      if (target.hasAttribute('data-atlas-list-index')) listItems[requested]?.focus({ preventScroll: true });
+    });
+
+    let scale = 1;
+    let translateX = 0;
+    let translateY = 0;
+    const minScale = 1;
+    const maxScale = 3;
+    let highResolutionLoaded = false;
+
+    function loadHighResolutionMap() {
+      if (highResolutionLoaded || !mapImage.dataset.hires || saveData) return;
+      highResolutionLoaded = true;
+      const incoming = new Image();
+      incoming.decoding = 'async';
+      incoming.onload = () => { mapImage.src = mapImage.dataset.hires || mapImage.src; };
+      incoming.src = mapImage.dataset.hires;
+    }
+
+    function clampMap() {
+      const width = canvas.offsetWidth * scale;
+      const height = canvas.offsetHeight * scale;
+      translateX = Math.min(0, Math.max(viewport.clientWidth - width, translateX));
+      translateY = Math.min(0, Math.max(viewport.clientHeight - height, translateY));
+      if (scale === 1) {
+        translateX = 0;
+        translateY = 0;
+      }
+    }
+
+    function renderMap() {
+      clampMap();
+      canvas.style.transform = `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`;
+      viewport.dataset.zoomed = String(scale > 1.01);
+    }
+
+    function zoomAt(clientX: number, clientY: number, factor: number) {
+      const bounds = viewport.getBoundingClientRect();
+      const pointX = clientX - bounds.left;
+      const pointY = clientY - bounds.top;
+      const nextScale = Math.min(maxScale, Math.max(minScale, scale * factor));
+      translateX = pointX - (pointX - translateX) * (nextScale / scale);
+      translateY = pointY - (pointY - translateY) * (nextScale / scale);
+      scale = nextScale;
+      if (scale > 1.08) loadHighResolutionMap();
+      renderMap();
+    }
+
+    function zoomFromCenter(factor: number) {
+      const bounds = viewport.getBoundingClientRect();
+      zoomAt(bounds.left + bounds.width / 2, bounds.top + bounds.height / 2, factor);
+    }
+
+    root.querySelector('#atlas-zoom-in')?.addEventListener('click', () => zoomFromCenter(1.35));
+    root.querySelector('#atlas-zoom-out')?.addEventListener('click', () => zoomFromCenter(1 / 1.35));
+    root.querySelector('#atlas-zoom-reset')?.addEventListener('click', () => {
+      scale = 1;
+      translateX = 0;
+      translateY = 0;
+      renderMap();
+    });
+
+    viewport.addEventListener('wheel', (event) => {
+      if (!event.ctrlKey && !event.metaKey) return;
+      event.preventDefault();
+      zoomAt(event.clientX, event.clientY, event.deltaY < 0 ? 1.16 : 1 / 1.16);
+    }, { passive: false });
+
+    viewport.addEventListener('keydown', (event) => {
+      if (event.target !== viewport) return;
+      if (event.key === '+' || event.key === '=') {
+        event.preventDefault();
+        zoomFromCenter(1.3);
+      } else if (event.key === '-') {
+        event.preventDefault();
+        zoomFromCenter(1 / 1.3);
+      } else if (event.key === '0' || event.key === 'Escape') {
+        event.preventDefault();
+        scale = 1;
+        translateX = 0;
+        translateY = 0;
+        renderMap();
+      }
+    });
+
+    let dragging = false;
+    let previousX = 0;
+    let previousY = 0;
+    viewport.addEventListener('pointerdown', (event) => {
+      if (scale <= 1.01 || (event.target as HTMLElement).closest('button, a')) return;
+      dragging = true;
+      previousX = event.clientX;
+      previousY = event.clientY;
+      viewport.classList.add('is-dragging');
+      viewport.setPointerCapture(event.pointerId);
+    });
+    viewport.addEventListener('pointermove', (event) => {
+      if (!dragging) return;
+      translateX += event.clientX - previousX;
+      translateY += event.clientY - previousY;
+      previousX = event.clientX;
+      previousY = event.clientY;
+      renderMap();
+    });
+    const stopDragging = () => {
+      dragging = false;
+      viewport.classList.remove('is-dragging');
+    };
+    viewport.addEventListener('pointerup', stopDragging);
+    viewport.addEventListener('pointercancel', stopDragging);
+    viewport.addEventListener('lostpointercapture', stopDragging);
+    new ResizeObserver(renderMap).observe(viewport);
+
+    const hashSlug = location.hash.replace('#reino-', '');
+    const fromHash = entries.findIndex((entry) => entry.slug === hashSlug);
+    if (fromHash >= 0) selectRealm(fromHash, { updateHash: false });
+    scheduleAtlasPrefetch(fromHash >= 0 ? fromHash : current);
+  }
+
+  document.addEventListener('astro:page-load', bindImmersiveAtlas);
+</script>
+
+<style>
+  .immersive-atlas {
+    --atlas-line: rgba(201, 163, 92, 0.38);
+    position: relative;
+    border: 1px solid var(--atlas-line);
+    background: #080706;
+    box-shadow: 0 28px 90px rgba(0, 0, 0, 0.46), inset 0 0 80px rgba(201, 163, 92, 0.025);
+  }
+
+  .immersive-atlas::before,
+  .immersive-atlas::after {
+    content: '';
+    position: absolute;
+    z-index: 5;
+    width: 54px;
+    height: 54px;
+    pointer-events: none;
+  }
+
+  .immersive-atlas::before {
+    inset: -1px auto auto -1px;
+    border-top: 2px solid var(--gold);
+    border-left: 2px solid var(--gold);
+  }
+
+  .immersive-atlas::after {
+    inset: auto -1px -1px auto;
+    border-right: 2px solid var(--gold);
+    border-bottom: 2px solid var(--gold);
+  }
+
+  .atlas-command {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 1.15rem 1.35rem;
+    border-bottom: 1px solid var(--atlas-line);
+    background: linear-gradient(90deg, rgba(30, 25, 19, 0.96), rgba(12, 10, 8, 0.98));
+  }
+
+  .atlas-command .rubric { display: block; margin-bottom: .3rem; color: var(--gold); }
+  .atlas-command h2 { font-size: clamp(1rem, 2vw, 1.35rem); color: var(--parchment); letter-spacing: .16em; }
+
+  .atlas-command-status { text-align: right; }
+  .atlas-command-status span,
+  .atlas-command-status strong { display: block; }
+  .atlas-command-status span { font-family: var(--font-display); font-size: .55rem; letter-spacing: .22em; color: var(--parchment-faint); text-transform: uppercase; }
+  .atlas-command-status strong { margin-top: .2rem; font-family: var(--font-display); font-size: .72rem; letter-spacing: .16em; color: var(--amber); }
+
+  .atlas-workspace { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(330px, .62fr); }
+  .atlas-map-column { min-width: 0; border-right: 1px solid var(--atlas-line); }
+
+  .atlas-map-viewport {
+    position: relative;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    background: #020202;
+    cursor: default;
+    touch-action: pan-y;
+    isolation: isolate;
+  }
+
+  .atlas-map-viewport[data-zoomed='true'] { cursor: grab; touch-action: none; }
+  .atlas-map-viewport.is-dragging { cursor: grabbing; }
+
+  .atlas-map-canvas {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    transform-origin: 0 0;
+    will-change: transform;
+  }
+
+  .atlas-map-canvas > img { display: block; width: 100%; height: 100%; object-fit: cover; user-select: none; -webkit-user-drag: none; }
+  .atlas-map-vignette { position: absolute; inset: 0; z-index: 2; pointer-events: none; box-shadow: inset 0 0 70px 24px rgba(0, 0, 0, .52); }
+
+  .atlas-pins { position: absolute; z-index: 3; inset: 0; pointer-events: none; }
+  .atlas-pin {
+    position: absolute;
+    left: var(--pin-x);
+    top: var(--pin-y);
+    width: clamp(28px, 3.3vw, 43px);
+    height: clamp(28px, 3.3vw, 43px);
+    transform: translate(-50%, -50%);
+    border: 1px solid rgba(230, 217, 184, .62);
+    border-radius: 50%;
+    color: var(--parchment);
+    background: rgba(8, 7, 6, .82);
+    box-shadow: 0 0 0 4px rgba(8, 7, 6, .48), 0 3px 12px rgba(0, 0, 0, .8);
+    pointer-events: auto;
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-size: clamp(.48rem, .7vw, .62rem);
+    line-height: 1;
+    transition: border-color .2s ease, color .2s ease, background .2s ease, box-shadow .2s ease, transform .2s ease;
+  }
+
+  .atlas-pin::before,
+  .atlas-pin::after {
+    content: '';
+    position: absolute;
+    inset: -7px;
+    border: 1px solid rgba(226, 183, 107, .28);
+    border-radius: 50%;
+    opacity: 0;
+  }
+
+  .atlas-pin::after { inset: -13px; }
+  .atlas-pin > strong {
+    position: absolute;
+    z-index: 4;
+    left: 50%;
+    bottom: calc(100% + 9px);
+    width: max-content;
+    max-width: 160px;
+    padding: .32rem .5rem;
+    transform: translate(-50%, 5px);
+    border: 1px solid rgba(201, 163, 92, .46);
+    color: var(--parchment);
+    background: rgba(8, 7, 6, .94);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .55);
+    font-size: .55rem;
+    font-weight: 600;
+    letter-spacing: .09em;
+    line-height: 1.25;
+    text-transform: uppercase;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s ease, transform .2s ease;
+  }
+
+  .atlas-pin:hover,
+  .atlas-pin:focus-visible,
+  .atlas-pin[aria-pressed='true'] {
+    z-index: 3;
+    transform: translate(-50%, -50%) scale(1.08);
+    border-color: var(--amber);
+    color: #170e04;
+    background: var(--amber);
+    box-shadow: 0 0 0 4px rgba(8, 7, 6, .72), 0 0 24px rgba(226, 183, 107, .9);
+  }
+
+  .atlas-pin:hover > strong,
+  .atlas-pin:focus-visible > strong,
+  .atlas-pin[aria-pressed='true'] > strong { opacity: 1; transform: translate(-50%, 0); }
+  .atlas-pin[aria-pressed='true']::before { opacity: .7; animation: atlas-signal 2.2s ease-out infinite; }
+  .atlas-pin[data-pending] {
+    color: var(--amber);
+    border-color: var(--amber);
+    background: rgba(8, 7, 6, .94);
+    box-shadow: 0 0 0 4px rgba(8, 7, 6, .72), 0 0 18px rgba(226, 183, 107, .52);
+  }
+  .atlas-pin[data-pending]::after { opacity: .85; animation: atlas-pending 1s ease-in-out infinite; }
+
+  @keyframes atlas-pending {
+    0%, 100% { transform: scale(.88); opacity: .35; }
+    50% { transform: scale(1.08); opacity: .9; }
+  }
+
+  @keyframes atlas-signal {
+    0% { transform: scale(.74); opacity: .75; }
+    75%, 100% { transform: scale(1.75); opacity: 0; }
+  }
+
+  .atlas-map-controls { position: absolute; z-index: 4; top: 1rem; right: 1rem; display: grid; gap: .45rem; }
+  .atlas-map-controls button {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border: 1px solid rgba(201, 163, 92, .5);
+    color: var(--gold);
+    background: rgba(8, 7, 6, .82);
+    box-shadow: 0 5px 18px rgba(0, 0, 0, .4);
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-size: 1rem;
+  }
+  .atlas-map-controls button:hover { border-color: var(--amber); color: var(--parchment); background: rgba(30, 25, 19, .96); }
+
+  .atlas-map-instructions {
+    position: absolute;
+    z-index: 4;
+    right: 1rem;
+    bottom: .9rem;
+    margin: 0;
+    padding: .36rem .65rem;
+    border: 1px solid rgba(201, 163, 92, .34);
+    color: var(--parchment-dim);
+    background: rgba(8, 7, 6, .78);
+    font-family: var(--font-display);
+    font-size: .5rem;
+    letter-spacing: .14em;
+  }
+  .touch-instruction { display: none; }
+
+  .atlas-territory-index { border-top: 1px solid var(--atlas-line); background: linear-gradient(180deg, #15110d, #0c0a08); }
+  .atlas-territory-index > header { display: flex; align-items: center; justify-content: space-between; padding: .65rem .85rem; border-bottom: 1px solid rgba(201, 163, 92, .18); }
+  .atlas-territory-index > header > span:last-child { font-family: var(--font-display); font-size: .62rem; letter-spacing: .12em; color: var(--parchment-faint); }
+  .atlas-territory-index > header b { color: var(--amber); font-weight: 600; }
+  .atlas-territory-list { display: flex; overflow-x: auto; scrollbar-color: var(--gold) #0c0a08; scrollbar-width: thin; }
+  .atlas-territory-list button {
+    flex: 0 0 142px;
+    min-height: 60px;
+    padding: .7rem .8rem;
+    border: 0;
+    border-right: 1px solid rgba(201, 163, 92, .16);
+    color: var(--parchment-dim);
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+  }
+  .atlas-territory-list small,
+  .atlas-territory-list strong { display: block; }
+  .atlas-territory-list small { margin-bottom: .22rem; color: var(--parchment-faint); font-family: var(--font-display); font-size: .54rem; letter-spacing: .18em; }
+  .atlas-territory-list strong { overflow: hidden; font-family: var(--font-display); font-size: .62rem; letter-spacing: .08em; text-overflow: ellipsis; white-space: nowrap; }
+  .atlas-territory-list button:hover,
+  .atlas-territory-list button[aria-selected='true'] { color: var(--parchment); background: rgba(201, 163, 92, .1); box-shadow: inset 0 -2px var(--gold); }
+  .atlas-territory-list button[data-pending] { color: var(--amber); background: rgba(201, 163, 92, .04); box-shadow: inset 0 -1px rgba(226, 183, 107, .55); }
+
+  .atlas-dossier { min-width: 0; background: radial-gradient(circle at 50% 0%, rgba(61, 45, 27, .35), transparent 38%), #0f0c09; }
+  .atlas-dossier[aria-busy='true'] { cursor: progress; }
+  .atlas-dossier-visual { position: relative; aspect-ratio: 16 / 8.2; overflow: hidden; margin: 0; border-bottom: 1px solid var(--atlas-line); background: #050403; }
+  .atlas-dossier-scene { position: absolute; inset: 0; transform-origin: center; }
+  .atlas-dossier-scene.is-preparing { opacity: 0; }
+  .atlas-dossier-scene.is-entering { animation: atlas-scene-enter .42s cubic-bezier(.2,.72,.2,1) both; }
+  .atlas-dossier-scene.is-outgoing { pointer-events: none; animation: atlas-scene-exit .42s cubic-bezier(.2,.72,.2,1) both; }
+  @keyframes atlas-scene-enter { from { opacity: 0; transform: scale(1.018); } to { opacity: 1; transform: scale(1); } }
+  @keyframes atlas-scene-exit { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(.992); } }
+  .atlas-dossier-panorama { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .atlas-dossier-visual-wash { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(8,7,6,.08), rgba(8,7,6,.15) 42%, rgba(8,7,6,.94)); }
+  .atlas-dossier-emblem { position: absolute; left: 1rem; bottom: 1rem; width: clamp(64px, 8vw, 94px); height: auto; aspect-ratio: 1; object-fit: contain; filter: drop-shadow(0 7px 16px rgba(0,0,0,.8)); }
+  .atlas-dossier-visual figcaption { position: absolute; z-index: 3; right: .8rem; bottom: .55rem; max-width: 54%; color: rgba(230,217,184,.68); font-family: var(--font-display); font-size: .47rem; letter-spacing: .13em; text-align: right; }
+  .atlas-dossier-body { padding: 1.35rem; }
+  .atlas-dossier-heading .rubric { display: block; margin-bottom: .45rem; color: var(--gold); }
+  .atlas-dossier-heading h3 { color: var(--parchment); font-size: clamp(1.25rem, 2.1vw, 1.8rem); letter-spacing: .08em; }
+  .atlas-dossier-heading p { margin: .45rem 0 0; color: var(--amber); font-size: .92rem; font-style: italic; }
+
+  .atlas-dossier-ledger { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin: 1.25rem 0; border: 1px solid rgba(201, 163, 92, .22); background: rgba(201, 163, 92, .2); }
+  .atlas-dossier-ledger > div { min-width: 0; padding: .7rem .75rem; background: rgba(15, 12, 9, .97); }
+  .atlas-dossier-ledger dt { color: var(--parchment-faint); font-family: var(--font-display); font-size: .5rem; letter-spacing: .17em; text-transform: uppercase; }
+  .atlas-dossier-ledger dd { margin: .25rem 0 0; color: var(--parchment); font-size: .77rem; line-height: 1.32; }
+
+  .atlas-dossier-lore { padding: 1rem 0; border-top: 1px solid rgba(201, 163, 92, .2); border-bottom: 1px solid rgba(201, 163, 92, .2); }
+  .atlas-dossier-lore .rubric { display: block; margin-bottom: .25rem; }
+  .atlas-dossier-lore strong { color: var(--gold); font-family: var(--font-display); font-size: .75rem; letter-spacing: .08em; }
+  .atlas-dossier-lore p { display: -webkit-box; overflow: hidden; margin: .65rem 0 0; color: var(--parchment-dim); font-size: .84rem; line-height: 1.42; -webkit-box-orient: vertical; -webkit-line-clamp: 4; }
+
+  .atlas-dossier-actions { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; margin-top: 1.15rem; }
+  .atlas-dossier-actions a { padding: .7rem .55rem; border: 1px solid rgba(201, 163, 92, .38); color: var(--gold); background: rgba(201, 163, 92, .035); font-family: var(--font-display); font-size: .54rem; letter-spacing: .11em; text-align: center; text-transform: uppercase; }
+  .atlas-dossier-actions a:first-child { color: #170e04; border-color: var(--gold); background: var(--gold); }
+  .atlas-dossier-actions a:hover { color: var(--parchment); border-color: var(--amber); background: rgba(201, 163, 92, .12); }
+
+  .atlas-dossier-sequence { display: flex; justify-content: space-between; gap: .6rem; margin-top: 1rem; }
+  .atlas-dossier-sequence button { padding: .3rem 0; border: 0; color: var(--parchment-faint); background: none; cursor: pointer; font-family: var(--font-display); font-size: .52rem; letter-spacing: .08em; text-transform: uppercase; }
+  .atlas-dossier-sequence button:hover { color: var(--amber); }
+
+  .atlas-coordinate-line { display: flex; justify-content: space-between; gap: 1rem; padding: .7rem 1rem; border-top: 1px solid var(--atlas-line); color: var(--parchment-faint); background: #080706; font-family: var(--font-display); font-size: .5rem; letter-spacing: .17em; }
+
+  @media (max-width: 1050px) {
+    .atlas-workspace { grid-template-columns: 1fr; }
+    .atlas-map-column { border-right: 0; }
+    .atlas-dossier { display: grid; grid-template-columns: minmax(300px, .8fr) 1fr; border-top: 1px solid var(--atlas-line); }
+    .atlas-dossier-visual { height: 100%; aspect-ratio: auto; border-right: 1px solid var(--atlas-line); border-bottom: 0; }
+  }
+
+  @media (max-width: 700px) {
+    .atlas-command { align-items: start; padding: .9rem; }
+    .atlas-command .rubric { font-size: .62rem; letter-spacing: .2em; }
+    .atlas-command-status span { display: none; }
+    .atlas-command-status strong { max-width: 120px; font-size: .58rem; }
+    .atlas-map-viewport { min-height: 0; }
+    .atlas-map-controls { top: .55rem; right: .55rem; gap: .28rem; }
+    .atlas-map-controls button { width: 36px; height: 36px; }
+    .desktop-instruction { display: none; }
+    .touch-instruction { display: inline; }
+    .atlas-map-instructions { right: .5rem; bottom: .45rem; max-width: 75%; padding: .3rem .45rem; font-size: .42rem; text-align: right; }
+    .atlas-pin { width: 27px; height: 27px; font-size: .43rem; }
+    .atlas-pin > strong { display: none; }
+    .atlas-territory-list button { flex-basis: 122px; min-height: 55px; }
+    .atlas-dossier { display: block; }
+    .atlas-dossier-visual { width: 100%; height: auto; aspect-ratio: 16 / 8.5; border-right: 0; border-bottom: 1px solid var(--atlas-line); }
+    .atlas-dossier-body { padding: 1rem; }
+    .atlas-dossier-ledger { grid-template-columns: 1fr; }
+    .atlas-dossier-actions { grid-template-columns: 1fr; }
+    .atlas-coordinate-line { display: block; text-align: center; }
+    .atlas-coordinate-line span:last-child { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .atlas-pin[aria-pressed='true']::before,
+    .atlas-pin[data-pending]::after { animation: none; }
+    .atlas-dossier-scene.is-entering,
+    .atlas-dossier-scene.is-outgoing { animation: none; }
+    .atlas-territory-list { scroll-behavior: auto; }
+  }
+</style>

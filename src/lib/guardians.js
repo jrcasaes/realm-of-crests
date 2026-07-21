@@ -1,5 +1,6 @@
 import realms from '../data/realms.json';
 import guardianDetails from '../data/guardians.json';
+import { parseFervorField } from './fervor.js';
 
 const portraitAssets = {
   Nego: ['WEB_RoC_Nego_Retrato_v2.0.jpg', 1536, 1024],
@@ -38,12 +39,22 @@ export const guardianRoster = realms.map((realm) => {
     name: realm.guardian,
     realmSlug: realm.slug,
     realmName: realm.realm,
-    realmEcho: realm.territorialEcho,
+    realmEcho: realm.territorialEcho ?? realm.historicalAlias ?? realm.trueName,
+    order: realm.order,
+    essence: realm.essence,
     fervor: realm.fervor,
+    fervorRelations: parseFervorField(realm.fervor),
+    gravity: realm.gravity,
+    gravityState: /^(Constructive|Catalytic|Corrosive)/i.exec(realm.gravity)?.[1]?.toLowerCase() ?? 'indefinida',
+    temple: realm.temple,
+    templeDesc: realm.templeDesc,
+    biome: realm.biome,
+    emblem: `emblem_${realm.slug}.webp`,
+    panorama: realm.panoramaAsset,
     epithet: realm.epithet,
     ecoAncestral: realm.guardianEcho,
-    vulgo: realm.guardianVulgo,
-    battleEcho: realm.battleEcho,
+    vulgo: realm.guardianVulgo ?? 'Não catalogado na camada pública',
+    battleEcho: realm.battleEcho ?? 'Não catalogado na camada pública',
     portrait,
     portraitWidth,
     portraitHeight,

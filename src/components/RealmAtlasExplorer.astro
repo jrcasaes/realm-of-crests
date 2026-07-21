@@ -38,6 +38,7 @@ const guardianSlug = (name: string) =>
             width="44"
             height="44"
             loading="lazy"
+            decoding="async"
             onerror={`this.onerror=null;this.src='${base}/assets/emblems/placeholder.svg'`}
           />
           <span>
@@ -59,6 +60,7 @@ const guardianSlug = (name: string) =>
         width="1915"
         height="821"
         fetchpriority="high"
+        decoding="async"
       />
       <div class="realm-stage-wash" aria-hidden="true"></div>
       <div class="realm-stage-status">
@@ -120,14 +122,6 @@ const guardianSlug = (name: string) =>
     let current = 0;
     let request = 0;
 
-    function preload(index) {
-      const choice = choices[(index + choices.length) % choices.length];
-      const panorama = choice?.dataset.panorama;
-      if (!panorama) return;
-      const img = new Image();
-      img.src = `${base}/assets/realms/${panorama}`;
-    }
-
     function select(index, updateHash = true) {
       current = (index + choices.length) % choices.length;
       const choice = choices[current];
@@ -151,12 +145,12 @@ const guardianSlug = (name: string) =>
 
       stage.classList.add('is-loading');
       const incoming = new Image();
+      incoming.decoding = 'async';
       incoming.onload = () => {
         if (token !== request) return;
         image.src = nextSrc;
         image.alt = `Panorama editorial habitado de ${data.trueName}`;
         requestAnimationFrame(() => stage.classList.remove('is-loading'));
-        preload(current + 1);
       };
       incoming.onerror = () => {
         if (token === request) stage.classList.remove('is-loading');
@@ -181,7 +175,6 @@ const guardianSlug = (name: string) =>
     const slug = location.hash.replace('#reino-', '');
     const fromHash = choices.findIndex((choice) => choice.dataset.slug === slug);
     if (fromHash >= 0) select(fromHash, false);
-    else preload(1);
   }
 
   document.addEventListener('astro:page-load', bindSovereignAtlas);

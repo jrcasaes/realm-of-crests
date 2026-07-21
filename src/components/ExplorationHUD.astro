@@ -1,0 +1,347 @@
+---
+import realms from '../data/realms.json';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const registry = realms
+  .slice()
+  .sort((a, b) => a.order - b.order)
+  .map(({ slug, realm, order }) => ({ slug, realm, order, href: `${base}/reinos/${slug}/` }));
+---
+
+<aside
+  class="exploration-hud"
+  data-exploration-hud
+  data-realms={JSON.stringify(registry)}
+  data-base={base}
+  aria-label="Registro de exploração"
+  transition:persist="exploration-hud"
+>
+  <button
+    class="exploration-trigger"
+    type="button"
+    aria-expanded="false"
+    aria-controls="exploration-panel"
+  >
+    <span class="exploration-ring" data-exploration-ring aria-hidden="true">
+      <span data-exploration-count>0</span>
+    </span>
+    <span class="exploration-trigger-copy">
+      <small>registro</small>
+      <strong><span data-exploration-count>0</span>/19</strong>
+    </span>
+  </button>
+
+  <div class="exploration-panel" id="exploration-panel" hidden>
+    <header>
+      <div>
+        <span class="rubric">memória desta travessia</span>
+        <h2>REGISTRO DO VIAJANTE</h2>
+      </div>
+      <button class="exploration-close" type="button" aria-label="Fechar registro">×</button>
+    </header>
+
+    <p class="exploration-intro">
+      Sua jornada fica somente neste navegador. Nenhuma conta, envio ou rastreamento.
+    </p>
+
+    <div class="exploration-meter" aria-live="polite">
+      <strong><span data-exploration-count>0</span> de 19</strong>
+      <span data-exploration-copy>Reinos registrados</span>
+      <span class="exploration-bar" aria-hidden="true"><i data-exploration-progress></i></span>
+    </div>
+
+    <ol class="exploration-sigils" aria-label="Progresso pelos dezenove Reinos">
+      {registry.map((realm) => (
+        <li>
+          <a
+            href={realm.href}
+            data-exploration-sigil={realm.slug}
+            aria-label={`${String(realm.order).padStart(2, '0')} · ${realm.realm}: ainda não registrado`}
+            title={`${String(realm.order).padStart(2, '0')} · ${realm.realm}`}
+          >
+            {String(realm.order).padStart(2, '0')}
+          </a>
+        </li>
+      ))}
+    </ol>
+
+    <a class="exploration-continue" href={`${base}/atlas/`} data-exploration-continue>
+      <span data-exploration-label>Iniciar pelo Atlas</span>
+      <span aria-hidden="true">→</span>
+    </a>
+
+    <a class="exploration-ritual" href={`${base}/ritual/`}>
+      <span aria-hidden="true">◇</span>
+      <span><strong data-pilgrimage-label>Definir rota de afinidade</strong><small data-pilgrimage-copy>ritual opcional · não canônico</small></span>
+      <i aria-hidden="true">→</i>
+    </a>
+
+    <a class="exploration-journal" href={`${base}/diario/`}>
+      <span aria-hidden="true">✦</span>
+      <span><strong>Diário da Emberline</strong><small><span data-journal-hud-count>0</span> notas privadas</small></span>
+      <i aria-hidden="true">→</i>
+    </a>
+
+    <div class="atmosphere-control">
+      <div>
+        <strong>Ambiência do Realm</strong>
+        <small>síntese sonora · opcional</small>
+      </div>
+      <button type="button" data-atmosphere-toggle aria-pressed="false">
+        <span data-atmosphere-label>desligada</span>
+      </button>
+    </div>
+  </div>
+</aside>
+
+<script>
+  type RealmRegistryEntry = { slug: string; realm: string; order: number; href: string };
+  type ExplorationState = { version: 1; visited: string[]; lastRealm: string | null; lastPath: string | null; updatedAt: string | null };
+
+  const STORAGE_KEY = 'roc.exploration.v1';
+  const PILGRIMAGE_KEY = 'roc.pilgrimage.v1';
+  const JOURNAL_KEY = 'roc.journal.v1';
+  const EMPTY_STATE: ExplorationState = { version: 1, visited: [], lastRealm: null, lastPath: null, updatedAt: null };
+
+  function readExplorationState(registry: RealmRegistryEntry[]): ExplorationState {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+      const known = new Set(registry.map(({ slug }) => slug));
+      if (!parsed || parsed.version !== 1 || !Array.isArray(parsed.visited)) return { ...EMPTY_STATE };
+      const visited = [...new Set(parsed.visited.filter((slug: unknown) => typeof slug === 'string' && known.has(slug)))];
+      const lastRealm = typeof parsed.lastRealm === 'string' && known.has(parsed.lastRealm) ? parsed.lastRealm : null;
+      const currentLastPath = registry.find(({ slug }) => slug === lastRealm)?.href || null;
+      return {
+        version: 1,
+        visited,
+        lastRealm,
+        // Recompõe o caminho com a base atual para migrar estados vindos de outras prévias.
+        lastPath: currentLastPath,
+        updatedAt: typeof parsed.updatedAt === 'string' ? parsed.updatedAt : null,
+      };
+    } catch {
+      return { ...EMPTY_STATE };
+    }
+  }
+
+  function writeExplorationState(state: ExplorationState) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch { /* armazenamento pode estar indisponível */ }
+  }
+
+  function renderExplorationState() {
+    const root = document.querySelector<HTMLElement>('[data-exploration-hud]');
+    if (!root) return;
+    const registry = JSON.parse(root.dataset.realms || '[]') as RealmRegistryEntry[];
+    const state = readExplorationState(registry);
+    const visited = new Set(state.visited);
+    const count = visited.size;
+    const percentage = `${(count / registry.length) * 100}%`;
+
+    document.querySelectorAll<HTMLElement>('[data-exploration-count]').forEach((node) => { node.textContent = String(count); });
+    document.querySelectorAll<HTMLElement>('[data-exploration-progress]').forEach((node) => { node.style.width = percentage; });
+    document.querySelectorAll<HTMLElement>('[data-exploration-ring]').forEach((node) => { node.style.setProperty('--exploration-progress', percentage); });
+
+    root.querySelectorAll<HTMLAnchorElement>('[data-exploration-sigil]').forEach((sigil) => {
+      const entry = registry.find(({ slug }) => slug === sigil.dataset.explorationSigil);
+      const isVisited = visited.has(sigil.dataset.explorationSigil || '');
+      sigil.classList.toggle('is-visited', isVisited);
+      if (entry) sigil.setAttribute('aria-label', `${String(entry.order).padStart(2, '0')} · ${entry.realm}: ${isVisited ? 'registrado' : 'ainda não registrado'}`);
+    });
+
+    const fallback = `${root.dataset.base || ''}/atlas/`;
+    const lastEntry = registry.find(({ slug }) => slug === state.lastRealm);
+    document.querySelectorAll<HTMLAnchorElement>('[data-exploration-continue]').forEach((link) => {
+      link.href = state.lastPath || lastEntry?.href || fallback;
+      const label = link.querySelector<HTMLElement>('[data-exploration-label]');
+      if (label) label.textContent = lastEntry ? `Continuar em ${lastEntry.realm}` : count ? 'Continuar pelo Atlas' : 'Iniciar pelo Atlas';
+    });
+  }
+
+  function renderPilgrimageState() {
+    const root = document.querySelector<HTMLElement>('[data-exploration-hud]');
+    if (!root) return;
+    let primary = '';
+    let secondary = '';
+    try {
+      const parsed = JSON.parse(localStorage.getItem(PILGRIMAGE_KEY) || 'null');
+      if (parsed?.version === 1 && typeof parsed.primary === 'string' && typeof parsed.secondary === 'string') {
+        primary = parsed.primary;
+        secondary = parsed.secondary;
+      }
+    } catch { /* afinidade local indisponível */ }
+    const label = root.querySelector<HTMLElement>('[data-pilgrimage-label]');
+    const copy = root.querySelector<HTMLElement>('[data-pilgrimage-copy]');
+    if (label) label.textContent = primary ? 'Crest de Jornada desperto' : 'Definir rota de afinidade';
+    if (copy) copy.textContent = primary ? `${primary} · ${secondary}` : 'ritual opcional · não canônico';
+    root.classList.toggle('has-pilgrimage', Boolean(primary));
+  }
+
+  function renderJournalState() {
+    const root = document.querySelector<HTMLElement>('[data-exploration-hud]');
+    if (!root) return;
+    let count = 0;
+    try {
+      const parsed = JSON.parse(localStorage.getItem(JOURNAL_KEY) || 'null');
+      count = Object.values(parsed?.entries || {}).filter((entry: any) => typeof entry?.note === 'string' && entry.note.trim()).length;
+    } catch { /* diário local indisponível */ }
+    const marker = root.querySelector<HTMLElement>('[data-journal-hud-count]');
+    if (marker) marker.textContent = String(count);
+    root.classList.toggle('has-journal-notes', count > 0);
+  }
+
+  function registerRealm(slug: string, path?: string) {
+    const root = document.querySelector<HTMLElement>('[data-exploration-hud]');
+    if (!root) return;
+    const registry = JSON.parse(root.dataset.realms || '[]') as RealmRegistryEntry[];
+    const entry = registry.find((realm) => realm.slug === slug);
+    if (!entry) return;
+    const state = readExplorationState(registry);
+    state.visited = [...new Set([...state.visited, slug])];
+    state.lastRealm = slug;
+    state.lastPath = path || entry.href;
+    state.updatedAt = new Date().toISOString();
+    writeExplorationState(state);
+    renderExplorationState();
+  }
+
+  function bindExplorationHUD() {
+    const root = document.querySelector<HTMLElement>('[data-exploration-hud]');
+    if (!root) return;
+    const match = window.location.pathname.match(/\/reinos\/([^/]+)\/?$/);
+    if (match) registerRealm(match[1], window.location.pathname);
+    else renderExplorationState();
+    renderPilgrimageState();
+    renderJournalState();
+    if (root.dataset.bound) return;
+    root.dataset.bound = 'true';
+    const trigger = root.querySelector<HTMLButtonElement>('.exploration-trigger')!;
+    const panel = root.querySelector<HTMLElement>('.exploration-panel')!;
+    const close = root.querySelector<HTMLButtonElement>('.exploration-close')!;
+
+    const setOpen = (open: boolean) => {
+      trigger.setAttribute('aria-expanded', String(open));
+      panel.hidden = !open;
+      root.classList.toggle('is-open', open);
+      if (open) close.focus({ preventScroll: true });
+    };
+    trigger.addEventListener('click', () => setOpen(trigger.getAttribute('aria-expanded') !== 'true'));
+    close.addEventListener('click', () => { setOpen(false); trigger.focus({ preventScroll: true }); });
+    root.addEventListener('keydown', (event) => { if (event.key === 'Escape' && !panel.hidden) setOpen(false); });
+
+    const audioToggle = root.querySelector<HTMLButtonElement>('[data-atmosphere-toggle]')!;
+    const audioLabel = root.querySelector<HTMLElement>('[data-atmosphere-label]')!;
+    let context: AudioContext | null = null;
+    let master: GainNode | null = null;
+
+    async function stopAtmosphere() {
+      audioToggle.setAttribute('aria-pressed', 'false');
+      audioLabel.textContent = 'desligada';
+      if (master && context) master.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + .35);
+      const closing = context;
+      context = null;
+      master = null;
+      if (closing) window.setTimeout(() => closing.close(), 420);
+    }
+
+    async function startAtmosphere() {
+      const AudioContextClass = window.AudioContext || (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+      if (!AudioContextClass) return;
+      context = new AudioContextClass();
+      await context.resume();
+      master = context.createGain();
+      master.gain.setValueAtTime(.0001, context.currentTime);
+      master.gain.exponentialRampToValueAtTime(.018, context.currentTime + 1.2);
+      const filter = context.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.value = 210;
+      filter.Q.value = .7;
+      filter.connect(master).connect(context.destination);
+      [55, 82.4].forEach((frequency, index) => {
+        const oscillator = context!.createOscillator();
+        const gain = context!.createGain();
+        oscillator.type = index ? 'triangle' : 'sine';
+        oscillator.frequency.value = frequency;
+        gain.gain.value = index ? .22 : .42;
+        oscillator.connect(gain).connect(filter);
+        oscillator.start();
+      });
+      audioToggle.setAttribute('aria-pressed', 'true');
+      audioLabel.textContent = 'ligada';
+    }
+
+    audioToggle.addEventListener('click', () => {
+      if (audioToggle.getAttribute('aria-pressed') === 'true') stopAtmosphere();
+      else startAtmosphere();
+    });
+
+  }
+
+  const explorationWindow = window as typeof window & { __rocExplorationBound?: boolean };
+  if (!explorationWindow.__rocExplorationBound) {
+    explorationWindow.__rocExplorationBound = true;
+    window.addEventListener('roc:realm-visited', ((event: CustomEvent<{ slug?: string; path?: string }>) => {
+      if (event.detail?.slug) registerRealm(event.detail.slug, event.detail.path);
+    }) as EventListener);
+    window.addEventListener('roc:exploration-reset', renderExplorationState);
+    window.addEventListener('roc:pilgrimage-updated', renderPilgrimageState);
+    window.addEventListener('roc:journal-updated', renderJournalState);
+    window.addEventListener('storage', () => { renderExplorationState(); renderPilgrimageState(); renderJournalState(); });
+  }
+  document.addEventListener('astro:page-load', bindExplorationHUD);
+</script>
+
+<style>
+  .exploration-hud { position: fixed; right: clamp(.8rem, 2vw, 1.5rem); bottom: clamp(.8rem, 2vw, 1.5rem); z-index: 60; font-family: var(--font-body); }
+  .exploration-trigger { display: flex; align-items: center; gap: .65rem; min-width: 112px; padding: .5rem .7rem .5rem .5rem; border: 1px solid rgba(201,163,92,.5); color: var(--parchment); background: rgba(12,10,8,.92); box-shadow: 0 12px 34px rgba(0,0,0,.48), inset 0 0 18px rgba(201,163,92,.05); backdrop-filter: blur(12px); cursor: pointer; }
+  .exploration-ring { --exploration-progress: 0%; display: grid; width: 42px; aspect-ratio: 1; place-items: center; border-radius: 50%; background: radial-gradient(circle at center, var(--ink) 58%, transparent 60%), conic-gradient(var(--gold) var(--exploration-progress), rgba(201,163,92,.14) 0); color: var(--gold); font-family: var(--font-display); font-size: .68rem; }
+  .exploration-trigger-copy { display: grid; text-align: left; line-height: 1.05; }
+  .exploration-trigger-copy small { color: var(--parchment-dim); font-variant: small-caps; letter-spacing: .15em; }
+  .exploration-trigger-copy strong { margin-top: .2rem; color: var(--parchment); font-family: var(--font-display); font-size: .72rem; letter-spacing: .12em; }
+  .exploration-panel { position: absolute; right: 0; bottom: calc(100% + .75rem); width: min(360px, calc(100vw - 1.6rem)); padding: 1.2rem; border: 1px solid rgba(201,163,92,.46); background: linear-gradient(145deg, rgba(30,25,19,.98), rgba(12,10,8,.98)); box-shadow: 0 22px 70px rgba(0,0,0,.68); backdrop-filter: blur(18px); }
+  .exploration-panel[hidden] { display: none; }
+  .exploration-panel::before { content: ''; position: absolute; inset: 5px; border: 1px solid rgba(201,163,92,.1); pointer-events: none; }
+  .exploration-panel header { position: relative; display: flex; align-items: start; justify-content: space-between; gap: 1rem; }
+  .exploration-panel h2 { margin-top: .3rem; color: var(--parchment); font-size: .9rem; letter-spacing: .13em; }
+  .exploration-panel .rubric { color: var(--gold); font-size: .6rem; }
+  .exploration-close { width: 32px; height: 32px; border: 1px solid var(--edge); color: var(--parchment-dim); background: transparent; font: 1.15rem/1 var(--font-body); cursor: pointer; }
+  .exploration-close:hover { color: var(--parchment); border-color: var(--gold); }
+  .exploration-intro { position: relative; margin: 1rem 0; color: var(--parchment-dim); font-size: .82rem; line-height: 1.35; }
+  .exploration-meter { position: relative; display: grid; grid-template-columns: auto 1fr; gap: .05rem .55rem; align-items: baseline; }
+  .exploration-meter strong { color: var(--gold); font-family: var(--font-display); font-size: .78rem; }
+  .exploration-meter > span:not(.exploration-bar) { color: var(--parchment-dim); font-size: .76rem; }
+  .exploration-bar { grid-column: 1 / -1; height: 2px; margin-top: .5rem; overflow: hidden; background: rgba(201,163,92,.12); }
+  .exploration-bar i { display: block; width: 0; height: 100%; background: linear-gradient(90deg, var(--gold), var(--ember)); transition: width .45s ease; }
+  .exploration-sigils { position: relative; display: grid; grid-template-columns: repeat(10, 1fr); gap: .35rem; margin: 1rem 0; padding: 0; list-style: none; }
+  .exploration-sigils a { display: grid; aspect-ratio: 1; place-items: center; border: 1px solid var(--edge); color: var(--parchment-faint); background: rgba(0,0,0,.2); font-family: var(--font-display); font-size: .5rem; }
+  .exploration-sigils a:hover { color: var(--parchment); border-color: var(--gold); }
+  .exploration-sigils a.is-visited { border-color: rgba(226,183,107,.66); color: var(--gold); background: radial-gradient(circle, rgba(255,122,61,.2), rgba(201,163,92,.05)); box-shadow: 0 0 10px rgba(255,122,61,.08); }
+  .exploration-continue { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .75rem .85rem; border: 1px solid rgba(201,163,92,.38); color: var(--gold); background: rgba(201,163,92,.05); font-family: var(--font-display); font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; }
+  .exploration-continue:hover { border-color: var(--gold); background: rgba(201,163,92,.1); }
+  .exploration-ritual { position: relative; display: grid; grid-template-columns: 26px 1fr auto; gap: .55rem; align-items: center; margin-top: .55rem; padding: .55rem .7rem; border: 1px solid var(--edge); color: var(--parchment-dim); background: rgba(0,0,0,.18); }
+  .exploration-ritual > span:first-child { color: var(--gold); font-size: 1.1rem; }
+  .exploration-ritual > span:nth-child(2) { display: grid; line-height: 1.2; }
+  .exploration-ritual strong { color: var(--parchment); font-size: .76rem; font-weight: 500; }
+  .exploration-ritual small { margin-top: .15rem; color: var(--parchment-faint); font-size: .64rem; text-transform: capitalize; }
+  .exploration-ritual i { color: var(--gold); font-style: normal; }
+  .has-pilgrimage .exploration-ritual { border-color: rgba(201,163,92,.42); background: rgba(201,163,92,.06); }
+  .exploration-journal { position: relative; display: grid; grid-template-columns: 26px 1fr auto; gap: .55rem; align-items: center; margin-top: .55rem; padding: .55rem .7rem; border: 1px solid var(--edge); color: var(--parchment-dim); background: rgba(0,0,0,.18); }
+  .exploration-journal > span:first-child { color: var(--ember); font-size: .95rem; }
+  .exploration-journal > span:nth-child(2) { display: grid; line-height: 1.2; }
+  .exploration-journal strong { color: var(--parchment); font-size: .76rem; font-weight: 500; }
+  .exploration-journal small { margin-top: .15rem; color: var(--parchment-faint); font-size: .64rem; }
+  .exploration-journal i { color: var(--gold); font-style: normal; }
+  .has-journal-notes .exploration-journal { border-color: rgba(255,122,61,.38); background: rgba(255,122,61,.045); }
+  .atmosphere-control { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: .8rem; padding-top: .8rem; border-top: 1px solid var(--edge); }
+  .atmosphere-control > div { display: grid; line-height: 1.2; }
+  .atmosphere-control strong { color: var(--parchment); font-size: .78rem; font-weight: 500; }
+  .atmosphere-control small { margin-top: .2rem; color: var(--parchment-faint); font-size: .66rem; }
+  .atmosphere-control button { min-width: 82px; padding: .35rem .55rem; border: 1px solid var(--edge); color: var(--parchment-dim); background: transparent; font: small-caps .72rem var(--font-body); letter-spacing: .1em; cursor: pointer; }
+  .atmosphere-control button[aria-pressed='true'] { border-color: var(--gold); color: var(--gold); box-shadow: inset 0 0 14px rgba(201,163,92,.1); }
+  @media (max-width: 560px) {
+    .exploration-trigger-copy { display: none; }
+    .exploration-trigger { min-width: 0; padding: .42rem; border-radius: 50%; }
+    .exploration-panel { right: -.1rem; }
+    .exploration-sigils { grid-template-columns: repeat(10, 1fr); gap: .25rem; }
+  }
+  @media (prefers-reduced-motion: reduce) { .exploration-bar i { transition: none; } }
+</style>

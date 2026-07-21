@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import OrnamentDivider from '../components/OrnamentDivider.astro';
+import ImmersiveRealmMap from '../components/ImmersiveRealmMap.astro';
 import realms from '../data/realms.json';
 import atlasHotspots from '../data/atlas-hotspots.json';
 import { guardianRoster } from '../lib/guardians.js';
@@ -18,213 +18,185 @@ const atlasEntries = atlasHotspots.map((hotspot) => {
 
   return { ...hotspot, realm, guardian };
 });
-const initialEntry = atlasEntries[0];
 ---
-<BaseLayout title="Atlas do Continente — Realm of Crests" description="O Mapa Canônico do Continente de Realm of Crests: os dezenove Reinos, biomas, o Solo Ancestral, os Caminhos Sagrados e as Zonas de Colapso.">
-  <div class="page-head">
-    <span class="rubric">cartografia canônica · v1.0</span>
-    <h1>ATLAS DO CONTINENTE</h1>
-    <p class="lede">Dezenove Reinos sobre um único continente — costas, biomas, o Solo Ancestral, os Caminhos Sagrados e as cicatrizes que a Ruína deixou na terra.</p>
+
+<BaseLayout
+  title="Atlas Imersivo do Continente — Realm of Crests"
+  description="Explore o Mapa Canônico de Realm of Crests: dezenove Reinos, seus Guardiões, Essências, Fervores e cicatrizes territoriais."
+>
+  <section
+    class="atlas-prologue"
+    aria-labelledby="atlas-page-title"
+    style={`--atlas-map-url: url("${base}/assets/maps/map_continent.webp")`}
+  >
+    <div class="atlas-prologue-glow" aria-hidden="true"></div>
+    <div class="wide-wrap atlas-prologue-inner">
+      <span class="rubric">arquivo cartográfico · instrumento de exploração</span>
+      <h1 id="atlas-page-title">O MUNDO NÃO SE ENTREGA<br /><span>ELE É DESCOBERTO</span></h1>
+      <p>
+        Cada fronteira guarda uma vontade. Cada rota cobra memória. Escolha um selo no mapa
+        e deixe o continente revelar o Reino que existe sob ele.
+      </p>
+      <a href="#atlas-explorer">Adentrar o Atlas <span aria-hidden="true">↓</span></a>
+    </div>
+  </section>
+
+  <div class="wide-wrap atlas-experience-wrap">
+    <ImmersiveRealmMap entries={atlasEntries} base={base} />
   </div>
 
-  <OrnamentDivider />
+  <section class="atlas-lore-sequence" aria-labelledby="atlas-lore-title">
+    <div class="wrap">
+      <header class="atlas-lore-heading" data-lore-reveal>
+        <span class="rubric">três leis para atravessar o continente</span>
+        <h2 id="atlas-lore-title">A CARTOGRAFIA TAMBÉM É LORE</h2>
+        <p>O mapa não ilustra apenas lugares. Ele registra forças que governam toda travessia.</p>
+      </header>
 
-  <div class="wrap">
-    <div class="atlas-frame">
-      <span class="atlas-corner tl"></span><span class="atlas-corner tr"></span>
-      <span class="atlas-corner bl"></span><span class="atlas-corner br"></span>
-      <div class="atlas-viewport" id="viewport">
-        <div class="atlas-map" id="atlas-map">
-          <img
-            id="mapa"
-            src={`${base}/assets/maps/map_continent.webp`}
-            alt="Mapa Canônico do Continente de Realm of Crests, com os dezenove Reinos, biomas, Caminhos Sagrados e Zonas de Colapso"
-            width="1536"
-            height="1024"
-            draggable="false"
-          />
-          <nav class="atlas-hotspots" aria-label="Reinos no mapa canônico">
-            {atlasEntries.map(({ mapNumber, x, y, realm, guardian }) => (
-              <a
-                class="atlas-hotspot"
-                href={`${base}/reinos/${realm.slug}/`}
-                style={`--atlas-x:${x}%;--atlas-y:${y}%;`}
-                aria-label={`Reino ${String(mapNumber).padStart(2, '0')}: ${realm.realm}. Abrir fólio do reino.`}
-                data-map-number={String(mapNumber).padStart(2, '0')}
-                data-realm={realm.realm}
-                data-guardian={guardian.name}
-                data-epithet={guardian.epithet}
-                data-essence={realm.essence}
-                data-realm-href={`${base}/reinos/${realm.slug}/`}
-                data-guardian-href={`${base}/guardioes/${guardian.slug}/`}
-              >
-                <span class="sr-only">{realm.realm}</span>
-              </a>
-            ))}
-          </nav>
-        </div>
-        <div class="atlas-controls">
-          <button id="zin" aria-label="Aproximar">+</button>
-          <button id="zout" aria-label="Afastar">−</button>
-          <button id="zreset" aria-label="Restaurar" title="Restaurar">◻</button>
-        </div>
-        <div class="atlas-hint" id="hint">PASSE PELOS REINOS · CLIQUE PARA ABRIR · ROLE PARA APROXIMAR</div>
-      </div>
-      <section class="atlas-inspector" id="atlas-inspector" aria-live="polite">
-        <div class="atlas-inspector-heading">
-          <span class="rubric" id="atlas-number">{`reino ${String(initialEntry.mapNumber).padStart(2, '0')}`}</span>
-          <h2 id="atlas-realm">{initialEntry.realm.realm}</h2>
-          <p id="atlas-epithet">“{initialEntry.guardian.epithet}”</p>
-        </div>
-        <dl>
+      <div class="atlas-lore-path">
+        <article class="atlas-lore-chapter ancestral" data-lore-reveal>
+          <span class="atlas-lore-number">I</span>
           <div>
-            <dt>Guardião</dt>
-            <dd id="atlas-guardian">{initialEntry.guardian.name}</dd>
+            <span class="rubric">origem</span>
+            <h3>SOLO ANCESTRAL</h3>
+            <p>Primeiro espaço de existência do Realm. Nenhum Reino o reivindica sozinho porque todos nasceram de sua memória.</p>
           </div>
+        </article>
+
+        <article class="atlas-lore-chapter sacred" data-lore-reveal>
+          <span class="atlas-lore-number">II</span>
           <div>
-            <dt>Essência</dt>
-            <dd id="atlas-essence">{initialEntry.realm.essence}</dd>
+            <span class="rubric">travessia</span>
+            <h3>CAMINHOS SAGRADOS</h3>
+            <p>Veias ontológicas abertas pela ressonância antiga. Reduzem o custo da jornada, mas nunca anulam a distância.</p>
           </div>
-        </dl>
-        <div class="atlas-inspector-actions">
-          <a id="atlas-realm-link" href={`${base}/reinos/${initialEntry.realm.slug}/`}>Abrir Reino</a>
-          <a id="atlas-guardian-link" href={`${base}/guardioes/${initialEntry.guardian.slug}/`}>Ver Guardião</a>
-        </div>
-      </section>
-      <div class="atlas-caption">
-        <span>MAPA CANÔNICO DO CONTINENTE · v1.0</span>
-        <span>ESCALA NARRATIVA — DISTÂNCIAS NO REGISTRO DE ROTAS</span>
-      </div>
-    </div>
+        </article>
 
-    <div class="legend">
-      <div class="ancestral">
-        <h3>SOLO ANCESTRAL</h3>
-        <p>O chão onde a memória do continente é mais antiga que qualquer trono — origem comum que nenhum Reino reivindica sozinho.</p>
+        <article class="atlas-lore-chapter ruin" data-lore-reveal>
+          <span class="atlas-lore-number">III</span>
+          <div>
+            <span class="rubric">limite</span>
+            <h3>FRONTEIRA DA RUÍNA</h3>
+            <p>Onde a realidade física enfraquece e a memória apodrece. Os ecos se perdem; a orientação deixa de ser promessa.</p>
+          </div>
+        </article>
       </div>
-      <div class="sacred">
-        <h3>CAMINHOS SAGRADOS</h3>
-        <p>As vias consagradas que ligam os Reinos. Reduzem o custo da travessia — mas nunca eliminam a distância.</p>
-      </div>
-      <div class="collapse">
-        <h3>ZONAS DE COLAPSO</h3>
-        <p>Cicatrizes deixadas pela Ruína sobre a terra. Regiões onde a travessia se torna lenta, hostil — e, por vezes, impraticável.</p>
-      </div>
-    </div>
 
-    <div class="law" style="margin-inline: auto;">
-      <span class="tag">REGRA DE GOVERNANÇA CARTOGRÁFICA</span>
-      <p>Distância canônica é sempre medida por rota, não em linha reta.</p>
-    </div>
+      <aside class="atlas-route-law" data-lore-reveal>
+        <span class="rubric">regra de governança cartográfica</span>
+        <p>Distância canônica é sempre medida por rota, nunca em linha reta.</p>
+      </aside>
 
-    <p class="source-line rubric" style="text-align: center;">fontes: mapa canônico do continente v1.0 · índice de mapas, escala e rotas v1.1 — revisão canônica: 2026-07-11</p>
-  </div>
+      <p class="atlas-source rubric">fontes: mapa canônico do continente v1.1 · índice de mapas, escala e rotas v1.1 · errata cartográfica aprovada: 2026-07-21</p>
+    </div>
+  </section>
 </BaseLayout>
 
 <script>
-  function initAtlas() {
-  const vp = document.getElementById('viewport') as HTMLElement;
-  if ((vp as any).dataset.bound) return; (vp as any).dataset.bound = '1';
-  const img = document.getElementById('mapa') as HTMLImageElement;
-  const map = document.getElementById('atlas-map') as HTMLElement;
-  const hint = document.getElementById('hint') as HTMLElement;
-  const hotspots = Array.from(document.querySelectorAll<HTMLAnchorElement>('.atlas-hotspot'));
-  const number = document.getElementById('atlas-number') as HTMLElement;
-  const realmName = document.getElementById('atlas-realm') as HTMLElement;
-  const guardianName = document.getElementById('atlas-guardian') as HTMLElement;
-  const epithet = document.getElementById('atlas-epithet') as HTMLElement;
-  const essence = document.getElementById('atlas-essence') as HTMLElement;
-  const realmLink = document.getElementById('atlas-realm-link') as HTMLAnchorElement;
-  const guardianLink = document.getElementById('atlas-guardian-link') as HTMLAnchorElement;
-  let scale = 1, tx = 0, ty = 0;
-  const MIN = 1, MAX = 3;
-  const hiSrc = img.src.replace('map_continent.webp', 'map_continent_2x.webp');
-  let hiLoaded = false;
-  function loadHi() {
-    if (hiLoaded) return;
-    hiLoaded = true;
-    const pre = new Image();
-    pre.onload = () => { img.src = hiSrc; };
-    pre.src = hiSrc;
+  function bindAtlasLoreReveal() {
+    const chapters = Array.from(document.querySelectorAll<HTMLElement>('[data-lore-reveal]:not(.is-revealed)'));
+    if (!chapters.length) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      chapters.forEach((chapter) => chapter.classList.add('is-revealed'));
+      return;
+    }
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-revealed');
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: .18 });
+    chapters.forEach((chapter) => observer.observe(chapter));
   }
 
-  function clamp() {
-    const r = vp.getBoundingClientRect();
-    const w = map.clientWidth * scale, h = map.clientHeight * scale;
-    tx = Math.min(0, Math.max(r.width - w, tx));
-    ty = Math.min(0, Math.max(Math.min(r.height, map.clientHeight) - h, ty));
-    if (scale === 1) { tx = 0; ty = 0; }
-  }
-  function apply() {
-    clamp();
-    map.style.transform = `translate(${tx}px,${ty}px) scale(${scale})`;
-  }
-
-  function selectRealm(hotspot: HTMLAnchorElement) {
-    hotspots.forEach((item) => item.classList.toggle('active', item === hotspot));
-    number.textContent = `reino ${hotspot.dataset.mapNumber}`;
-    realmName.textContent = hotspot.dataset.realm ?? '';
-    guardianName.textContent = hotspot.dataset.guardian ?? '';
-    epithet.textContent = `“${hotspot.dataset.epithet ?? ''}”`;
-    essence.textContent = hotspot.dataset.essence ?? '';
-    realmLink.href = hotspot.dataset.realmHref ?? hotspot.href;
-    guardianLink.href = hotspot.dataset.guardianHref ?? '#';
-    hint.classList.add('hide');
-  }
-
-  hotspots.forEach((hotspot, index) => {
-    if (index === 0) hotspot.classList.add('active');
-    hotspot.addEventListener('pointerenter', () => selectRealm(hotspot));
-    hotspot.addEventListener('focus', () => selectRealm(hotspot));
-  });
-  function zoomAt(cx: number, cy: number, factor: number) {
-    const r = vp.getBoundingClientRect();
-    const x = cx - r.left, y = cy - r.top;
-    const ns = Math.min(MAX, Math.max(MIN, scale * factor));
-    tx = x - (x - tx) * (ns / scale);
-    ty = y - (y - ty) * (ns / scale);
-    scale = ns;
-    if (scale > 1.05) loadHi();
-    apply();
-    hint.classList.add('hide');
-  }
-
-  vp.addEventListener('wheel', (e) => {
-    e.preventDefault();
-    zoomAt(e.clientX, e.clientY, e.deltaY < 0 ? 1.18 : 1 / 1.18);
-  }, { passive: false });
-
-  let dragging = false, lx = 0, ly = 0;
-  vp.addEventListener('pointerdown', (e) => {
-    if ((e.target as HTMLElement).closest('a, button')) return;
-    dragging = true; lx = e.clientX; ly = e.clientY;
-    vp.classList.add('grabbing'); vp.setPointerCapture(e.pointerId);
-    hint.classList.add('hide');
-  });
-  vp.addEventListener('pointermove', (e) => {
-    if (!dragging) return;
-    tx += e.clientX - lx; ty += e.clientY - ly;
-    lx = e.clientX; ly = e.clientY;
-    apply();
-  });
-  vp.addEventListener('pointerup', () => { dragging = false; vp.classList.remove('grabbing'); });
-  vp.addEventListener('pointercancel', () => { dragging = false; vp.classList.remove('grabbing'); });
-
-  document.getElementById('zin')!.addEventListener('click', () => {
-    const r = vp.getBoundingClientRect();
-    zoomAt(r.left + r.width / 2, r.top + r.height / 2, 1.35);
-  });
-  document.getElementById('zout')!.addEventListener('click', () => {
-    const r = vp.getBoundingClientRect();
-    zoomAt(r.left + r.width / 2, r.top + r.height / 2, 1 / 1.35);
-  });
-  document.getElementById('zreset')!.addEventListener('click', () => {
-    scale = 1; tx = 0; ty = 0; apply();
-  });
-
-  setTimeout(() => hint.classList.add('hide'), 5000);
-  }
-  document.addEventListener('astro:page-load', () => {
-    if (document.getElementById('viewport')) initAtlas();
-  });
+  document.addEventListener('astro:page-load', bindAtlasLoreReveal);
 </script>
+
+<style>
+  .atlas-prologue {
+    position: relative;
+    display: grid;
+    min-height: min(58vh, 620px);
+    place-items: center;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(201, 163, 92, .22);
+    text-align: center;
+  }
+
+  .atlas-prologue::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(12,10,8,.94), rgba(12,10,8,.42) 48%, var(--ink)),
+      var(--atlas-map-url) center 43% / cover;
+    filter: saturate(.72);
+    transform: scale(1.035);
+  }
+
+  .atlas-prologue-glow {
+    position: absolute;
+    width: min(42vw, 540px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(226,183,107,.18), rgba(226,183,107,.04) 36%, transparent 68%);
+    mix-blend-mode: screen;
+    animation: prologue-breathe 5s ease-in-out infinite alternate;
+  }
+
+  @keyframes prologue-breathe { to { transform: scale(1.12); opacity: .72; } }
+
+  .atlas-prologue-inner { position: relative; z-index: 1; padding-block: 4rem 5.5rem; }
+  .atlas-prologue .rubric { display: block; margin-bottom: 1.25rem; color: var(--gold); }
+  .atlas-prologue h1 { color: var(--parchment); font-size: clamp(2rem, 5.8vw, 4.5rem); letter-spacing: .105em; text-shadow: 0 8px 34px #000; }
+  .atlas-prologue h1 span { color: var(--gold); }
+  .atlas-prologue p { max-width: 58ch; margin: 1.5rem auto 0; color: var(--parchment); font-size: clamp(1rem, 1.7vw, 1.2rem); font-style: italic; text-shadow: 0 2px 12px #000; }
+  .atlas-prologue a { display: inline-flex; align-items: center; gap: .7rem; margin-top: 1.6rem; padding: .72rem 1rem; border-bottom: 1px solid var(--gold); color: var(--gold); font-family: var(--font-display); font-size: .62rem; letter-spacing: .18em; text-transform: uppercase; }
+  .atlas-prologue a:hover { color: var(--parchment); border-color: var(--parchment); }
+
+  .atlas-experience-wrap { position: relative; z-index: 2; margin-top: clamp(-3.7rem, -5vw, -2rem); }
+
+  .atlas-lore-sequence { padding-block: clamp(5rem, 9vw, 8rem); }
+  .atlas-lore-heading { max-width: 700px; margin: 0 auto 3rem; text-align: center; }
+  .atlas-lore-heading .rubric { color: var(--gold); }
+  .atlas-lore-heading h2 { margin-top: .85rem; color: var(--parchment); font-size: clamp(1.7rem, 4vw, 2.7rem); }
+  .atlas-lore-heading p { margin: 1rem auto 0; color: var(--parchment-dim); font-style: italic; }
+
+  .atlas-lore-path { position: relative; max-width: 850px; margin-inline: auto; }
+  .atlas-lore-path::before { content: ''; position: absolute; top: 2rem; bottom: 2rem; left: 34px; width: 1px; background: linear-gradient(var(--gold), var(--amber), var(--crimson)); opacity: .55; }
+  .atlas-lore-chapter { position: relative; display: grid; grid-template-columns: 68px 1fr; gap: 1.5rem; align-items: start; padding: 2rem 0; }
+  .atlas-lore-number { position: relative; z-index: 1; display: grid; width: 68px; height: 68px; place-items: center; border: 1px solid rgba(201,163,92,.5); border-radius: 50%; color: var(--gold); background: var(--ink); font-family: var(--font-display); font-size: .8rem; box-shadow: 0 0 28px rgba(201,163,92,.12); }
+  .atlas-lore-chapter > div { padding: .2rem 0 1.5rem; border-bottom: 1px solid var(--edge); }
+  .atlas-lore-chapter .rubric { display: block; margin-bottom: .4rem; }
+  .atlas-lore-chapter h3 { font-size: 1.1rem; letter-spacing: .16em; }
+  .atlas-lore-chapter p { max-width: 64ch; margin: .7rem 0 0; color: var(--parchment-dim); }
+  .atlas-lore-chapter.sacred h3 { color: var(--amber); }
+  .atlas-lore-chapter.ruin h3 { color: #b85b89; }
+
+  .atlas-route-law { max-width: 850px; margin: 2.5rem auto 0; padding: 1.3rem 1.5rem; border: 1px solid rgba(201,163,92,.36); background: linear-gradient(90deg, rgba(201,163,92,.08), transparent); text-align: center; }
+  .atlas-route-law .rubric { color: var(--gold); }
+  .atlas-route-law p { margin: .45rem 0 0; color: var(--parchment); font-size: 1.12rem; font-style: italic; }
+  .atlas-source { margin: 2rem 0 0; color: var(--parchment-faint); font-size: .62rem; text-align: center; }
+
+  [data-lore-reveal] { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+  [data-lore-reveal].is-revealed { opacity: 1; transform: translateY(0); }
+  .atlas-lore-chapter:nth-child(2) { transition-delay: .08s; }
+  .atlas-lore-chapter:nth-child(3) { transition-delay: .16s; }
+
+  @media (max-width: 700px) {
+    .atlas-prologue { min-height: 480px; }
+    .atlas-prologue::before { background-position: 52% center; }
+    .atlas-prologue-inner { padding-block: 3rem 5rem; }
+    .atlas-prologue h1 br { display: none; }
+    .atlas-experience-wrap { width: calc(100% - 1rem); margin-top: -2.5rem; }
+    .atlas-lore-path::before { left: 24px; }
+    .atlas-lore-chapter { grid-template-columns: 48px 1fr; gap: 1rem; }
+    .atlas-lore-number { width: 48px; height: 48px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .atlas-prologue-glow { animation: none; }
+    [data-lore-reveal] { opacity: 1; transform: none; }
+  }
+</style>

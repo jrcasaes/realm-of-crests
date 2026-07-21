@@ -5,7 +5,7 @@
   "authority": {
     "registry": {
       "title": "roc-source-registry",
-      "version_at_sync": "1.2.11"
+      "version_at_sync": "1.2.12"
     },
     "loreMaster": {
       "title": "REALM_OF_CRESTS_LORE_MASTER_CANON",
@@ -20,6 +20,13 @@
       "title": "RoC_Story_Bible_MASTER_CC31_v2.2.html",
       "version_at_sync": "2.2",
       "mutability": "DERIVED_REFERENCE_CC31"
+    },
+    "cartography": {
+      "title": "RoC_Mapa_Canonico_Continente_MASTER",
+      "version_at_sync": "1.1",
+      "index": "RoC_Indice_de_Mapas_Escala_e_Rotas_v1.1",
+      "changeClass": "ERRATA_DERIVED_FROM_CONSOLIDATED_CANON",
+      "geographyChanged": false
     }
   },
   "contentCompliance": {
@@ -66,14 +73,21 @@
       }
     }
   },
-  "lastSync": "2026-07-19",
+  "lastSync": "2026-07-21",
   "glyphRasterFullLock": {
     "scope": "RASTER_8X5_ONLY",
     "families": 8,
     "materialsPerFamily": 5,
     "activeAssets": 40,
     "verification": "PASS_40_OF_40",
-    "vectorMastersStatus": "PENDING_NOT_INFERRED",
-    "note": "PNG não substitui master SVG; masters SVG e monocromáticos permanecem pendentes."
+    "vectorMastersStatus": "DERIVED_TECHNICAL_ACTIVE_V1.0",
+    "vectorAssets": {
+      "svgMasters": 8,
+      "monochromeSvg": 16,
+      "vectorPdf": 8,
+      "transparentPng4096": 16,
+      "basis": "CC-27 v1.3 + Guia de Produção Digital v1.2"
+    },
+    "note": "Os masters vetoriais v1.0 codificam a topologia-base e não substituem nem ampliam o FULL LOCK da matriz raster 8 × 5."
   }
 }

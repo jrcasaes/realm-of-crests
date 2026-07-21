@@ -1,51 +1,56 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import OrnamentDivider from '../../components/OrnamentDivider.astro';
+import GuardianArchive from '../../components/GuardianArchive.astro';
 import { guardianRoster } from '../../lib/guardians.js';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
-<BaseLayout title="Guardiões — Realm of Crests" description="Os Guardiões do Realm of Crests: as manifestações soberanas dos dezenove Reinos.">
-  <div class="page-head">
-    <span class="rubric">a galeria soberana</span>
-    <h1>GUARDIÕES</h1>
-    <p class="lede">Cada Reino manifesta um Guardião — não um campeão que o representa, mas a própria soberania feita carne, peso e memória.</p>
-  </div>
 
-  <OrnamentDivider />
-
-  <section class="realms-section">
-    <div class="wrap">
-      <div class="guardian-grid">
-        {guardianRoster.map((g) => (
-          <a class="guardian-card" href={`${base}/guardioes/${g.slug}/`}>
-            {g.portrait
-              ? <div
-                  class:list={{
-                    'portrait-stage': true,
-                    'portrait-vertical': g.portraitHeight > g.portraitWidth,
-                  }}
-                  style={g.portraitHeight > g.portraitWidth
-                    ? `--portrait-image: url(${base}/assets/guardians/${g.portrait})`
-                    : undefined}
-                >
-                  <img
-                    src={`${base}/assets/guardians/${g.portrait}`}
-                    alt={`${g.name}, Guardião de ${g.realmName}`}
-                    loading="lazy"
-                  />
-                </div>
-              : <div class="pending">RETRATO PENDENTE</div>
-            }
-            <div class="info">
-              <h3>{g.name.toUpperCase()}</h3>
-              <p class="epithet">“{g.epithet}”</p>
-              <p class="realm">Guardião de {g.realmName}</p>
-            </div>
-          </a>
-        ))}
-      </div>
-      <p class="source-line rubric" style="text-align:center;">19 retratos web derivados dos masters preservados · rmv v0.1</p>
+<BaseLayout
+  title="Dossiês Vivos dos Guardiões — Realm of Crests"
+  description="Explore, filtre e compare as dezenove manifestações soberanas de Realm of Crests."
+>
+  <section class="guardians-prologue" aria-labelledby="guardians-title">
+    <div class="guardians-portraits" aria-hidden="true">
+      {guardianRoster.slice(0, 5).map((guardian) => (
+        <img src={`${base}/assets/guardians/${guardian.portrait}`} alt="" width={guardian.portraitWidth} height={guardian.portraitHeight} />
+      ))}
     </div>
+    <div class="guardians-prologue-wash" aria-hidden="true"></div>
+    <div class="wide-wrap guardians-prologue-content">
+      <span class="rubric">dezenove manifestações · uma galeria soberana</span>
+      <h1 id="guardians-title">A SOBERANIA<br /><em>OLHA DE VOLTA</em></h1>
+      <p>
+        Um Guardião não é apenas o rosto de um Reino. É sua vontade sob pressão —
+        atravessada por Fervor, gravidade, memória e território.
+      </p>
+      <a href="#arquivo-vivo">Abrir o arquivo vivo <span aria-hidden="true">↓</span></a>
+    </div>
+    <p class="guardians-prologue-index"><strong>19</strong><span>Guardiões<br />publicamente catalogados</span></p>
   </section>
+
+  <div class="wide-wrap">
+    <GuardianArchive guardians={guardianRoster} base={base} />
+    <p class="guardians-source rubric">19 retratos web derivados dos masters preservados · rmv v0.1 · dados territoriais conforme canon público validado</p>
+  </div>
 </BaseLayout>
+
+<style>
+  .guardians-prologue { position: relative; display: grid; min-height: min(72vh, 760px); place-items: center; overflow: hidden; isolation: isolate; border-bottom: 1px solid rgba(201,163,92,.22); }
+  .guardians-portraits { position: absolute; z-index: -3; inset: 0; display: grid; grid-template-columns: repeat(5, 1fr); }
+  .guardians-portraits img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; filter: grayscale(.2) saturate(.55) brightness(.48); }
+  .guardians-portraits img:nth-child(even) { transform: scale(1.045); filter: grayscale(.35) saturate(.48) brightness(.38); }
+  .guardians-prologue-wash { position: absolute; z-index: -2; inset: 0; background: linear-gradient(180deg, rgba(12,10,8,.6), rgba(12,10,8,.28) 42%, var(--ink)), radial-gradient(circle at 50% 40%, transparent, rgba(0,0,0,.72)); }
+  .guardians-prologue-content { padding-block: 5rem 7rem; text-align: center; }
+  .guardians-prologue .rubric { color: var(--gold); text-shadow: 0 2px 10px #000; }
+  .guardians-prologue h1 { margin-top: .8rem; color: var(--parchment); font-size: clamp(2.3rem, 7vw, 6rem); letter-spacing: .11em; text-shadow: 0 8px 36px #000; }
+  .guardians-prologue h1 em { color: var(--gold); font-style: normal; }
+  .guardians-prologue-content > p { max-width: 59ch; margin: 1.3rem auto 0; color: var(--parchment); font-size: clamp(1rem, 1.6vw, 1.18rem); font-style: italic; text-shadow: 0 2px 14px #000; }
+  .guardians-prologue-content > a { display: inline-flex; align-items: center; gap: .8rem; margin-top: 1.6rem; padding: .75rem 1rem; border-bottom: 1px solid var(--gold); color: var(--gold); font-family: var(--font-display); font-size: .62rem; letter-spacing: .14em; text-transform: uppercase; }
+  .guardians-prologue-index { position: absolute; right: 1.5rem; bottom: 1rem; display: flex; align-items: center; gap: .65rem; margin: 0; color: var(--parchment-faint); text-align: left; }
+  .guardians-prologue-index strong { color: var(--gold); font-family: var(--font-display); font-size: 2rem; }
+  .guardians-prologue-index span { font-size: .62rem; line-height: 1.2; letter-spacing: .08em; text-transform: uppercase; }
+  .guardians-source { margin: -3rem 0 4rem; color: var(--parchment-faint); font-size: .58rem; text-align: center; }
+  @media (max-width: 760px) { .guardians-portraits { left: -70%; right: -70%; } .guardians-prologue { min-height: 68vh; } .guardians-prologue-index { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .guardians-portraits img:nth-child(even) { transform: none; } }
+</style>

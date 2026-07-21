@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import EmberlineJournal from '../../components/EmberlineJournal.astro';
+import { emberlineFragments, journalRealms } from '../../lib/journal.js';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<BaseLayout
+  title="Diário da Emberline — Realm of Crests"
+  description="Diário privado da travessia pelos dezenove Reinos, com notas locais, fragmentos editoriais e preferências de leitura."
+>
+  <section class="journal-hero" aria-labelledby="journal-hero-title">
+    <div class="journal-hero-mark" aria-hidden="true">
+      <img
+        src={`${base}/assets/fervor/glyph_legacy_light.webp`}
+        data-journal-fervors
+        data-static-src={`${base}/assets/fervor/glyph_legacy_light.webp`}
+        data-animated-src={`${base}/assets/fervor/fervors_cycle.webp`}
+        alt=""
+        width="420"
+        height="420"
+        decoding="async"
+      />
+    </div>
+    <div class="wide-wrap journal-hero-content">
+      <span class="rubric">a memória não termina quando a página fecha</span>
+      <h1 id="journal-hero-title">DIÁRIO <i>DA</i><br />EMBERLINE</h1>
+      <p>Um arquivo privado para os vestígios da sua travessia. Nenhuma nota cria cânone. Nenhuma descoberta concede poder.</p>
+      <a href="#journal-title">Abrir o diário <span aria-hidden="true">↓</span></a>
+    </div>
+  </section>
+
+  <EmberlineJournal realms={journalRealms} fragments={emberlineFragments} base={base} />
+</BaseLayout>
+
+<script>
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function syncJournalFervors() {
+    const mark = document.querySelector<HTMLImageElement>('[data-journal-fervors]');
+    if (!mark) return;
+    const saveData = Boolean((navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData);
+    const serene = document.documentElement.dataset.rocMotion === 'serene';
+    const animatedSrc = mark.dataset.animatedSrc;
+    const staticSrc = mark.dataset.staticSrc;
+    if (!animatedSrc || !staticSrc) return;
+    const target = reducedMotion.matches || saveData || serene ? staticSrc : animatedSrc;
+    if (mark.src !== new URL(target, window.location.href).href) mark.src = target;
+  }
+
+  syncJournalFervors();
+  document.addEventListener('astro:page-load', syncJournalFervors);
+  window.addEventListener('roc:preferences-updated', syncJournalFervors);
+  reducedMotion.addEventListener('change', syncJournalFervors);
+</script>
+
+<style>
+  .journal-hero { position: relative; min-height: min(760px, 86svh); display: grid; place-items: center; overflow: hidden; border-bottom: 1px solid var(--edge); background: radial-gradient(circle at 72% 45%, rgba(201,163,92,.13), transparent 26%), linear-gradient(115deg, #080706 24%, #17120d 68%, #090807); }
+  .journal-hero::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, transparent 0 8.2%, rgba(201,163,92,.025) 8.3% 8.4%); mask-image: linear-gradient(to bottom, transparent, black 30%, black 75%, transparent); }
+  .journal-hero-mark { position: absolute; top: 50%; right: clamp(-9rem, 4vw, 4rem); width: min(58vw, 700px); transform: translateY(-50%); opacity: .28; filter: drop-shadow(0 0 60px rgba(201,163,92,.18)); }
+  .journal-hero-mark img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; }
+  .journal-hero-content { position: relative; z-index: 1; }
+  .journal-hero-content .rubric { color: var(--gold); }
+  .journal-hero h1 { margin-top: 1rem; color: var(--parchment); font-size: clamp(3.2rem, 9vw, 8.4rem); line-height: .84; letter-spacing: -.045em; }
+  .journal-hero h1 i { color: var(--gold); font-size: .34em; font-weight: 400; }
+  .journal-hero p { max-width: 600px; margin: 1.5rem 0; color: var(--parchment-dim); font-size: clamp(1rem, 2vw, 1.25rem); }
+  .journal-hero a { display: inline-flex; gap: 1rem; padding: .8rem 1rem; border: 1px solid rgba(201,163,92,.45); color: var(--gold); font-family: var(--font-display); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; }
+  @media (max-width: 700px) { .journal-hero { min-height: 68svh; } .journal-hero-mark { right: -30%; width: 100vw; opacity: .13; } }
+</style>

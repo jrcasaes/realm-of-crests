@@ -1,5 +1,35 @@
 # Realm of Crests — Registro de versões do site
 
+## v1.2.13 — 2026-07-21
+
+Status: **Fase 6.1 e atualização visual 18/19 do Atlas validadas em prévia pública; integração na `main` pendente**.
+
+- Integra o Mapa Canônico do Continente v1.1 como errata cartográfica derivada do cânone consolidado.
+- Corrige exclusivamente o verbete Woundlands; geografia, rotas, marcadores e enquadramento permanecem inalterados.
+- Regenera apenas os derivados WebP do mapa e preserva os panoramas territoriais.
+- Substitui exclusivamente no Atlas 18 emblemas por derivados WebP 256 × 256 com transparência; os emblemas gerais do site permanecem intactos.
+- Mantém Athlétia exatamente como aprovado e preserva temporariamente o emblema opaco anterior de Botáfia, pendente de reexportação íntegra.
+- Restaura as margens responsivas do herói do Diário.
+- Normaliza referências técnicas para Lore Master v3.0.6, Dossiê v2.6, CC-27 v1.3 e CC-31 v1.0.
+
+Gate local: **PASS** — Fases 0–6, build de 48 páginas e auditoria do artefato aprovados.
+
+Verificação pública dos emblemas transparentes: **PASS** — 19/19 estados carregados corretamente; 18/19 com transparência e Botáfia preservada como exceção opaca declarada.
+
+## v1.2.12 — 2026-07-19
+
+Status: **superada em preview pela v1.2.13; não integrada à `main`**.
+
+- Ativa os masters SVG, os derivados monocromáticos e os PDFs técnicos v1.0 dos oito Fervores.
+- Sincroniza os dois ponteiros públicos do site com o `roc-source-registry v1.2.12`.
+- Remove o bloqueio acidental de indexação e acrescenta URL canônica a todas as páginas.
+- Introduz um gate local repetível para os 19 Reinos, 19 Guardiões, 57 hotspots, CC-28C, CC-31 e ativos vetoriais.
+- Publica o manifesto operacional v1.2.12 sem declarar antecipadamente a verificação pública.
+
+Gate local: **PASS** — validação de conteúdo íntegra e 46 páginas compiladas.
+
+Verificação pública: **PENDENTE** — somente após aprovação e integração na `main`.
+
 ## v1.2.11 — 2026-07-19
 
 Status: **publicado e verificado**.

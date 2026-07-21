@@ -1,6 +1,0 @@
-# MODO PRÉ-LANÇAMENTO — bloqueia todos os buscadores.
-# No lançamento: substitua o conteúdo deste arquivo por:
-#   User-agent: *
-#   Allow: /
-User-agent: *
-Disallow: /

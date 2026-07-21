@@ -6,11 +6,11 @@ import sources from '../data/sources.json';
 
 const a = sources.authority;
 
-export const LORE_MASTER = a.loreMaster.version_at_sync;        // ex.: "3.0.4"
-export const DOSSIER = a.guardiansDossier.version_at_sync;      // ex.: "2.4"
+export const LORE_MASTER = a.loreMaster.version_at_sync;        // ex.: "3.0.6"
+export const DOSSIER = a.guardiansDossier.version_at_sync;      // ex.: "2.6"
 
 // Rótulos prontos, em minúsculas (registro editorial das rubricas)
-export const canonLabel = `canon v${LORE_MASTER}`;              // "canon v3.0.4"
+export const canonLabel = `canon v${LORE_MASTER}`;              // "canon v3.0.6"
 export const loreMasterLabel = `lore master canon v${LORE_MASTER}`;
 export const dossierLabel = `dossiê dos guardiões v${DOSSIER}`;
 
