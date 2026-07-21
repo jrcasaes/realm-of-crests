@@ -1,5 +1,15 @@
 # Realm of Crests — Registro de versões do site
 
+## v1.2.14 — 2026-07-21
+
+Status: **publicada e verificada em produção; Atlas concluído com 19/19 emblemas transparentes**.
+
+- Substitui exclusivamente o emblema opaco temporário de Botáfia no Atlas por um derivado WebP transparente 256 × 256 do PNG íntegro aprovado.
+- Preserva os outros 18 emblemas, panoramas, mapa, componentes, rotas e conteúdo canônico.
+
+Verificação pública: **PASS** — Botáfia selecionada no Atlas canônico; emblema completo em 256 × 256, renderizado em 94 × 94, sem imagem quebrada ou overflow no desktop observado.
+
+
 ## v1.2.13 — 2026-07-21
 
 Status: **publicada e verificada em produção; Botáfia permanece como exceção opaca temporária**.
