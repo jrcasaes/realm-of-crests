@@ -18,16 +18,17 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       const params = new URLSearchParams(location.search);
       const requested = Number(params.get('vp'));
       const width = allowed.has(requested) ? requested : 320;
+      const page = params.get('page') === 'diario' ? 'diario' : 'atlas';
       const run = params.get('run') || 'qa';
       const base = document.querySelector('.qa-responsive').dataset.base;
       const frame = document.createElement('iframe');
       frame.dataset.qaViewport = String(width);
-      frame.title = `Atlas em ${width} pixels`;
-      frame.src = `${base}/atlas/?qa=responsive-${width}&run=${encodeURIComponent(run)}`;
+      frame.title = `${page === 'diario' ? 'Diário' : 'Atlas'} em ${width} pixels`;
+      frame.src = `${base}/${page}/?qa=responsive-${width}&run=${encodeURIComponent(run)}`;
       frame.style.width = `${width}px`;
       frame.style.height = '1050px';
       frame.addEventListener('load', () => {
-        document.getElementById('qa-status').textContent = `Atlas renderizado em ${width} px`;
+        document.getElementById('qa-status').textContent = `${page === 'diario' ? 'Diário' : 'Atlas'} renderizado em ${width} px`;
       }, { once: true });
       document.getElementById('qa-stage').append(frame);
     </script>
