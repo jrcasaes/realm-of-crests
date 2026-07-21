@@ -2,7 +2,7 @@
 
 ## v1.2.13 — 2026-07-21
 
-Status: **Fase 6.1 validada em branch; atualização visual 18/19 do Atlas em validação pública**.
+Status: **Fase 6.1 e atualização visual 18/19 do Atlas validadas em prévia pública; integração na `main` pendente**.
 
 - Integra o Mapa Canônico do Continente v1.1 como errata cartográfica derivada do cânone consolidado.
 - Corrige exclusivamente o verbete Woundlands; geografia, rotas, marcadores e enquadramento permanecem inalterados.
@@ -14,7 +14,7 @@ Status: **Fase 6.1 validada em branch; atualização visual 18/19 do Atlas em va
 
 Gate local: **PASS** — Fases 0–6, build de 48 páginas e auditoria do artefato aprovados.
 
-Verificação pública dos emblemas transparentes: **PENDENTE** — será executada após o push na prévia isolada da Fase 6.
+Verificação pública dos emblemas transparentes: **PASS** — 19/19 estados carregados corretamente; 18/19 com transparência e Botáfia preservada como exceção opaca declarada.
 
 ## v1.2.12 — 2026-07-19
 

@@ -34,7 +34,7 @@
     "athletiaTreatment": "PRESERVED_AS_APPROVED",
     "botafiaStatus": "PENDING_INTEGRAL_TRANSPARENT_SOURCE",
     "generalSiteEmblemsChanged": false,
-    "verification": "PENDING_PUBLIC_PREVIEW"
+    "verification": "PASS_PUBLIC_PREVIEW_18_OF_19"
   },
   "cc28c": {
     "status": "INCORPORATED_AND_REQUIRED",
@@ -88,6 +88,9 @@
       "atlasTransitionRemigiaVictoria": "PASS",
       "mobileBreakpointContracts": "PASS",
       "atlasColdFirstHoverVictoria": "PASS_1286MS_REMOTE_END_TO_END",
+      "atlasEmblemStateSwap": "PASS_19_OF_19",
+      "atlasTransparentAssets": "PASS_18_OF_19",
+      "botafiaLegacyOpaqueException": "PASS_DECLARED",
       "applicationConsoleErrors": 0
     }
   },
@@ -96,9 +99,9 @@
     "canonicalLinks": "ENABLED"
   },
   "deployment": {
-    "github": "PENDING_ATLAS_EMBLEMS_18_OF_19_QA",
+    "github": "DEPLOYED_PHASE_6_PREVIEW_RUN_16_PASS",
     "pullRequest": 8,
-    "draft": true,
+    "draft": false,
     "mainInvolved": false
   },
   "publicMetadata": "SANITIZED_NO_PRIVATE_DRIVE_IDS",
