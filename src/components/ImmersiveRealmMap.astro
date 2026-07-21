@@ -706,7 +706,7 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
   .atlas-command-status { text-align: right; }
   .atlas-command-status span,
   .atlas-command-status strong { display: block; }
-  .atlas-command-status span { font-family: var(--font-display); font-size: .55rem; letter-spacing: .22em; color: var(--parchment-faint); text-transform: uppercase; }
+  .atlas-command-status span { font-family: var(--font-display); font-size: .64rem; letter-spacing: .18em; color: var(--parchment-faint); text-transform: uppercase; }
   .atlas-command-status strong { margin-top: .2rem; font-family: var(--font-display); font-size: .72rem; letter-spacing: .16em; color: var(--amber); }
 
   .atlas-workspace { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(330px, .62fr); }
@@ -781,7 +781,7 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
     color: var(--parchment);
     background: rgba(8, 7, 6, .94);
     box-shadow: 0 8px 20px rgba(0, 0, 0, .55);
-    font-size: .55rem;
+    font-size: .64rem;
     font-weight: 600;
     letter-spacing: .09em;
     line-height: 1.25;
@@ -852,7 +852,7 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
     color: var(--parchment-dim);
     background: rgba(8, 7, 6, .78);
     font-family: var(--font-display);
-    font-size: .5rem;
+    font-size: .62rem;
     letter-spacing: .14em;
   }
   .touch-instruction { display: none; }
@@ -875,7 +875,7 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
   }
   .atlas-territory-list small,
   .atlas-territory-list strong { display: block; }
-  .atlas-territory-list small { margin-bottom: .22rem; color: var(--parchment-faint); font-family: var(--font-display); font-size: .54rem; letter-spacing: .18em; }
+  .atlas-territory-list small { margin-bottom: .22rem; color: var(--parchment-faint); font-family: var(--font-display); font-size: .63rem; letter-spacing: .14em; }
   .atlas-territory-list strong { overflow: hidden; font-family: var(--font-display); font-size: .62rem; letter-spacing: .08em; text-overflow: ellipsis; white-space: nowrap; }
   .atlas-territory-list button:hover,
   .atlas-territory-list button[aria-selected='true'] { color: var(--parchment); background: rgba(201, 163, 92, .1); box-shadow: inset 0 -2px var(--gold); }
@@ -893,7 +893,7 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
   .atlas-dossier-panorama { display: block; width: 100%; height: 100%; object-fit: cover; }
   .atlas-dossier-visual-wash { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(8,7,6,.08), rgba(8,7,6,.15) 42%, rgba(8,7,6,.94)); }
   .atlas-dossier-emblem { position: absolute; left: 1rem; bottom: 1rem; width: clamp(64px, 8vw, 94px); height: auto; aspect-ratio: 1; object-fit: contain; filter: drop-shadow(0 7px 16px rgba(0,0,0,.8)); }
-  .atlas-dossier-visual figcaption { position: absolute; z-index: 3; right: .8rem; bottom: .55rem; max-width: 54%; color: rgba(230,217,184,.68); font-family: var(--font-display); font-size: .47rem; letter-spacing: .13em; text-align: right; }
+  .atlas-dossier-visual figcaption { position: absolute; z-index: 3; right: .8rem; bottom: .55rem; max-width: 62%; color: rgba(230,217,184,.74); font-family: var(--font-display); font-size: .62rem; letter-spacing: .1em; text-align: right; }
   .atlas-dossier-body { padding: 1.35rem; }
   .atlas-dossier-heading .rubric { display: block; margin-bottom: .45rem; color: var(--gold); }
   .atlas-dossier-heading h3 { color: var(--parchment); font-size: clamp(1.25rem, 2.1vw, 1.8rem); letter-spacing: .08em; }
@@ -901,7 +901,7 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
 
   .atlas-dossier-ledger { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin: 1.25rem 0; border: 1px solid rgba(201, 163, 92, .22); background: rgba(201, 163, 92, .2); }
   .atlas-dossier-ledger > div { min-width: 0; padding: .7rem .75rem; background: rgba(15, 12, 9, .97); }
-  .atlas-dossier-ledger dt { color: var(--parchment-faint); font-family: var(--font-display); font-size: .5rem; letter-spacing: .17em; text-transform: uppercase; }
+  .atlas-dossier-ledger dt { color: var(--parchment-faint); font-family: var(--font-display); font-size: .62rem; letter-spacing: .13em; text-transform: uppercase; }
   .atlas-dossier-ledger dd { margin: .25rem 0 0; color: var(--parchment); font-size: .77rem; line-height: 1.32; }
 
   .atlas-dossier-lore { padding: 1rem 0; border-top: 1px solid rgba(201, 163, 92, .2); border-bottom: 1px solid rgba(201, 163, 92, .2); }
@@ -910,15 +910,15 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
   .atlas-dossier-lore p { display: -webkit-box; overflow: hidden; margin: .65rem 0 0; color: var(--parchment-dim); font-size: .84rem; line-height: 1.42; -webkit-box-orient: vertical; -webkit-line-clamp: 4; }
 
   .atlas-dossier-actions { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; margin-top: 1.15rem; }
-  .atlas-dossier-actions a { padding: .7rem .55rem; border: 1px solid rgba(201, 163, 92, .38); color: var(--gold); background: rgba(201, 163, 92, .035); font-family: var(--font-display); font-size: .54rem; letter-spacing: .11em; text-align: center; text-transform: uppercase; }
+  .atlas-dossier-actions a { padding: .7rem .55rem; border: 1px solid rgba(201, 163, 92, .38); color: var(--gold); background: rgba(201, 163, 92, .035); font-family: var(--font-display); font-size: .63rem; letter-spacing: .09em; text-align: center; text-transform: uppercase; }
   .atlas-dossier-actions a:first-child { color: #170e04; border-color: var(--gold); background: var(--gold); }
   .atlas-dossier-actions a:hover { color: var(--parchment); border-color: var(--amber); background: rgba(201, 163, 92, .12); }
 
   .atlas-dossier-sequence { display: flex; justify-content: space-between; gap: .6rem; margin-top: 1rem; }
-  .atlas-dossier-sequence button { padding: .3rem 0; border: 0; color: var(--parchment-faint); background: none; cursor: pointer; font-family: var(--font-display); font-size: .52rem; letter-spacing: .08em; text-transform: uppercase; }
+  .atlas-dossier-sequence button { padding: .3rem 0; border: 0; color: var(--parchment-faint); background: none; cursor: pointer; font-family: var(--font-display); font-size: .62rem; letter-spacing: .07em; text-transform: uppercase; }
   .atlas-dossier-sequence button:hover { color: var(--amber); }
 
-  .atlas-coordinate-line { display: flex; justify-content: space-between; gap: 1rem; padding: .7rem 1rem; border-top: 1px solid var(--atlas-line); color: var(--parchment-faint); background: #080706; font-family: var(--font-display); font-size: .5rem; letter-spacing: .17em; }
+  .atlas-coordinate-line { display: flex; justify-content: space-between; gap: 1rem; padding: .7rem 1rem; border-top: 1px solid var(--atlas-line); color: var(--parchment-faint); background: #080706; font-family: var(--font-display); font-size: .62rem; letter-spacing: .13em; }
 
   @media (max-width: 1050px) {
     .atlas-workspace { grid-template-columns: 1fr; }

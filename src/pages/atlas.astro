@@ -4,6 +4,7 @@ import ImmersiveRealmMap from '../components/ImmersiveRealmMap.astro';
 import realms from '../data/realms.json';
 import atlasHotspots from '../data/atlas-hotspots.json';
 import { guardianRoster } from '../lib/guardians.js';
+import ContinuityEcho from '../components/ContinuityEcho.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const realmsBySlug = new Map(realms.map((realm) => [realm.slug, realm]));
@@ -40,6 +41,8 @@ const atlasEntries = atlasHotspots.map((hotspot) => {
       <a href="#atlas-explorer">Adentrar o Atlas <span aria-hidden="true">↓</span></a>
     </div>
   </section>
+
+  <ContinuityEcho mode="atlas" />
 
   <div class="wide-wrap atlas-experience-wrap">
     <ImmersiveRealmMap entries={atlasEntries} base={base} />

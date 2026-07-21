@@ -4,6 +4,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import RealmPanorama from '../../components/RealmPanorama.astro';
 import realms from '../../data/realms.json';
 import { fervorSignature, parseFervorField } from '../../lib/fervor.js';
+import ContinuityEcho from '../../components/ContinuityEcho.astro';
 
 export function getStaticPaths() {
   return realms.map((realm) => ({
@@ -76,6 +77,8 @@ const next = realms[(idx + 1) % realms.length];
               <dd>{realm.gravity}</dd>
             </div>
           </dl>
+
+          <ContinuityEcho currentRealm={realm} mode="realm" />
 
           <div class="layers">
             <table>

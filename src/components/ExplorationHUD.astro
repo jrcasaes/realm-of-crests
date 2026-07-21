@@ -1,11 +1,16 @@
 ---
 import realms from '../data/realms.json';
+import { parseFervorField } from '../lib/fervor.js';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const registry = realms
   .slice()
   .sort((a, b) => a.order - b.order)
-  .map(({ slug, realm, order }) => ({ slug, realm, order, href: `${base}/reinos/${slug}/` }));
+  .map(({ slug, realm, order, guardian, fervor }) => {
+    const dominant = parseFervorField(fervor).find((entry) => entry.role === 'dominante') || parseFervorField(fervor)[0];
+    const guardianSlug = guardian.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/\s+/g, '-');
+    return { slug, realm, order, guardian, guardianSlug, dominantFervor: dominant?.id, dominantLabel: dominant?.label, href: `${base}/reinos/${slug}/` };
+  });
 ---
 
 <aside
@@ -43,6 +48,12 @@ const registry = realms
     <p class="exploration-intro">
       Sua jornada fica somente neste navegador. Nenhuma conta, envio ou rastreamento.
     </p>
+
+    <a class="exploration-first-passage" href={`${base}/#primeira-travessia`} data-first-passage-link>
+      <span aria-hidden="true">⌁</span>
+      <span><strong data-first-passage-label>Primeira travessia opcional</strong><small data-first-passage-copy>conecte Atlas, Guardião, Fervor e Diário</small></span>
+      <i aria-hidden="true">→</i>
+    </a>
 
     <div class="exploration-meter" aria-live="polite">
       <strong><span data-exploration-count>0</span> de 19</strong>
@@ -95,12 +106,14 @@ const registry = realms
 </aside>
 
 <script>
-  type RealmRegistryEntry = { slug: string; realm: string; order: number; href: string };
+  type RealmRegistryEntry = { slug: string; realm: string; order: number; guardian: string; guardianSlug: string; dominantFervor: string; dominantLabel: string; href: string };
   type ExplorationState = { version: 1; visited: string[]; lastRealm: string | null; lastPath: string | null; updatedAt: string | null };
+  type FirstPassageState = { version: 1; status: 'active' | 'completed' | 'skipped'; startedAt: string | null; updatedAt: string };
 
   const STORAGE_KEY = 'roc.exploration.v1';
   const PILGRIMAGE_KEY = 'roc.pilgrimage.v1';
   const JOURNAL_KEY = 'roc.journal.v1';
+  const FIRST_PASSAGE_KEY = 'roc.first-passage.v1';
   const EMPTY_STATE: ExplorationState = { version: 1, visited: [], lastRealm: null, lastPath: null, updatedAt: null };
 
   function readExplorationState(registry: RealmRegistryEntry[]): ExplorationState {
@@ -126,6 +139,17 @@ const registry = realms
 
   function writeExplorationState(state: ExplorationState) {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch { /* armazenamento pode estar indisponível */ }
+  }
+
+  function readFirstPassageState(): FirstPassageState | null {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(FIRST_PASSAGE_KEY) || 'null');
+      return parsed?.version === 1 ? parsed : null;
+    } catch { return null; }
+  }
+
+  function writeFirstPassageState(state: FirstPassageState) {
+    try { localStorage.setItem(FIRST_PASSAGE_KEY, JSON.stringify(state)); } catch { /* armazenamento pode estar indisponível */ }
   }
 
   function renderExplorationState() {
@@ -176,6 +200,58 @@ const registry = realms
     root.classList.toggle('has-pilgrimage', Boolean(primary));
   }
 
+  function renderFirstPassageState() {
+    const root = document.querySelector<HTMLElement>('[data-exploration-hud]');
+    if (!root) return;
+    const registry = JSON.parse(root.dataset.realms || '[]') as RealmRegistryEntry[];
+    const exploration = readExplorationState(registry);
+    const lastEntry = registry.find(({ slug }) => slug === exploration.lastRealm);
+    const link = root.querySelector<HTMLAnchorElement>('[data-first-passage-link]');
+    const label = root.querySelector<HTMLElement>('[data-first-passage-label]');
+    const copy = root.querySelector<HTMLElement>('[data-first-passage-copy]');
+    if (!link || !label || !copy) return;
+    const base = root.dataset.base || '';
+    let state = readFirstPassageState();
+    const path = window.location.pathname;
+
+    if (state?.status === 'active' && path.includes('/diario/')) {
+      state = { ...state, status: 'completed', updatedAt: new Date().toISOString() };
+      writeFirstPassageState(state);
+    }
+    root.classList.toggle('has-first-passage', state?.status === 'active');
+    root.classList.toggle('completed-first-passage', state?.status === 'completed');
+
+    if (!state || state.status === 'skipped') {
+      link.href = `${base}/#primeira-travessia`;
+      label.textContent = 'Primeira travessia opcional';
+      copy.textContent = 'conecte Atlas, Guardião, Fervor e Diário';
+      return;
+    }
+    if (state.status === 'completed') {
+      link.href = `${base}/diario/`;
+      label.textContent = 'Primeira travessia concluída';
+      copy.textContent = 'o fio permanece no Diário da Emberline';
+      return;
+    }
+    if (!lastEntry) {
+      link.href = `${base}/atlas/#atlas-explorer`;
+      label.textContent = 'I · Encontrar um Reino';
+      copy.textContent = 'escolha o primeiro vestígio no Atlas';
+    } else if (path.includes('/sistemas/fervor/')) {
+      link.href = `${base}/diario/`;
+      label.textContent = 'IV · Guardar a memória';
+      copy.textContent = 'feche a travessia guiada no Diário';
+    } else if (path.includes(`/guardioes/${lastEntry.guardianSlug}/`)) {
+      link.href = `${base}/sistemas/fervor/#fervor-${lastEntry.dominantFervor}`;
+      label.textContent = 'III · Ler o Fervor';
+      copy.textContent = `${lastEntry.dominantLabel} atravessa ${lastEntry.guardian}`;
+    } else {
+      link.href = `${base}/guardioes/${lastEntry.guardianSlug}/`;
+      label.textContent = 'II · Encarar o Guardião';
+      copy.textContent = `${lastEntry.guardian} manifesta ${lastEntry.realm}`;
+    }
+  }
+
   function renderJournalState() {
     const root = document.querySelector<HTMLElement>('[data-exploration-hud]');
     if (!root) return;
@@ -202,6 +278,7 @@ const registry = realms
     state.updatedAt = new Date().toISOString();
     writeExplorationState(state);
     renderExplorationState();
+    renderFirstPassageState();
   }
 
   function bindExplorationHUD() {
@@ -212,6 +289,7 @@ const registry = realms
     else renderExplorationState();
     renderPilgrimageState();
     renderJournalState();
+    renderFirstPassageState();
     if (root.dataset.bound) return;
     root.dataset.bound = 'true';
     const trigger = root.querySelector<HTMLButtonElement>('.exploration-trigger')!;
@@ -285,7 +363,8 @@ const registry = realms
     window.addEventListener('roc:exploration-reset', renderExplorationState);
     window.addEventListener('roc:pilgrimage-updated', renderPilgrimageState);
     window.addEventListener('roc:journal-updated', renderJournalState);
-    window.addEventListener('storage', () => { renderExplorationState(); renderPilgrimageState(); renderJournalState(); });
+    window.addEventListener('roc:first-passage-updated', renderFirstPassageState);
+    window.addEventListener('storage', () => { renderExplorationState(); renderPilgrimageState(); renderJournalState(); renderFirstPassageState(); });
   }
   document.addEventListener('astro:page-load', bindExplorationHUD);
 </script>
@@ -306,6 +385,14 @@ const registry = realms
   .exploration-close { width: 32px; height: 32px; border: 1px solid var(--edge); color: var(--parchment-dim); background: transparent; font: 1.15rem/1 var(--font-body); cursor: pointer; }
   .exploration-close:hover { color: var(--parchment); border-color: var(--gold); }
   .exploration-intro { position: relative; margin: 1rem 0; color: var(--parchment-dim); font-size: .82rem; line-height: 1.35; }
+  .exploration-first-passage { position: relative; display: grid; grid-template-columns: 26px 1fr auto; gap: .55rem; align-items: center; margin-bottom: .8rem; padding: .62rem .7rem; border: 1px solid var(--edge); color: var(--parchment-dim); background: rgba(0,0,0,.18); }
+  .exploration-first-passage > span:first-child { color: var(--gold); font-size: 1.1rem; }
+  .exploration-first-passage > span:nth-child(2) { display: grid; line-height: 1.2; }
+  .exploration-first-passage strong { color: var(--parchment); font-size: .76rem; font-weight: 500; }
+  .exploration-first-passage small { margin-top: .15rem; color: var(--parchment-faint); font-size: .64rem; }
+  .exploration-first-passage i { color: var(--gold); font-style: normal; }
+  .has-first-passage .exploration-first-passage { border-color: rgba(201,163,92,.52); background: linear-gradient(90deg, rgba(201,163,92,.1), rgba(0,0,0,.18)); }
+  .completed-first-passage .exploration-first-passage { border-color: rgba(255,122,61,.34); }
   .exploration-meter { position: relative; display: grid; grid-template-columns: auto 1fr; gap: .05rem .55rem; align-items: baseline; }
   .exploration-meter strong { color: var(--gold); font-family: var(--font-display); font-size: .78rem; }
   .exploration-meter > span:not(.exploration-bar) { color: var(--parchment-dim); font-size: .76rem; }

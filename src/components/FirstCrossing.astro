@@ -1,0 +1,91 @@
+---
+interface Props { base: string }
+const { base } = Astro.props;
+---
+
+<div class="first-crossing" id="primeira-travessia" data-first-crossing data-base={base}>
+  <button class="first-crossing-open" type="button" data-first-crossing-open>
+    <span>Primeira Travessia</span>
+    <small>rota guiada opcional · 4 passagens</small>
+  </button>
+
+  <dialog data-first-crossing-dialog aria-labelledby="first-crossing-title">
+    <form method="dialog">
+      <button class="first-crossing-close" value="cancel" aria-label="Fechar">×</button>
+      <span class="rubric">um fio pelo Codex · sem caminho obrigatório</span>
+      <h2 id="first-crossing-title">PRIMEIRA TRAVESSIA</h2>
+      <p>Uma rota breve conecta território, Guardião, Fervor e memória. Você pode abandoná-la a qualquer momento; sua escolha fica somente neste navegador.</p>
+      <ol>
+        <li><span>I</span><div><strong>Encontre um Reino</strong><small>O Atlas registra o primeiro vestígio.</small></div></li>
+        <li><span>II</span><div><strong>Encare seu Guardião</strong><small>A soberania ganha presença e propósito.</small></div></li>
+        <li><span>III</span><div><strong>Leia seu Fervor</strong><small>O Códice revela a força que atravessa o domínio.</small></div></li>
+        <li><span>IV</span><div><strong>Guarde a memória</strong><small>O Diário devolve a descoberta à sua travessia.</small></div></li>
+      </ol>
+      <div class="first-crossing-actions">
+        <button type="button" data-first-crossing-start>Iniciar pelo Atlas <span aria-hidden="true">→</span></button>
+        <button type="button" data-first-crossing-skip>Continuar sem guia</button>
+      </div>
+    </form>
+  </dialog>
+</div>
+
+<script>
+  type FirstCrossingState = { version: 1; status: 'active' | 'completed' | 'skipped'; startedAt: string | null; updatedAt: string };
+  const FIRST_CROSSING_KEY = 'roc.first-passage.v1';
+
+  function bindFirstCrossing() {
+    const root = document.querySelector<HTMLElement>('[data-first-crossing]');
+    if (!root || root.dataset.bound) return;
+    root.dataset.bound = 'true';
+    const dialog = root.querySelector<HTMLDialogElement>('[data-first-crossing-dialog]')!;
+    const opener = root.querySelector<HTMLButtonElement>('[data-first-crossing-open]')!;
+    const base = root.dataset.base || '';
+    let state: FirstCrossingState | null = null;
+    try { state = JSON.parse(localStorage.getItem(FIRST_CROSSING_KEY) || 'null'); } catch { /* memória local indisponível */ }
+    if (state?.version === 1 && state.status === 'active') {
+      opener.querySelector('span')!.textContent = 'Retomar Primeira Travessia';
+      opener.querySelector('small')!.textContent = 'a bússola continua no registro do viajante';
+    }
+    opener.addEventListener('click', () => dialog.showModal());
+    root.querySelector<HTMLButtonElement>('[data-first-crossing-start]')?.addEventListener('click', () => {
+      const now = new Date().toISOString();
+      const next: FirstCrossingState = { version: 1, status: 'active', startedAt: state?.startedAt || now, updatedAt: now };
+      try { localStorage.setItem(FIRST_CROSSING_KEY, JSON.stringify(next)); } catch { /* memória local indisponível */ }
+      window.dispatchEvent(new CustomEvent('roc:first-passage-updated', { detail: next }));
+      window.location.href = `${base}/atlas/#atlas-explorer`;
+    });
+    root.querySelector<HTMLButtonElement>('[data-first-crossing-skip]')?.addEventListener('click', () => {
+      const next: FirstCrossingState = { version: 1, status: 'skipped', startedAt: state?.startedAt || null, updatedAt: new Date().toISOString() };
+      try { localStorage.setItem(FIRST_CROSSING_KEY, JSON.stringify(next)); } catch { /* memória local indisponível */ }
+      dialog.close();
+      window.dispatchEvent(new CustomEvent('roc:first-passage-updated', { detail: next }));
+    });
+    if (window.location.hash === '#primeira-travessia' && !dialog.open) dialog.showModal();
+  }
+  document.addEventListener('astro:page-load', bindFirstCrossing);
+</script>
+
+<style>
+  .first-crossing { display: inline-flex; }
+  .first-crossing-open { display: grid; min-width: 196px; padding: .72rem .9rem; border: 1px solid rgba(230,217,184,.4); color: var(--parchment); background: rgba(12,10,8,.62); cursor: pointer; text-align: left; backdrop-filter: blur(10px); }
+  .first-crossing-open span { font-family: var(--font-display); font-size: .64rem; letter-spacing: .13em; text-transform: uppercase; }
+  .first-crossing-open small { margin-top: .2rem; color: var(--parchment-faint); font-size: .64rem; }
+  .first-crossing-open:hover { border-color: var(--gold); }
+  dialog { width: min(720px, calc(100% - 2rem)); padding: 0; border: 1px solid rgba(201,163,92,.55); color: var(--parchment); background: linear-gradient(145deg, #211b14, #0c0a08); box-shadow: 0 30px 100px #000; }
+  dialog::backdrop { background: rgba(0,0,0,.78); backdrop-filter: blur(7px); }
+  dialog form { position: relative; padding: clamp(1.5rem, 5vw, 3.2rem); }
+  .first-crossing-close { position: absolute; top: .8rem; right: .8rem; width: 34px; height: 34px; border: 1px solid var(--edge); color: var(--parchment-dim); background: transparent; cursor: pointer; }
+  dialog .rubric { color: var(--gold); }
+  dialog h2 { margin-top: .55rem; color: var(--parchment); font-size: clamp(1.7rem, 5vw, 3rem); }
+  dialog > form > p { max-width: 62ch; margin-top: .8rem; color: var(--parchment-dim); }
+  dialog ol { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin: 2rem 0; padding: 1px; list-style: none; background: var(--edge); }
+  dialog li { min-height: 150px; padding: 1rem; background: var(--codex); }
+  dialog li > span { color: var(--gold); font-family: var(--font-display); font-size: .65rem; }
+  dialog li div { display: grid; margin-top: 2rem; }
+  dialog li strong { color: var(--parchment); font-size: .82rem; font-weight: 500; }
+  dialog li small { margin-top: .35rem; color: var(--parchment-faint); line-height: 1.35; }
+  .first-crossing-actions { display: flex; flex-wrap: wrap; gap: .7rem; }
+  .first-crossing-actions button { padding: .7rem .9rem; border: 1px solid var(--gold); color: var(--ink); background: var(--gold); cursor: pointer; font-family: var(--font-display); font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; }
+  .first-crossing-actions button:last-child { color: var(--parchment-dim); background: transparent; border-color: var(--edge); }
+  @media (max-width: 680px) { dialog ol { grid-template-columns: 1fr 1fr; } dialog li { min-height: 125px; } }
+</style>

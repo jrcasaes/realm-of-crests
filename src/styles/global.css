@@ -1151,7 +1151,7 @@ section.chapter { padding-block: 1.2rem 2.6rem; }
   grid-row: 1 / span 2;
   align-self: center;
   font-family: var(--font-display);
-  font-size: 0.58rem;
+  font-size: 0.65rem;
   letter-spacing: 0.16em;
   color: var(--parchment-faint);
 }
@@ -1303,7 +1303,7 @@ section.chapter { padding-block: 1.2rem 2.6rem; }
   border: 1px solid rgba(201, 163, 92, 0.38);
   color: var(--gold);
   font-family: var(--font-display);
-  font-size: 0.62rem;
+  font-size: 0.68rem;
   letter-spacing: 0.16em;
   text-align: center;
   text-transform: uppercase;
@@ -1317,7 +1317,7 @@ section.chapter { padding-block: 1.2rem 2.6rem; }
 .sovereign-atlas-note {
   margin: 1rem 0 0;
   text-align: center;
-  font-size: 0.66rem;
+  font-size: 0.72rem;
 }
 
 @media (max-width: 1180px) {

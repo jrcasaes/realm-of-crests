@@ -1,0 +1,106 @@
+---
+interface Props { kind: 'gravity' | 'ascension' }
+const { kind } = Astro.props;
+const gravityStates = [
+  { id: 'constructive', name: 'CONSTRUCTIVE', range: 'contenção', copy: 'O peso edifica: memória, Temple e vontade permanecem alinhados.' },
+  { id: 'catalytic', name: 'CATALYTIC', range: 'liberação', copy: 'O peso acende: energia soberana se expande sob controle e custo crescente.' },
+  { id: 'corrosive', name: 'CORROSIVE', range: 'erosão', copy: 'O peso consome: assimetria e abertura tornam a soberania vulnerável à Ruína.' },
+];
+const ascensionStates = [
+  { id: 'base', name: 'BASE FORM', label: 'equilíbrio', copy: 'Soberania inteira e contida. O estado mais estável não é ausência de poder, mas domínio do próprio fardo.' },
+  { id: 'ignition', name: 'IGNITION', label: 'despertar', copy: 'A primeira desestabilização torna o fardo visível. Expansão começa; estabilidade já tem custo.' },
+  { id: 'rupture', name: 'RUPTURE STATE', label: 'limite natural', copy: 'A contenção alcança seu último estado fixo. Mais pressão não cria um quarto estágio legítimo.' },
+];
+const states = kind === 'gravity' ? gravityStates : ascensionStates;
+---
+
+<section class:list={['system-lens', `lens-${kind}`]} data-system-lens={kind} aria-labelledby={`${kind}-lens-title`}>
+  <header>
+    <span class="rubric">demonstração conceitual · não é escala de poder</span>
+    <h2 id={`${kind}-lens-title`}>{kind === 'gravity' ? 'SINTA A PRESSÃO DO FARDO' : 'ATRAVESSE OS TRÊS ESTADOS'}</h2>
+    <p>{kind === 'gravity' ? 'Mova a pressão para observar como a leitura visual muda entre contenção, liberação e erosão.' : 'Selecione um estado para comparar estabilidade, expansão e custo sem inventar uma progressão além do cânone.'}</p>
+  </header>
+
+  {kind === 'gravity' ? (
+    <div class="gravity-lens-control">
+      <label for="gravity-pressure">Pressão soberana <output data-lens-output>18%</output></label>
+      <input id="gravity-pressure" type="range" min="0" max="100" value="18" step="1" data-gravity-pressure />
+      <div class="gravity-lens-vessel" aria-hidden="true"><i></i><span></span></div>
+    </div>
+  ) : (
+    <div class="ascension-lens-sigil" aria-hidden="true"><i></i><i></i><i></i></div>
+  )}
+
+  <div class="system-lens-states" role="list">
+    {states.map((state, index) => (
+      <button type="button" role="listitem" data-lens-state={state.id} aria-pressed={index === 0 ? 'true' : 'false'}>
+        <span>{String(index + 1).padStart(2, '0')}</span>
+        <strong>{state.name}</strong>
+        <small>{'range' in state ? state.range : state.label}</small>
+      </button>
+    ))}
+  </div>
+  <article aria-live="polite">
+    <span class="rubric" data-lens-label>{'range' in states[0] ? states[0].range : states[0].label}</span>
+    <h3 data-lens-name>{states[0].name}</h3>
+    <p data-lens-copy>{states[0].copy}</p>
+  </article>
+  <p class="system-lens-law">A interface demonstra relações já públicas. Não mede um Guardião, não prevê resultado e não cria estado canônico.</p>
+</section>
+
+<script define:vars={{ kind, states }}>
+  function bindSystemLens() {
+    const root = document.querySelector(`[data-system-lens="${kind}"]`);
+    if (!root || root.dataset.bound) return;
+    root.dataset.bound = '1';
+    const buttons = Array.from(root.querySelectorAll('[data-lens-state]'));
+    const render = (index) => {
+      const state = states[index];
+      buttons.forEach((button, itemIndex) => button.setAttribute('aria-pressed', String(itemIndex === index)));
+      root.dataset.active = state.id;
+      root.querySelector('[data-lens-label]').textContent = state.range || state.label;
+      root.querySelector('[data-lens-name]').textContent = state.name;
+      root.querySelector('[data-lens-copy]').textContent = state.copy;
+    };
+    buttons.forEach((button, index) => button.addEventListener('click', () => render(index)));
+    const range = root.querySelector('[data-gravity-pressure]');
+    range?.addEventListener('input', () => {
+      const value = Number(range.value);
+      root.style.setProperty('--pressure', `${value}%`);
+      root.querySelector('[data-lens-output]').textContent = `${value}%`;
+      render(value < 34 ? 0 : value < 68 ? 1 : 2);
+    });
+    render(0);
+  }
+  document.addEventListener('astro:page-load', bindSystemLens);
+</script>
+
+<style>
+  .system-lens { --pressure: 18%; margin-block: 3rem; padding: clamp(1.4rem, 4vw, 2.5rem); border: 1px solid rgba(201,163,92,.36); background: linear-gradient(145deg, var(--codex-raised), var(--ink)); }
+  .system-lens header { max-width: 760px; }
+  .system-lens .rubric { color: var(--gold); }
+  .system-lens h2 { margin-top: .55rem; color: var(--parchment); font-size: clamp(1.5rem, 3.6vw, 2.7rem); }
+  .system-lens header p { margin-top: .7rem; color: var(--parchment-dim); }
+  .gravity-lens-control { margin-top: 2rem; }
+  .gravity-lens-control label { display: flex; justify-content: space-between; color: var(--parchment); font-size: .8rem; }
+  .gravity-lens-control output { color: var(--gold); font-family: var(--font-display); }
+  .gravity-lens-control input { width: 100%; margin-top: .7rem; accent-color: var(--gold); }
+  .gravity-lens-vessel { position: relative; height: 90px; margin-top: 1rem; overflow: hidden; border: 1px solid var(--edge); background: #080706; }
+  .gravity-lens-vessel i { position: absolute; left: 0; bottom: 0; width: var(--pressure); height: 100%; background: linear-gradient(90deg, rgba(201,163,92,.18), rgba(255,122,61,.35), rgba(132,38,55,.55)); transition: width .25s ease; }
+  .gravity-lens-vessel span { position: absolute; inset: 18px; border: 1px solid color-mix(in srgb, var(--gold) calc(100% - var(--pressure)), var(--crimson)); transform: skewX(calc((var(--pressure) - 50%) / 10)); }
+  .ascension-lens-sigil { display: flex; gap: 1.4rem; align-items: center; justify-content: center; min-height: 130px; margin-top: 1.5rem; }
+  .ascension-lens-sigil i { width: 48px; aspect-ratio: 1; border: 1px solid var(--gold); border-radius: 50%; box-shadow: 0 0 24px rgba(201,163,92,.1); }
+  .ascension-lens-sigil i:nth-child(2) { transform: scale(1.25); box-shadow: inset 0 0 18px rgba(255,122,61,.24), 0 0 28px rgba(255,122,61,.16); }
+  .ascension-lens-sigil i:nth-child(3) { border-style: dashed; transform: scale(1.48); box-shadow: 0 0 34px rgba(132,38,55,.22); }
+  .system-lens-states { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin-top: 1rem; background: var(--edge); }
+  .system-lens-states button { display: grid; min-height: 92px; padding: .8rem; border: 0; color: var(--parchment-dim); background: var(--codex); cursor: pointer; text-align: left; }
+  .system-lens-states button[aria-pressed='true'] { color: var(--parchment); background: linear-gradient(135deg, rgba(201,163,92,.14), var(--codex)); box-shadow: inset 0 -2px var(--gold); }
+  .system-lens-states span { color: var(--gold); font-family: var(--font-display); font-size: .56rem; }
+  .system-lens-states strong { align-self: end; font-family: var(--font-display); font-size: .76rem; letter-spacing: .08em; }
+  .system-lens-states small { color: var(--parchment-faint); }
+  .system-lens > article { margin-top: 1px; padding: 1.3rem; background: rgba(12,10,8,.72); }
+  .system-lens > article h3 { margin-top: .35rem; color: var(--parchment); }
+  .system-lens > article p { margin-top: .5rem; color: var(--parchment-dim); }
+  .system-lens-law { margin: 1rem 0 0; color: var(--parchment-faint); font-size: .72rem; }
+  @media (max-width: 620px) { .system-lens-states { grid-template-columns: 1fr; } }
+</style>

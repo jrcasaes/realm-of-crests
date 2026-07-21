@@ -1,0 +1,147 @@
+---
+import realms from '../data/realms.json';
+import { emberlineFragments } from '../lib/journal.js';
+import { parseFervorField } from '../lib/fervor.js';
+
+interface Props {
+  currentRealm?: any;
+  mode?: 'atlas' | 'realm' | 'guardian';
+}
+
+const { currentRealm = null, mode = 'atlas' } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const path = (name: string) => name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/\s+/g, '-');
+const registry = realms.slice().sort((a, b) => a.order - b.order).map((realm) => {
+  const relations = parseFervorField(realm.fervor);
+  return {
+    slug: realm.slug,
+    realm: realm.realm,
+    guardian: realm.guardian,
+    guardianSlug: path(realm.guardian),
+    essence: realm.essence,
+    dominant: relations.find((entry) => entry.role === 'dominante') || relations[0],
+    secondary: relations.find((entry) => entry.role === 'secundário') || relations[1],
+  };
+});
+const initial = currentRealm ? registry.find((entry) => entry.slug === currentRealm.slug) || registry[0] : registry[0];
+const safeJson = (value: unknown) => JSON.stringify(value).replace(/</g, '\\u003c');
+---
+
+<section class:list={['continuity-echo', `mode-${mode}`]} data-continuity-echo data-current={currentRealm?.slug || ''} data-base={base} aria-labelledby={`continuity-title-${mode}`}>
+  <script type="application/json" data-continuity-realms set:html={safeJson(registry)}></script>
+  <script type="application/json" data-continuity-fragments set:html={safeJson(emberlineFragments)}></script>
+  <header>
+    <div>
+      <span class="rubric">continuidade viva · leitura local</span>
+      <h2 id={`continuity-title-${mode}`}>{mode === 'atlas' ? 'A ROTA RESPONDE À SUA TRAVESSIA' : 'O VESTÍGIO NÃO TERMINA NESTA PÁGINA'}</h2>
+    </div>
+    <p data-continuity-affinity>Sem um Crest de Jornada, a bússola usa apenas os Reinos ainda não registrados.</p>
+  </header>
+
+  <div class="continuity-grid">
+    <article>
+      <span class="rubric">próximo vestígio explicado</span>
+      <h3 data-continuity-realm>{initial.realm}</h3>
+      <p data-continuity-reason>{initial.guardian} manifesta {initial.dominant.label} como Fervor dominante; esta é uma porta de leitura territorial, não uma ordem obrigatória.</p>
+      <div class="continuity-actions">
+        <a href={`${base}/reinos/${initial.slug}/`} data-continuity-realm-link>Entrar no Reino</a>
+        <a href={`${base}/guardioes/${initial.guardianSlug}/`} data-continuity-guardian-link>Encontrar {initial.guardian}</a>
+        <a href={`${base}/sistemas/fervor/#fervor-${initial.dominant.id}`} data-continuity-fervor-link>Ler {initial.dominant.label}</a>
+      </div>
+    </article>
+    <aside data-continuity-fragment hidden>
+      <span class="rubric">fragmento que reaparece</span>
+      <h3 data-continuity-fragment-title></h3>
+      <p data-continuity-fragment-copy></p>
+      <a href={`${base}/diario/#fragments-title`}>Ver no Diário <span aria-hidden="true">→</span></a>
+    </aside>
+  </div>
+  <p class="continuity-disclaimer">As sugestões explicam relações públicas entre Reino, Guardião e Fervor. Não concedem afinidade canônica, poder ou pontuação.</p>
+</section>
+
+<script>
+  type FervorRelation = { id: string; label: string; role: string };
+  type Entry = { slug: string; realm: string; guardian: string; guardianSlug: string; essence: string; dominant: FervorRelation; secondary: FervorRelation };
+  type Fragment = { count: number; title: string; copy: string };
+
+  function bindContinuityEcho() {
+    document.querySelectorAll<HTMLElement>('[data-continuity-echo]:not([data-bound])').forEach((root) => {
+      root.dataset.bound = 'true';
+      const entries = JSON.parse(root.querySelector('[data-continuity-realms]')?.textContent || '[]') as Entry[];
+      const fragments = JSON.parse(root.querySelector('[data-continuity-fragments]')?.textContent || '[]') as Fragment[];
+      const base = root.dataset.base || '';
+      let visited: string[] = [];
+      let primary = '';
+      let secondary = '';
+      try {
+        const exploration = JSON.parse(localStorage.getItem('roc.exploration.v1') || 'null');
+        if (Array.isArray(exploration?.visited)) visited = exploration.visited.filter((slug: unknown) => typeof slug === 'string');
+        const pilgrimage = JSON.parse(localStorage.getItem('roc.pilgrimage.v1') || 'null');
+        if (pilgrimage?.version === 1) { primary = pilgrimage.primary || ''; secondary = pilgrimage.secondary || ''; }
+      } catch { /* leitura local indisponível */ }
+
+      const current = root.dataset.current || '';
+      const pool = entries.filter((entry) => !visited.includes(entry.slug) && entry.slug !== current);
+      const candidates = pool.length ? pool : entries.filter((entry) => entry.slug !== current);
+      const score = (entry: Entry) =>
+        (entry.dominant.id === primary ? 8 : 0) +
+        (entry.secondary.id === primary ? 5 : 0) +
+        (entry.dominant.id === secondary ? 3 : 0) +
+        (entry.secondary.id === secondary ? 2 : 0);
+      const recommended = candidates.slice().sort((a, b) => score(b) - score(a))[0] || entries[0];
+      if (!recommended) return;
+
+      const affinity = root.querySelector<HTMLElement>('[data-continuity-affinity]');
+      if (affinity) affinity.textContent = primary
+        ? `Seu Crest de Jornada (${primary} × ${secondary}) orienta a sugestão sem transformar afinidade em destino.`
+        : 'Sem um Crest de Jornada, a bússola prioriza um Reino ainda não registrado.';
+      root.querySelector<HTMLElement>('[data-continuity-realm]')!.textContent = recommended.realm;
+      const connections = [
+        recommended.dominant.id === primary && `${recommended.dominant.label} é dominante`,
+        recommended.secondary.id === primary && `${recommended.secondary.label} aparece como pressão secundária`,
+        recommended.dominant.id === secondary && `${recommended.dominant.label} ressoa com sua afinidade secundária`,
+      ].filter(Boolean);
+      root.querySelector<HTMLElement>('[data-continuity-reason]')!.textContent = connections.length
+        ? `${recommended.guardian} e ${recommended.realm} entram na rota porque ${connections.join(' e ')}. A relação é explicada; a escolha continua sua.`
+        : `${recommended.realm} ainda não foi registrado nesta travessia. ${recommended.guardian} manifesta ${recommended.dominant.label} como Fervor dominante.`;
+      const realmLink = root.querySelector<HTMLAnchorElement>('[data-continuity-realm-link]')!;
+      realmLink.href = `${base}/reinos/${recommended.slug}/`;
+      const guardianLink = root.querySelector<HTMLAnchorElement>('[data-continuity-guardian-link]')!;
+      guardianLink.href = `${base}/guardioes/${recommended.guardianSlug}/`;
+      guardianLink.textContent = `Encontrar ${recommended.guardian}`;
+      const fervorLink = root.querySelector<HTMLAnchorElement>('[data-continuity-fervor-link]')!;
+      fervorLink.href = `${base}/sistemas/fervor/#fervor-${recommended.dominant.id}`;
+      fervorLink.textContent = `Ler ${recommended.dominant.label}`;
+
+      const awake = fragments.filter((fragment) => visited.length >= fragment.count).at(-1);
+      const fragmentRoot = root.querySelector<HTMLElement>('[data-continuity-fragment]');
+      if (awake && fragmentRoot) {
+        fragmentRoot.hidden = false;
+        fragmentRoot.querySelector<HTMLElement>('[data-continuity-fragment-title]')!.textContent = awake.title;
+        fragmentRoot.querySelector<HTMLElement>('[data-continuity-fragment-copy]')!.textContent = awake.copy;
+      }
+      root.classList.add('is-ready');
+    });
+  }
+  document.addEventListener('astro:page-load', bindContinuityEcho);
+</script>
+
+<style>
+  .continuity-echo { margin-block: clamp(3rem, 7vw, 6rem); padding: clamp(1.4rem, 4vw, 2.5rem); border: 1px solid rgba(201,163,92,.36); background: radial-gradient(circle at 15% 0, rgba(201,163,92,.09), transparent 32%), linear-gradient(145deg, var(--codex-raised), var(--ink)); }
+  .continuity-echo > header { display: grid; grid-template-columns: 1.2fr .8fr; gap: 2rem; align-items: end; }
+  .continuity-echo .rubric { color: var(--gold); }
+  .continuity-echo h2 { margin-top: .55rem; color: var(--parchment); font-size: clamp(1.45rem, 3.4vw, 2.5rem); }
+  .continuity-echo > header > p { margin: 0; color: var(--parchment-dim); font-style: italic; }
+  .continuity-grid { display: grid; grid-template-columns: 1.35fr .65fr; gap: 1px; margin-top: 1.7rem; background: var(--edge); }
+  .continuity-grid > * { padding: 1.3rem; background: rgba(12,10,8,.88); }
+  .continuity-grid h3 { margin-top: .45rem; color: var(--parchment); font-size: 1.35rem; }
+  .continuity-grid p { margin-top: .65rem; color: var(--parchment-dim); }
+  .continuity-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
+  .continuity-actions a, .continuity-grid aside a { padding: .55rem .7rem; border: 1px solid var(--edge); color: var(--gold); font-family: var(--font-display); font-size: .62rem; letter-spacing: .08em; text-transform: uppercase; }
+  .continuity-actions a:first-child { color: var(--ink); background: var(--gold); border-color: var(--gold); }
+  .continuity-grid aside a { display: inline-block; margin-top: .8rem; }
+  .continuity-disclaimer { margin: 1rem 0 0; color: var(--parchment-faint); font-size: .72rem; }
+  .mode-atlas { width: min(1120px, calc(100% - 3rem)); margin-inline: auto; }
+  [data-continuity-fragment][hidden] { display: none; }
+  @media (max-width: 760px) { .continuity-echo > header, .continuity-grid { grid-template-columns: 1fr; } .mode-atlas { width: min(100% - 1.5rem, 1120px); } }
+</style>

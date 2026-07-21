@@ -1,5 +1,18 @@
 # Realm of Crests — Registro de versões do site
 
+## v1.2.15 — 2026-07-21
+
+Status: **Fases 7.0 e 7.1 implementadas em candidato de prévia; integração na `main` pendente de QA e aprovação**.
+
+- Reconhece o Atlas concluído em 19/19 emblemas transparentes e preserva Botáfia sem qualquer alteração visual.
+- Substitui nos fólios territoriais a entrega dos PNGs pesados pelos WebPs responsivos já aprovados.
+- Amplia metadados pequenos do Atlas, bloqueia o lampejo inicial do Diário e acrescenta orçamento para imagens efetivamente referenciadas.
+- Introduz a Primeira Travessia opcional, recomendações narrativas explicadas e reaparecimento contextual dos Fragmentos.
+- Conecta Atlas, Reinos, Guardiões, Fervores e Diário sem pontuação, poder ou alteração do cânone.
+- Acrescenta demonstrações conceituais leves de Sovereign Gravity e Ascensão; o Códice 8 × 5 permanece como demonstração de Fervor.
+
+Gate local e QA: **PENDENTES**.
+
 ## v1.2.14 — 2026-07-21
 
 Status: **publicada e verificada em produção; Atlas concluído com 19/19 emblemas transparentes**.

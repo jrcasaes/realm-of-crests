@@ -5,6 +5,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const first = realms[0];
 const guardianSlug = (name: string) =>
   name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+const panoramaStem = (asset: string) => asset.replace(/\.png$/i, '');
+const panoramaPath = (asset: string, width: 960 | 1536) => `${base}/assets/atlas/realms/${width}/${panoramaStem(asset)}.webp`;
 ---
 
 <section class="sovereign-atlas" id="atlas-soberano" aria-label="Atlas visual dos dezenove Reinos">
@@ -30,7 +32,7 @@ const guardianSlug = (name: string) =>
           data-epithet={realm.epithet}
           data-temple={realm.temple}
           data-biome={realm.biome}
-          data-panorama={realm.panoramaAsset}
+          data-panorama={panoramaStem(realm.panoramaAsset)}
         >
           <img
             src={`${base}/assets/emblems/emblem_${realm.slug}.webp`}
@@ -55,10 +57,12 @@ const guardianSlug = (name: string) =>
     <figure class="realm-stage-frame">
       <img
         id="realm-stage-image"
-        src={`${base}/assets/realms/${first.panoramaAsset}`}
+        src={panoramaPath(first.panoramaAsset, 1536)}
+        srcset={`${panoramaPath(first.panoramaAsset, 960)} 960w, ${panoramaPath(first.panoramaAsset, 1536)} 1536w`}
+        sizes="(max-width: 980px) 100vw, min(1120px, calc(100vw - 3rem))"
         alt={`Panorama editorial habitado de ${first.trueName}`}
-        width="1915"
-        height="821"
+        width="1536"
+        height="658"
         fetchpriority="high"
         decoding="async"
       />
@@ -127,7 +131,8 @@ const guardianSlug = (name: string) =>
       const choice = choices[current];
       const data = choice.dataset;
       const token = ++request;
-      const nextSrc = `${base}/assets/realms/${data.panorama}`;
+      const nextSrc = `${base}/assets/atlas/realms/1536/${data.panorama}.webp`;
+      const nextSrcset = `${base}/assets/atlas/realms/960/${data.panorama}.webp 960w, ${nextSrc} 1536w`;
 
       choices.forEach((item, itemIndex) => {
         item.setAttribute('aria-selected', String(itemIndex === current));
@@ -146,9 +151,12 @@ const guardianSlug = (name: string) =>
       stage.classList.add('is-loading');
       const incoming = new Image();
       incoming.decoding = 'async';
+      incoming.srcset = nextSrcset;
+      incoming.sizes = '(max-width: 980px) 100vw, min(1120px, calc(100vw - 3rem))';
       incoming.onload = () => {
         if (token !== request) return;
         image.src = nextSrc;
+        image.srcset = nextSrcset;
         image.alt = `Panorama editorial habitado de ${data.trueName}`;
         requestAnimationFrame(() => stage.classList.remove('is-loading'));
       };

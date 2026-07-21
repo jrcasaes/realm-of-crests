@@ -2,6 +2,8 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { guardianRoster } from '../../lib/guardians.js';
 import { fervorSignature, fervorVectorAsset } from '../../lib/fervor.js';
+import realms from '../../data/realms.json';
+import ContinuityEcho from '../../components/ContinuityEcho.astro';
 
 export function getStaticPaths() {
   return guardianRoster.map((guardian) => ({ params: { slug: guardian.slug }, props: { guardian } }));
@@ -13,6 +15,7 @@ const currentIndex = guardianRoster.findIndex((guardian) => guardian.slug === g.
 const previous = guardianRoster[(currentIndex - 1 + guardianRoster.length) % guardianRoster.length];
 const next = guardianRoster[(currentIndex + 1) % guardianRoster.length];
 const signature = fervorSignature(g.fervor);
+const realmData = realms.find((realm) => realm.slug === g.realmSlug);
 const publicSections = g.sections.length ? g.sections : [
   {
     title: 'VÍNCULO TERRITORIAL',
@@ -113,6 +116,8 @@ const publicSections = g.sections.length ? g.sections : [
       </dl>
       <p>{g.templeDesc}</p>
     </section>
+
+    {realmData && <div class="wrap"><ContinuityEcho currentRealm={realmData} mode="guardian" /></div>}
 
     <section class="dossier-fervor" id="fervor">
       <div class="wrap">
