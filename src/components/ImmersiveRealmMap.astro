@@ -266,6 +266,21 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
     const dataNode = root.querySelector<HTMLScriptElement>('#atlas-entry-data');
     if (!dataNode?.textContent) return;
     const entries = JSON.parse(dataNode.textContent) as AtlasClientEntry[];
+    const coldQaToken = new URLSearchParams(window.location.search).get('qa-cold');
+    if (coldQaToken) {
+      const bust = (url: string) => `${url}${url.includes('?') ? '&' : '?'}qa-cold=${encodeURIComponent(coldQaToken)}`;
+      entries.forEach((entry) => {
+        entry.panorama = bust(entry.panorama);
+        entry.panoramaSrcset = entry.panoramaSrcset
+          .split(',')
+          .map((candidate) => {
+            const [url, descriptor] = candidate.trim().split(/\s+/, 2);
+            return `${bust(url)} ${descriptor}`;
+          })
+          .join(', ');
+        entry.emblem = bust(entry.emblem);
+      });
+    }
     const pins = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-atlas-index]'));
     const listItems = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-atlas-list-index]'));
     const viewport = root.querySelector<HTMLElement>('#atlas-map-viewport')!;
@@ -653,7 +668,7 @@ const serializedAtlas = JSON.stringify(atlasData).replace(/</g, '\\u003c');
     const hashSlug = location.hash.replace('#reino-', '');
     const fromHash = entries.findIndex((entry) => entry.slug === hashSlug);
     if (fromHash >= 0) selectRealm(fromHash, { updateHash: false });
-    scheduleAtlasPrefetch(fromHash >= 0 ? fromHash : current);
+    if (!coldQaToken) scheduleAtlasPrefetch(fromHash >= 0 ? fromHash : current);
   }
 
   document.addEventListener('astro:page-load', bindImmersiveAtlas);
