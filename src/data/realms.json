@@ -290,7 +290,7 @@
     "slug": "galicia",
     "order": 10,
     "panoramaAsset": "RoC_Site_Reino_Galicia_Panorama_Desktop_v1.0_APROVADO_SITE.png",
-    "visualHotspots": [{"label":"Núcleo soberano","x":45,"y":52},{"label":"Arena de Ferro","x":57,"y":47},{"label":"Obelisco de ferro","x":21,"y":48}],
+    "visualHotspots": [{"label":"Núcleo soberano","x":45,"y":52},{"label":"Arena de Ferro","x":76,"y":59},{"label":"Obelisco de ferro","x":21,"y":48}],
     "realm": "Galícia",
     "trueName": "Reino de Galícia",
     "guardian": "Gallus",

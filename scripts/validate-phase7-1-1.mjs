@@ -26,7 +26,7 @@ const entries = realms.slice().sort((a, b) => a.order - b.order).map((realm) => 
 const known = entries.map((entry) => entry.guardianSlug);
 const affinities = [...new Set(entries.flatMap((entry) => [entry.dominant.id, entry.secondary.id]))];
 
-pass(packageJson.version === '1.8.1', 'O micropatch 7.1.1 deve identificar o pacote 1.8.1.');
+pass(packageJson.version === '1.8.2', 'O gate 7.1.1 deve permanecer íntegro no pacote 1.8.2.');
 pass(packageJson.scripts?.['validate:vestiges'] === 'node scripts/validate-phase7-1-1.mjs', 'O gate do micropatch não está declarado.');
 pass(entries.length === 19 && new Set(known).size === 19, 'A matriz de teste deve conter 19 Guardiões únicos.');
 pass(continuitySource.includes("GUARDIAN_JOURNEY_KEY") && continuitySource.includes("root.dataset.mode === 'guardian'"), 'A visita direta ao dossiê não registra memória própria.');

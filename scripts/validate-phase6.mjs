@@ -49,7 +49,7 @@ const pkg = json('package.json');
 const realms = json('src/data/realms.json');
 const guardianRoster = read('src/lib/guardians.js');
 
-pass(pkg.version === '1.8.1', 'A versão da Continuidade Viva com o micropatch 7.1.1 deve ser 1.8.1.');
+pass(pkg.version === '1.8.2', 'A versão da Continuidade Viva com o micropatch 7.1.2 deve ser 1.8.2.');
 pass(pkg.engines?.node === '>=22.12.0' && pkg.devDependencies?.astro === '^7.1.1', 'O release candidate deve usar Astro 7.1.1 como ferramenta de build em Node 22.');
 pass(!pkg.dependencies || Object.keys(pkg.dependencies).length === 0, 'O site estático não deve declarar dependências de runtime.');
 pass(pkg.scripts['audit:dist'] === 'node scripts/audit-dist.mjs', 'A auditoria pós-build não está declarada.');

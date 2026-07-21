@@ -1,7 +1,7 @@
 {
   "name": "realm-of-crests",
   "type": "module",
-  "version": "1.8.1",
+  "version": "1.8.2",
   "private": true,
   "engines": {
     "node": ">=22.12.0"
@@ -19,8 +19,9 @@
     "validate:release": "node scripts/validate-phase6.mjs",
     "validate:continuity": "node scripts/validate-phase7.mjs",
     "validate:vestiges": "node scripts/validate-phase7-1-1.mjs",
+    "validate:legibility": "node scripts/validate-phase7-1-2.mjs",
     "audit:dist": "node scripts/audit-dist.mjs",
-    "validate": "npm run validate:canon && npm run validate:experience && npm run validate:journey && npm run validate:guardians && npm run validate:pilgrimage && npm run validate:journal && npm run validate:release && npm run validate:continuity && npm run validate:vestiges",
+    "validate": "npm run validate:canon && npm run validate:experience && npm run validate:journey && npm run validate:guardians && npm run validate:pilgrimage && npm run validate:journal && npm run validate:release && npm run validate:continuity && npm run validate:vestiges && npm run validate:legibility",
     "check": "npm run validate && npm run build && npm run audit:dist"
   },
   "devDependencies": {

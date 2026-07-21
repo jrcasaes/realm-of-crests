@@ -1,6 +1,6 @@
 # Fase 7 — Continuidade Viva
 
-Status: Fases 7.0 e 7.1 publicadas; micropatch 7.1.1 validado localmente e pendente de publicação.
+Status: Fases 7.0, 7.1 e micropatch 7.1.1 publicados; micropatch 7.1.2 em validação local.
 
 ## 7.0 — Saneamento técnico
 
@@ -30,6 +30,14 @@ Atlas, fólios territoriais e dossiês exibem uma recomendação explicada. A se
 - Após 19/19, o rótulo muda para **Outra ressonância** e a navegação continua sem retorno imediato.
 - A memória permanece local, privada e separada de `roc.exploration.v1`.
 
+### Micropatch 7.1.2 — Legibilidade e Ancoragem
+
+- O eco contextual responde à largura real do componente e passa a uma coluna abaixo de 900 px, inclusive sob zoom do navegador.
+- Cabeçalho, rotas e Fragmento preservam largura mínima segura, quebra defensiva e leitura integral.
+- Os fólios dos 19 Reinos completam a ficha sistêmica com a **Âncora territorial**, derivada do Templo já canônico.
+- O marcador da **Arena de Ferro** em Galícia ancora a estrutura circular no primeiro plano à direita (`76% / 59%`).
+- O patch não altera panorama, cânone, relações de Fervor, emblemas ou memória de navegação.
+
 ### Fragmentos vivos
 
 Os mesmos quatro fundamentos públicos do Diário reaparecem na bússola após 1, 5, 10 e 19 Reinos. Não há informação exclusiva, prêmio, poder ou pontuação.
@@ -51,3 +59,6 @@ Os mesmos quatro fundamentos públicos do Diário reaparecem na bússola após 1
 6. Fragmentos reaparecendo fora do Diário conforme o progresso.
 7. QA desktop em 1366 × 768 e 1920 × 1080, sem overflow, imagem quebrada ou erro de aplicação.
 8. Nenhuma autoindicação, repetição antes de 19/19 ou ciclo de dois Guardiões.
+9. Eco contextual legível em 1024, 1366 e 1920 px, incluindo zoom de 125% e 150%.
+10. Fichas territoriais completas em 2 × 2 quando houver duas colunas, sem célula visual vazia.
+11. Arena de Ferro ancorada no edifício circular correto do panorama de Galícia.
