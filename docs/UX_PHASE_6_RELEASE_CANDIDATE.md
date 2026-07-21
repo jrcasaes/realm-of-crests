@@ -64,5 +64,12 @@ O toolchain do release candidate usa Node 22 e Astro 7.1.1. Astro permanece em `
 - O master cartográfico avança para v1.1 por errata textual derivada do cânone já consolidado.
 - A geografia, as rotas, os marcadores, os territórios e o enquadramento permanecem inalterados.
 - O verbete Woundlands deixa de atribuir soberania à Ruína e passa a registrar instabilidade de memória e orientação.
-- Apenas os dois WebP do mapa foram regenerados; panoramas territoriais e emblemas permanecem intactos.
+- Os dois WebP do mapa foram regenerados; os panoramas territoriais permanecem intactos.
 - O herói do Diário volta a herdar as margens responsivas de `wide-wrap` em desktop e mobile.
+
+## Complemento visual da Fase 6.1 — emblemas transparentes do Atlas
+
+- Dezoito emblemas do Atlas usam derivados WebP transparentes de 256 × 256; Athlétia preserva integralmente a composição aprovada.
+- Botáfia mantém temporariamente o derivado opaco anterior porque o PNG transparente recebido está truncado.
+- A substituição é isolada em `public/assets/atlas/emblems`; os emblemas gerais do site não são alterados.
+- O estado intermediário é rastreado como `18/19 transparentes`, sem declarar o Atlas visualmente final.

@@ -22,6 +22,16 @@ const validWebpSet = (directory, files) => files.every((name) => {
     && buffer.toString('ascii', 8, 12) === 'WEBP'
     && buffer.readUInt32LE(4) + 8 === buffer.length;
 });
+const hasLossyWebpAlpha = (path) => {
+  const buffer = readFileSync(resolve(root, path));
+  for (let offset = 12; offset + 8 <= buffer.length;) {
+    const type = buffer.toString('ascii', offset, offset + 4);
+    const size = buffer.readUInt32LE(offset + 4);
+    if (type === 'ALPH') return true;
+    offset += 8 + size + (size % 2);
+  }
+  return false;
+};
 
 const layout = read('src/layouts/BaseLayout.astro');
 const globalCss = read('src/styles/global.css');
@@ -101,6 +111,9 @@ pass(atlasEmblems.files.length === 19 && atlasEmblems.size <= 350_000, 'Os 19 em
 pass(validWebpSet('public/assets/atlas/realms/960', atlasPanoramas960.files), 'Há um panorama WebP de 960 px truncado ou inválido.');
 pass(validWebpSet('public/assets/atlas/realms/1536', atlasPanoramas1536.files), 'Há um panorama WebP de 1536 px truncado ou inválido.');
 pass(validWebpSet('public/assets/atlas/emblems', atlasEmblems.files), 'Há um emblema WebP do Atlas truncado ou inválido.');
+const transparentAtlasEmblems = atlasEmblems.files.filter((name) => hasLossyWebpAlpha(`public/assets/atlas/emblems/${name}`));
+pass(transparentAtlasEmblems.length === 18, 'O lote intermediário do Atlas deve conter exatamente 18 emblemas transparentes.');
+pass(!transparentAtlasEmblems.includes('emblem_botafia.webp'), 'Botáfia deve preservar o emblema opaco anterior até receber um PNG íntegro.');
 pass(explorationHud.includes('lastPath: currentLastPath'), 'A continuidade territorial deve migrar caminhos persistidos para a base da versão atual.');
 pass(journal.includes('height: auto') && journal.includes('object-fit: contain'), 'Os emblemas do Diário devem preservar sua proporção quadrada.');
 pass(globalCss.includes('place-items: center') && globalCss.includes('padding-top: 0.08em'), 'A numeração dos pontos de paisagem deve permanecer centralizada.');

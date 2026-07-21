@@ -25,6 +25,17 @@
       "public/assets/maps/map_continent_2x.webp"
     ]
   },
+  "atlasEmblems": {
+    "scope": "ATLAS_ONLY",
+    "dimensions": "256x256",
+    "format": "WEBP_WITH_ALPHA",
+    "transparentAssets": 18,
+    "legacyOpaqueAssets": ["Botáfia"],
+    "athletiaTreatment": "PRESERVED_AS_APPROVED",
+    "botafiaStatus": "PENDING_INTEGRAL_TRANSPARENT_SOURCE",
+    "generalSiteEmblemsChanged": false,
+    "verification": "PENDING_PUBLIC_PREVIEW"
+  },
   "cc28c": {
     "status": "INCORPORATED_AND_REQUIRED",
     "realms": 19,
@@ -85,7 +96,7 @@
     "canonicalLinks": "ENABLED"
   },
   "deployment": {
-    "github": "DEPLOYED_PHASE_6_PREVIEW_RUN_15_PASS",
+    "github": "PENDING_ATLAS_EMBLEMS_18_OF_19_QA",
     "pullRequest": 8,
     "draft": true,
     "mainInvolved": false
