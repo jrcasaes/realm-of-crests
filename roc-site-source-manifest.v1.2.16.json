@@ -1,0 +1,38 @@
+{
+  "project": "Realm of Crests",
+  "artifact": "site-operational-package",
+  "manifestVersion": "1.2.16",
+  "generatedDate": "2026-07-21",
+  "status": "MICROPATCH_7_1_1_VALIDATED_LOCAL_CANDIDATE",
+  "createsCanon": false,
+  "authority": {
+    "loreMaster": "REALM_OF_CRESTS_LORE_MASTER_CANON_v3.0.6.docx",
+    "dossier": "RoC_Dossie_Canonico_Guardioes_19_v2.6.docx",
+    "registryVersion": "1.2.12"
+  },
+  "micropatch7_1_1": {
+    "status": "VALIDATED_PENDING_PUBLICATION",
+    "storage": "roc.guardians.v1",
+    "storageScope": "LOCAL_ONLY",
+    "routes": ["CONTINUE_UNSEEN", "FOLLOW_RESONANCE"],
+    "guardianCoverageBeforeRepeat": 19,
+    "recentGuardiansExcluded": 3,
+    "selfRecommendation": false,
+    "twoNodeCycles": false,
+    "territorialProgressUnchanged": true
+  },
+  "canonProtection": {
+    "siteCreatesCanon": false,
+    "fervorRelationsChanged": false,
+    "assetsChanged": false,
+    "botafiaChanged": false
+  },
+  "targetQa": {
+    "algorithmicMatrix": "PASS_19_STARTS_X_64_AFFINITY_PAIRS",
+    "desktop1366": "PASS",
+    "desktop1920": "PASS",
+    "buildPages": 48,
+    "consoleErrors": "PASS",
+    "overflow": "PASS"
+  }
+}

@@ -15,6 +15,7 @@ const registry = realms.slice().sort((a, b) => a.order - b.order).map((realm) =>
   const relations = parseFervorField(realm.fervor);
   return {
     slug: realm.slug,
+    order: realm.order,
     realm: realm.realm,
     guardian: realm.guardian,
     guardianSlug: path(realm.guardian),
@@ -23,11 +24,13 @@ const registry = realms.slice().sort((a, b) => a.order - b.order).map((realm) =>
     secondary: relations.find((entry) => entry.role === 'secundário') || relations[1],
   };
 });
-const initial = currentRealm ? registry.find((entry) => entry.slug === currentRealm.slug) || registry[0] : registry[0];
+const currentIndex = currentRealm ? registry.findIndex((entry) => entry.slug === currentRealm.slug) : -1;
+const initial = registry[(currentIndex + 1) % registry.length] || registry[0];
+const alternative = registry[(currentIndex + 2) % registry.length] || registry[1];
 const safeJson = (value: unknown) => JSON.stringify(value).replace(/</g, '\\u003c');
 ---
 
-<section class:list={['continuity-echo', `mode-${mode}`]} data-continuity-echo data-current={currentRealm?.slug || ''} data-base={base} aria-labelledby={`continuity-title-${mode}`}>
+<section class:list={['continuity-echo', `mode-${mode}`]} data-continuity-echo data-mode={mode} data-current={currentRealm?.slug || ''} data-base={base} aria-labelledby={`continuity-title-${mode}`}>
   <script type="application/json" data-continuity-realms set:html={safeJson(registry)}></script>
   <script type="application/json" data-continuity-fragments set:html={safeJson(emberlineFragments)}></script>
   <header>
@@ -35,19 +38,29 @@ const safeJson = (value: unknown) => JSON.stringify(value).replace(/</g, '\\u003
       <span class="rubric">continuidade viva · leitura local</span>
       <h2 id={`continuity-title-${mode}`}>{mode === 'atlas' ? 'A ROTA RESPONDE À SUA TRAVESSIA' : 'O VESTÍGIO NÃO TERMINA NESTA PÁGINA'}</h2>
     </div>
-    <p data-continuity-affinity>Sem um Crest de Jornada, a bússola usa apenas os Reinos ainda não registrados.</p>
+    <p data-continuity-affinity>Sem um Crest de Jornada, a bússola usa a relação entre o Guardião atual e os vestígios ainda não vistos.</p>
   </header>
 
   <div class="continuity-grid">
-    <article>
-      <span class="rubric">próximo vestígio explicado</span>
-      <h3 data-continuity-realm>{initial.realm}</h3>
-      <p data-continuity-reason>{initial.guardian} manifesta {initial.dominant.label} como Fervor dominante; esta é uma porta de leitura territorial, não uma ordem obrigatória.</p>
-      <div class="continuity-actions">
-        <a href={`${base}/reinos/${initial.slug}/`} data-continuity-realm-link>Entrar no Reino</a>
-        <a href={`${base}/guardioes/${initial.guardianSlug}/`} data-continuity-guardian-link>Encontrar {initial.guardian}</a>
-        <a href={`${base}/sistemas/fervor/#fervor-${initial.dominant.id}`} data-continuity-fervor-link>Ler {initial.dominant.label}</a>
-      </div>
+    <article class="continuity-routes">
+      <section class="continuity-route is-primary">
+        <span class="rubric" data-continuity-route-label>continuar a travessia · próximo vestígio</span>
+        <h3 data-continuity-guardian>{initial.guardian}</h3>
+        <p data-continuity-reason>{initial.realm} ainda não foi percorrido nesta travessia. {initial.guardian} manifesta {initial.dominant.label} como Fervor dominante.</p>
+        <div class="continuity-actions">
+          <a href={`${base}/guardioes/${initial.guardianSlug}/`} data-continuity-guardian-link>Encontrar {initial.guardian}</a>
+          <a href={`${base}/reinos/${initial.slug}/`} data-continuity-realm-link>Entrar em {initial.realm}</a>
+        </div>
+      </section>
+      <section class="continuity-route is-resonance" data-continuity-resonance>
+        <span class="rubric">seguir uma ressonância · rota alternativa</span>
+        <h3 data-resonance-guardian>{alternative.guardian}</h3>
+        <p data-resonance-reason>{alternative.dominant.label} aproxima este vestígio da leitura atual sem torná-lo um destino obrigatório.</p>
+        <div class="continuity-actions">
+          <a href={`${base}/guardioes/${alternative.guardianSlug}/`} data-resonance-guardian-link>Seguir {alternative.guardian}</a>
+          <a href={`${base}/sistemas/fervor/#fervor-${alternative.dominant.id}`} data-resonance-fervor-link>Ler {alternative.dominant.label}</a>
+        </div>
+      </section>
     </article>
     <aside data-continuity-fragment hidden>
       <span class="rubric">fragmento que reaparece</span>
@@ -60,8 +73,10 @@ const safeJson = (value: unknown) => JSON.stringify(value).replace(/</g, '\\u003
 </section>
 
 <script>
+  import { GUARDIAN_JOURNEY_KEY, chooseGuardianRoutes, normalizeGuardianJourney, recordGuardianVisit } from '../lib/continuity.js';
+
   type FervorRelation = { id: string; label: string; role: string };
-  type Entry = { slug: string; realm: string; guardian: string; guardianSlug: string; essence: string; dominant: FervorRelation; secondary: FervorRelation };
+  type Entry = { slug: string; order: number; realm: string; guardian: string; guardianSlug: string; essence: string; dominant: FervorRelation; secondary: FervorRelation };
   type Fragment = { count: number; title: string; copy: string };
 
   function bindContinuityEcho() {
@@ -73,45 +88,76 @@ const safeJson = (value: unknown) => JSON.stringify(value).replace(/</g, '\\u003
       let visited: string[] = [];
       let primary = '';
       let secondary = '';
+      let guardianJourney = normalizeGuardianJourney(null, entries.map((entry) => entry.guardianSlug));
       try {
         const exploration = JSON.parse(localStorage.getItem('roc.exploration.v1') || 'null');
         if (Array.isArray(exploration?.visited)) visited = exploration.visited.filter((slug: unknown) => typeof slug === 'string');
         const pilgrimage = JSON.parse(localStorage.getItem('roc.pilgrimage.v1') || 'null');
         if (pilgrimage?.version === 1) { primary = pilgrimage.primary || ''; secondary = pilgrimage.secondary || ''; }
+        guardianJourney = normalizeGuardianJourney(JSON.parse(localStorage.getItem(GUARDIAN_JOURNEY_KEY) || 'null'), entries.map((entry) => entry.guardianSlug));
       } catch { /* leitura local indisponível */ }
 
       const current = root.dataset.current || '';
-      const pool = entries.filter((entry) => !visited.includes(entry.slug) && entry.slug !== current);
-      const candidates = pool.length ? pool : entries.filter((entry) => entry.slug !== current);
-      const score = (entry: Entry) =>
-        (entry.dominant.id === primary ? 8 : 0) +
-        (entry.secondary.id === primary ? 5 : 0) +
-        (entry.dominant.id === secondary ? 3 : 0) +
-        (entry.secondary.id === secondary ? 2 : 0);
-      const recommended = candidates.slice().sort((a, b) => score(b) - score(a))[0] || entries[0];
+      const currentEntry = entries.find((entry) => entry.slug === current);
+      if (root.dataset.mode === 'guardian' && currentEntry) {
+        guardianJourney = recordGuardianVisit(guardianJourney, currentEntry.guardianSlug, entries.map((entry) => entry.guardianSlug));
+        try { localStorage.setItem(GUARDIAN_JOURNEY_KEY, JSON.stringify(guardianJourney)); } catch { /* escrita local indisponível */ }
+      }
+      const routes = chooseGuardianRoutes(entries, guardianJourney, {
+        currentGuardianSlug: currentEntry?.guardianSlug,
+        primary,
+        secondary,
+      });
+      const recommended = routes.continuation;
       if (!recommended) return;
 
       const affinity = root.querySelector<HTMLElement>('[data-continuity-affinity]');
-      if (affinity) affinity.textContent = primary
-        ? `Seu Crest de Jornada (${primary} × ${secondary}) orienta a sugestão sem transformar afinidade em destino.`
-        : 'Sem um Crest de Jornada, a bússola prioriza um Reino ainda não registrado.';
-      root.querySelector<HTMLElement>('[data-continuity-realm]')!.textContent = recommended.realm;
+      if (affinity) affinity.textContent = routes.coverageComplete
+        ? 'Os dezenove Guardiões já foram vistos. A bússola agora evita retornos imediatos e procura outra relação possível.'
+        : primary
+          ? `Seu Crest de Jornada (${primary} × ${secondary}) ajuda a ordenar Guardiões ainda não vistos; afinidade não substitui descoberta.`
+          : 'A bússola prioriza Guardiões ainda não vistos e usa o vestígio atual apenas para orientar o desempate.';
+      root.querySelector<HTMLElement>('[data-continuity-route-label]')!.textContent = routes.coverageComplete
+        ? 'outra ressonância · travessia completa'
+        : 'continuar a travessia · próximo vestígio';
+      root.querySelector<HTMLElement>('[data-continuity-guardian]')!.textContent = recommended.guardian;
       const connections = [
         recommended.dominant.id === primary && `${recommended.dominant.label} é dominante`,
         recommended.secondary.id === primary && `${recommended.secondary.label} aparece como pressão secundária`,
         recommended.dominant.id === secondary && `${recommended.dominant.label} ressoa com sua afinidade secundária`,
       ].filter(Boolean);
       root.querySelector<HTMLElement>('[data-continuity-reason]')!.textContent = connections.length
-        ? `${recommended.guardian} e ${recommended.realm} entram na rota porque ${connections.join(' e ')}. A relação é explicada; a escolha continua sua.`
-        : `${recommended.realm} ainda não foi registrado nesta travessia. ${recommended.guardian} manifesta ${recommended.dominant.label} como Fervor dominante.`;
+        ? `${recommended.guardian}, de ${recommended.realm}, entra na rota porque ${connections.join(' e ')}. Entre os vestígios ainda não vistos, esta relação é a mais próxima.`
+        : routes.coverageComplete
+          ? `${recommended.guardian}, de ${recommended.realm}, abre outra relação possível sem devolver você ao vestígio anterior.`
+          : `${recommended.guardian}, de ${recommended.realm}, ainda não foi visto nesta travessia e manifesta ${recommended.dominant.label} como Fervor dominante.`;
       const realmLink = root.querySelector<HTMLAnchorElement>('[data-continuity-realm-link]')!;
       realmLink.href = `${base}/reinos/${recommended.slug}/`;
       const guardianLink = root.querySelector<HTMLAnchorElement>('[data-continuity-guardian-link]')!;
       guardianLink.href = `${base}/guardioes/${recommended.guardianSlug}/`;
       guardianLink.textContent = `Encontrar ${recommended.guardian}`;
-      const fervorLink = root.querySelector<HTMLAnchorElement>('[data-continuity-fervor-link]')!;
-      fervorLink.href = `${base}/sistemas/fervor/#fervor-${recommended.dominant.id}`;
-      fervorLink.textContent = `Ler ${recommended.dominant.label}`;
+      realmLink.textContent = `Entrar em ${recommended.realm}`;
+
+      const resonanceRoot = root.querySelector<HTMLElement>('[data-continuity-resonance]');
+      const resonance = routes.resonance;
+      if (resonanceRoot) resonanceRoot.hidden = !resonance;
+      if (resonance && resonanceRoot) {
+        resonanceRoot.querySelector<HTMLElement>('[data-resonance-guardian]')!.textContent = resonance.guardian;
+        const resonanceConnections = [
+          resonance.dominant.id === (primary || currentEntry?.dominant.id) && `${resonance.dominant.label} é dominante`,
+          resonance.secondary.id === (primary || currentEntry?.dominant.id) && `${resonance.secondary.label} atua como Fervor secundário`,
+          resonance.dominant.id === (secondary || currentEntry?.secondary.id) && `${resonance.dominant.label} ressoa com a segunda afinidade`,
+        ].filter(Boolean);
+        resonanceRoot.querySelector<HTMLElement>('[data-resonance-reason]')!.textContent = resonanceConnections.length
+          ? `${resonance.guardian}, de ${resonance.realm}, oferece uma alternativa porque ${resonanceConnections.join(' e ')}.`
+          : `${resonance.guardian}, de ${resonance.realm}, é uma rota alternativa ainda não vista e próxima da ordem atual.`;
+        const resonanceGuardianLink = resonanceRoot.querySelector<HTMLAnchorElement>('[data-resonance-guardian-link]')!;
+        resonanceGuardianLink.href = `${base}/guardioes/${resonance.guardianSlug}/`;
+        resonanceGuardianLink.textContent = `Seguir ${resonance.guardian}`;
+        const resonanceFervorLink = resonanceRoot.querySelector<HTMLAnchorElement>('[data-resonance-fervor-link]')!;
+        resonanceFervorLink.href = `${base}/sistemas/fervor/#fervor-${resonance.dominant.id}`;
+        resonanceFervorLink.textContent = `Ler ${resonance.dominant.label}`;
+      }
 
       const awake = fragments.filter((fragment) => visited.length >= fragment.count).at(-1);
       const fragmentRoot = root.querySelector<HTMLElement>('[data-continuity-fragment]');
@@ -119,6 +165,8 @@ const safeJson = (value: unknown) => JSON.stringify(value).replace(/</g, '\\u003
         fragmentRoot.hidden = false;
         fragmentRoot.querySelector<HTMLElement>('[data-continuity-fragment-title]')!.textContent = awake.title;
         fragmentRoot.querySelector<HTMLElement>('[data-continuity-fragment-copy]')!.textContent = awake.copy;
+      } else {
+        root.querySelector<HTMLElement>('.continuity-grid')?.classList.add('is-solo');
       }
       root.classList.add('is-ready');
     });
@@ -133,7 +181,11 @@ const safeJson = (value: unknown) => JSON.stringify(value).replace(/</g, '\\u003
   .continuity-echo h2 { margin-top: .55rem; color: var(--parchment); font-size: clamp(1.45rem, 3.4vw, 2.5rem); }
   .continuity-echo > header > p { margin: 0; color: var(--parchment-dim); font-style: italic; }
   .continuity-grid { display: grid; grid-template-columns: 1.35fr .65fr; gap: 1px; margin-top: 1.7rem; background: var(--edge); }
+  .continuity-grid.is-solo { grid-template-columns: 1fr; }
   .continuity-grid > * { padding: 1.3rem; background: rgba(12,10,8,.88); }
+  .continuity-routes { display: grid; gap: 1px; padding: 0; background: var(--edge); }
+  .continuity-route { padding: 1.3rem; background: rgba(12,10,8,.94); }
+  .continuity-route.is-resonance { background: rgba(23,19,15,.94); }
   .continuity-grid h3 { margin-top: .45rem; color: var(--parchment); font-size: 1.35rem; }
   .continuity-grid p { margin-top: .65rem; color: var(--parchment-dim); }
   .continuity-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
@@ -143,5 +195,6 @@ const safeJson = (value: unknown) => JSON.stringify(value).replace(/</g, '\\u003
   .continuity-disclaimer { margin: 1rem 0 0; color: var(--parchment-faint); font-size: .72rem; }
   .mode-atlas { width: min(1120px, calc(100% - 3rem)); margin-inline: auto; }
   [data-continuity-fragment][hidden] { display: none; }
+  [data-continuity-resonance][hidden] { display: none; }
   @media (max-width: 760px) { .continuity-echo > header, .continuity-grid { grid-template-columns: 1fr; } .mode-atlas { width: min(100% - 1.5rem, 1120px); } }
 </style>
