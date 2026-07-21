@@ -1,6 +1,8 @@
 # Fase 7 — Continuidade Viva
 
-Status: Fases 7.0, 7.1 e micropatch 7.1.1 publicados; micropatch 7.1.2 em validação local.
+Status: **concluída e verificada em produção**. Fases 7.0 e 7.1 e micropatches 7.1.1 e 7.1.2 publicados em 2026-07-21.
+
+Implementação de produção: `285bec7` (Fases 7.0–7.1), `c356cae` (7.1.1) e `2870cb1` (7.1.2). Registro operacional consolidado no manifesto v1.2.17.
 
 ## 7.0 — Saneamento técnico
 
@@ -62,3 +64,11 @@ Os mesmos quatro fundamentos públicos do Diário reaparecem na bússola após 1
 9. Eco contextual legível em 1024, 1366 e 1920 px, incluindo zoom de 125% e 150%.
 10. Fichas territoriais completas em 2 × 2 quando houver duas colunas, sem célula visual vazia.
 11. Arena de Ferro ancorada no edifício circular correto do panorama de Galícia.
+
+## Resultado de validação
+
+- Fases 7.0–7.1: **PASS** — 40/40 verificações centrais, 18/18 complementares e smoke público do PR #9.
+- Micropatch 7.1.1: **PASS** — 98/98 verificações navegáveis, cobertura dos 19 Guardiões, migração e persistência aprovadas; smoke público do PR #10.
+- Micropatch 7.1.2: **PASS** — 1024, 1366 e 1920 px e zoom equivalente a 125% e 150%; smoke público do PR #11.
+- Estado final: 48 páginas e 48 canonicals, sem overflow horizontal, imagens quebradas ou erros JavaScript da aplicação nas rotas auditadas.
+- Escopo preservado: nenhum conteúdo canônico, panorama, emblema ou relação de Fervor foi alterado pelo fechamento operacional.

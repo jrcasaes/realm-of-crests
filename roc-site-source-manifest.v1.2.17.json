@@ -1,0 +1,115 @@
+{
+  "project": "Realm of Crests",
+  "artifact": "site-operational-package",
+  "manifestVersion": "1.2.17",
+  "generatedDate": "2026-07-21",
+  "status": "PRODUCTION_VERIFIED",
+  "createsCanon": false,
+  "authority": {
+    "loreMaster": "REALM_OF_CRESTS_LORE_MASTER_CANON_v3.0.6.docx",
+    "dossier": "RoC_Dossie_Canonico_Guardioes_19_v2.6.docx",
+    "storyBible": "RoC_Story_Bible_MASTER_CC31_v2.2.html",
+    "registryVersion": "1.2.12",
+    "cc27": "RoC_CC-27_Sistema_Canonico_Marcas_e_Glifos_de_Fervor_v1.3.docx",
+    "cc31": "RoC_CC-31_Matriz_Canonica_de_Fervores_e_Estatuto_do_Legado_v1.0.docx",
+    "cartographyMaster": "RoC_Mapa_Canonico_Continente_MASTER_v1.1.png"
+  },
+  "release": {
+    "sitePackageVersion": "1.8.2",
+    "productionUrl": "https://jrcasaes.github.io/realm-of-crests/",
+    "verifiedDate": "2026-07-21",
+    "phase7Commit": "285bec7a9d1f7ac69b16a187ac68354e9e52f6b8",
+    "micropatch7_1_1Commit": "c356cae312eab71d0c4db2a613c4185532acec08",
+    "verifiedImplementationCommit": "2870cb10d0c4707d7d16fbd830ee712321e02306",
+    "pullRequests": [9, 10, 11],
+    "predecessorManifests": ["1.2.15", "1.2.16"]
+  },
+  "phase7_0": {
+    "status": "PRODUCTION_VERIFIED",
+    "atlasEmblems": {
+      "count": 19,
+      "transparentAssets": 19,
+      "botafiaStatus": "APPROVED_PUBLISHED_ASSET_PRESERVED"
+    },
+    "realmPanoramas": {
+      "pageSource": "RESPONSIVE_WEBP_DERIVATIVES",
+      "widths": [960, 1536],
+      "pngMastersReferencedByHtml": false
+    },
+    "journalColdStateFlash": "BLOCKED_UNTIL_LOCAL_STATE_READ",
+    "artifactAudit": "REFERENCED_IMAGE_SIZE_AND_PNG_MASTER_GATES_ENABLED"
+  },
+  "phase7_1": {
+    "status": "PRODUCTION_VERIFIED",
+    "firstPassage": {
+      "optional": true,
+      "steps": ["Atlas", "Guardiao", "Fervor", "Diario"],
+      "storage": "LOCAL_ONLY"
+    },
+    "continuity": {
+      "contexts": ["Atlas", "Reino", "Guardiao"],
+      "recommendationsExplained": true,
+      "fragmentsReappearOutsideJournal": true
+    },
+    "systemDemonstrations": {
+      "fervor": "EXISTING_CODEX_8X5_REUSED",
+      "gravity": "LIGHT_CONCEPTUAL_LENS",
+      "ascension": "LIGHT_FIXED_STATE_LENS",
+      "createsCanon": false,
+      "powerScoring": false
+    }
+  },
+  "micropatch7_1_1": {
+    "status": "PRODUCTION_VERIFIED",
+    "storage": "roc.guardians.v1",
+    "storageScope": "LOCAL_ONLY",
+    "routes": ["CONTINUE_UNSEEN", "FOLLOW_RESONANCE"],
+    "guardianCoverageBeforeRepeat": 19,
+    "recentGuardiansExcluded": 3,
+    "selfRecommendation": false,
+    "twoNodeCycles": false,
+    "territorialProgressUnchanged": true
+  },
+  "micropatch7_1_2": {
+    "status": "PRODUCTION_VERIFIED",
+    "continuityContainerBreakpointPx": 900,
+    "realmAnchors": "PASS_19_OF_19",
+    "galiciaIronArena": {
+      "xPercent": 76,
+      "yPercent": 59
+    },
+    "canonChanged": false,
+    "assetsChanged": false
+  },
+  "canonProtection": {
+    "siteCreatesCanon": false,
+    "userAffinityIsCanon": false,
+    "gamificationPoints": false,
+    "newLoreIntroduced": false,
+    "fervorRelationsChanged": false,
+    "panoramasChanged": false,
+    "emblemsChanged": false,
+    "botafiaChanged": false
+  },
+  "qa": {
+    "productionBuild": "PASS_48_PAGES",
+    "canonicalUrls": "PASS_48_UNIQUE",
+    "linksAndAssets": "PASS",
+    "phase7": "PASS_40_CENTRAL_PLUS_18_COMPLEMENTARY",
+    "micropatch7_1_1": "PASS_98_OF_98_NAVIGABLE",
+    "micropatch7_1_2": {
+      "desktop1024": "PASS",
+      "desktop1366": "PASS",
+      "desktop1920": "PASS",
+      "zoom125Equivalent": "PASS",
+      "zoom150Equivalent": "PASS",
+      "sanPaoloGrid2x2": "PASS",
+      "galiciaIronArena": "PASS"
+    },
+    "publicSmoke": "PASS_PULL_REQUESTS_9_10_11",
+    "applicationConsoleErrors": 0,
+    "brokenImages": 0,
+    "horizontalOverflow": false
+  },
+  "publicMetadata": "SANITIZED_NO_PRIVATE_DRIVE_IDS"
+}

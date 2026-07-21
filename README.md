@@ -3,70 +3,51 @@
 Site estático em **Astro** com estética **Dark Codex**, publicado via **GitHub Pages**.
 Conteúdo rastreável ao **LORE_MASTER_CANON v3.0.6**, ao **Dossiê Canônico dos 19 Guardiões v2.6**, à **Story Bible v2.2 CC-31 APPROVED** e ao **roc-source-registry v1.2.12**. As decisões CC-28C, CC-30 e CC-31 já estão incorporadas nessas fontes ativas.
 
-Status: derivado operacional. O site não cria cânone. A correção **CC-28C** é obrigatória em `src/data/realms.json`: as seis camadas transferidas ao Apêndice Não Canônico não podem aparecer como dados canônicos ativos. O `nego-dossier-v1` permanece fonte de apoio com escopo restrito a Nego, Victória e direção visual de personagem; não possui autoridade constitucional.
+Status: **produção verificada**, pacote 1.8.2 e manifesto operacional **v1.2.17**. O site é um derivado de apresentação e não cria cânone. O `roc-source-registry v1.2.12` continua sendo o ponteiro das fontes canônicas; a numeração do manifesto acompanha somente as entregas operacionais do site.
 
-Pacote sincronizado sob o registry **v1.2.12** em **2026-07-19**. O FULL LOCK VISUAL dos glifos permanece restrito à matriz raster 8 × 5, com PASS 40/40. Os masters vetoriais v1.0 e seus derivados monocromáticos estão ativos como recursos técnicos de topologia-base; não substituem nem ampliam o FULL LOCK das 40 transfigurações. A CC-31 fixa a matriz dos dezenove e define o Legado como excepcional e herdado, sem rótulo universal de raridade: Nego é o único dominante, e Admiral e Eldric o manifestam como secundário. As verificações CC-28C e CC-30 permanecem vigentes.
+A correção **CC-28C** permanece obrigatória em `src/data/realms.json`: as seis camadas transferidas ao Apêndice Não Canônico não podem reaparecer como dados canônicos ativos. O `nego-dossier-v1` continua restrito a Nego, Victória e direção visual de personagem, sem autoridade constitucional. O FULL LOCK VISUAL dos glifos permanece na matriz raster 8 × 5, com PASS 40/40; os masters vetoriais v1.0 são derivados técnicos de topologia-base.
 
 ---
 
 ## O que já está pronto
 
-- Página inicial com manifesto e grade dos 19 reinos (revelação de arquivo ao rolar)
-- Página individual de cada reino: emblema, Essence/Fervor/Gravity, nomenclatura em camadas, bioma e templo — tudo reconciliado com o cânone v3.0.6 e o registry v1.2.12
-- Emblemas pendentes aparecem como "Selo Pendente" automaticamente; basta soltar o PNG na pasta certa para substituir (ver `public/assets/emblems/_CONVENCAO.md`)
-- Deploy automático: todo push na branch `main` publica o site sozinho
+- Página inicial e arquivos dos 19 Reinos e 19 Guardiões.
+- Fólios territoriais com emblema, Essence, Fervores, Gravity, Âncora territorial e panorama WebP responsivo.
+- Atlas canônico com 19/19 emblemas transparentes e 57 pontos interpretativos.
+- Sistemas públicos de Fervor, Sovereign Gravity e Ascensão, sem escala de poder ou criação de estado canônico.
+- Primeira Travessia, continuidade contextual e Diário com memória local privada.
+- Oito famílias de Fervor com Códice raster 8 × 5, masters SVG e derivados monocromáticos.
+- Deploy automático pelo GitHub Pages a cada integração na branch `main`.
 
 ## Estrutura
 
 ```
 src/data/realms.json      ← dados dos 19 reinos (fontes: Lore Master v3.0.6 + Dossiê v2.6 + Story Bible v2.2; decisões CC-28C/CC-30/CC-31 incorporadas)
-src/pages/                ← páginas (index, /reinos, /reinos/[slug])
+src/pages/                ← páginas de Reinos, Guardiões, Atlas, Sistemas, Ritual e Diário
+src/components/           ← componentes da experiência e continuidade
+src/lib/                  ← seleção de rotas, Fervor e utilitários compartilhados
 src/styles/global.css     ← todo o design (CSS puro, tokens no :root)
-public/assets/emblems/    ← PNGs dos emblemas (veja _CONVENCAO.md)
+public/assets/atlas/      ← derivados responsivos de panoramas e emblemas do Atlas
+public/assets/emblems/    ← emblemas publicados (veja _CONVENCAO.md)
 public/assets/fervor/vector/ ← masters SVG, PDF e exports monocromáticos 4096 px
+scripts/                  ← gates das Fases 0–7.1.2 e auditoria do build
 ```
 
 ---
 
-## Passo a passo — publicar o site (só na primeira vez)
-
-Você vai precisar de uma conta no GitHub (github.com). Depois:
-
-**1. Criar o repositório**
-   - No GitHub, clique em **New repository**
-   - Nome: `realm-of-crests` (exatamente assim)
-   - Deixe **Public** marcado e clique **Create repository**
-
-**2. Ajustar uma linha do projeto**
-   - Abra o arquivo `astro.config.mjs`
-   - Troque `SEU-USUARIO` pelo seu nome de usuário do GitHub
-   - Exemplo: se seu usuário é `hildebrando`, fica `https://hildebrando.github.io`
-
-**3. Enviar os arquivos**
-   - Na página do repositório recém-criado, clique em **uploading an existing file**
-   - Arraste TODO o conteúdo desta pasta (incluindo as pastas `.github`, `src`, `public`)
-   - Clique **Commit changes**
-
-**4. Ativar o GitHub Pages**
-   - No repositório, vá em **Settings → Pages**
-   - Em **Source**, escolha **GitHub Actions**
-   - Pronto. Em 2–3 minutos o site estará em:
-     `https://SEU-USUARIO.github.io/realm-of-crests/`
-
-**Teste rápido:** abra o endereço acima. Se aparecer a página com "REALM OF CRESTS" em ouro, funcionou.
-
-## Atualizações do dia a dia
-
-- **Novo emblema pronto?** Suba o PNG em `public/assets/emblems/` com o nome da convenção. Commit → site atualiza sozinho.
-- **Correção de texto?** Edite `src/data/realms.json` direto no GitHub. Commit → site atualiza sozinho.
-
-## Rodar localmente (opcional)
-
-Só se quiser ver o site no seu computador antes de publicar:
+## Desenvolvimento e validação
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
 Abra http://localhost:4321/realm-of-crests/
+
+Antes de abrir um PR, execute o gate completo:
+
+```bash
+npm run check
+```
+
+Esse comando valida o conteúdo e os contratos das Fases 0–7.1.2, gera as 48 páginas e audita canonicals, links, assets e orçamento visual. A publicação ocorre somente após integração revisada na `main`; o workflow `.github/workflows/deploy.yml` preserva o endereço oficial em https://jrcasaes.github.io/realm-of-crests/.
