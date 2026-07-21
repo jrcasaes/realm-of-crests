@@ -28,6 +28,7 @@ walk(dist);
 
 const htmlFiles = files.filter((file) => extname(file) === '.html');
 const canonicalUrls = new Set();
+const referencedImages = new Set();
 const routeFor = (file) => relative(dist, file).split(sep).join('/');
 const attr = (html, name) => new RegExp(`<meta[^>]+(?:name|property)=["']${name}["'][^>]+content=["']([^"']+)["']`, 'i').exec(html)?.[1];
 
@@ -74,10 +75,20 @@ for (const file of htmlFiles) {
 
   const links = [...html.matchAll(/<a\b[^>]*\bhref=["']([^"']+)["']/gi)].map((match) => match[1]);
   const sources = [...html.matchAll(/<(?:img|script)\b[^>]*\bsrc=["']([^"']+)["']/gi)].map((match) => match[1]);
+  const responsiveSources = [...html.matchAll(/\bsrcset=["']([^"']+)["']/gi)]
+    .flatMap((match) => match[1].split(',').map((candidate) => candidate.trim().split(/\s+/)[0]));
+  const cssImages = [...html.matchAll(/url\(["']?([^"')]+)["']?\)/gi)].map((match) => match[1]);
   for (const value of [...links, ...sources]) {
     const target = targetFile(value, file);
     if (target === null) continue;
     pass(target !== false && existsSync(target), `${route}: destino interno ausente ${value}.`);
+  }
+  for (const value of [...sources, ...responsiveSources, ...cssImages]) {
+    const target = targetFile(value, file);
+    if (!target || target === false || !existsSync(target) || !/\.(?:avif|gif|jpe?g|png|svg|webp)$/i.test(target)) continue;
+    referencedImages.add(target);
+    pass(statSync(target).size <= 1_000_000, `${route}: imagem referenciada excede 1 MB (${value}).`);
+    pass(!/\/assets\/realms\/.*\.png$/i.test(target.split(sep).join('/')), `${route}: panorama PNG mestre não pode ser servido; use os WebPs responsivos do Atlas.`);
   }
 }
 
@@ -98,8 +109,10 @@ if (existsSync(robotsPath)) {
 
 const cssBytes = files.filter((file) => extname(file) === '.css').reduce((sum, file) => sum + statSync(file).size, 0);
 const jsBytes = files.filter((file) => extname(file) === '.js' && file.includes(`${sep}_astro${sep}`)).reduce((sum, file) => sum + statSync(file).size, 0);
+const referencedImageBytes = [...referencedImages].reduce((sum, file) => sum + statSync(file).size, 0);
 pass(cssBytes < 300_000, `CSS excede o orçamento de 300 KB (${cssBytes} bytes).`);
 pass(jsBytes < 450_000, `JavaScript excede o orçamento de 450 KB (${jsBytes} bytes).`);
+pass(referencedImageBytes < 20_000_000, `Imagens efetivamente referenciadas excedem 20 MB (${referencedImageBytes} bytes).`);
 
 if (failures.length) {
   console.error('PHASE_6_ARTIFACT_AUDIT: FAIL');
@@ -108,4 +121,4 @@ if (failures.length) {
 }
 
 console.log('PHASE_6_ARTIFACT_AUDIT: PASS');
-console.log(`${htmlFiles.length} páginas · ${canonicalUrls.size} canonicals únicos · links e assets internos íntegros · CSS ${cssBytes} B · JS ${jsBytes} B`);
+console.log(`${htmlFiles.length} páginas · ${canonicalUrls.size} canonicals únicos · links e assets internos íntegros · ${referencedImages.size} imagens referenciadas (${referencedImageBytes} B) · CSS ${cssBytes} B · JS ${jsBytes} B`);

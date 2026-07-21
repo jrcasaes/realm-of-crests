@@ -49,7 +49,7 @@ const pkg = json('package.json');
 const realms = json('src/data/realms.json');
 const guardianRoster = read('src/lib/guardians.js');
 
-pass(pkg.version === '1.7.0', 'A versão do release candidate deve ser 1.7.0.');
+pass(pkg.version === '1.8.0', 'A versão da Continuidade Viva deve ser 1.8.0.');
 pass(pkg.engines?.node === '>=22.12.0' && pkg.devDependencies?.astro === '^7.1.1', 'O release candidate deve usar Astro 7.1.1 como ferramenta de build em Node 22.');
 pass(!pkg.dependencies || Object.keys(pkg.dependencies).length === 0, 'O site estático não deve declarar dependências de runtime.');
 pass(pkg.scripts['audit:dist'] === 'node scripts/audit-dist.mjs', 'A auditoria pós-build não está declarada.');
@@ -112,8 +112,8 @@ pass(validWebpSet('public/assets/atlas/realms/960', atlasPanoramas960.files), 'H
 pass(validWebpSet('public/assets/atlas/realms/1536', atlasPanoramas1536.files), 'Há um panorama WebP de 1536 px truncado ou inválido.');
 pass(validWebpSet('public/assets/atlas/emblems', atlasEmblems.files), 'Há um emblema WebP do Atlas truncado ou inválido.');
 const transparentAtlasEmblems = atlasEmblems.files.filter((name) => hasLossyWebpAlpha(`public/assets/atlas/emblems/${name}`));
-pass(transparentAtlasEmblems.length === 18, 'O lote intermediário do Atlas deve conter exatamente 18 emblemas transparentes.');
-pass(!transparentAtlasEmblems.includes('emblem_botafia.webp'), 'Botáfia deve preservar o emblema opaco anterior até receber um PNG íntegro.');
+pass(transparentAtlasEmblems.length === 19, 'O Atlas concluído deve conter exatamente 19 emblemas transparentes.');
+pass(transparentAtlasEmblems.includes('emblem_botafia.webp'), 'Botáfia deve preservar o WebP transparente aprovado e publicado.');
 pass(explorationHud.includes('lastPath: currentLastPath'), 'A continuidade territorial deve migrar caminhos persistidos para a base da versão atual.');
 pass(journal.includes('height: auto') && journal.includes('object-fit: contain'), 'Os emblemas do Diário devem preservar sua proporção quadrada.');
 pass(globalCss.includes('place-items: center') && globalCss.includes('padding-top: 0.08em'), 'A numeração dos pontos de paisagem deve permanecer centralizada.');

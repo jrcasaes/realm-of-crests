@@ -14,6 +14,7 @@ const safeJson = (value: unknown) => JSON.stringify(value).replace(/</g, '\\u003
   data-emberline-journal
   data-base={base}
   aria-labelledby="journal-title"
+  aria-busy="true"
 >
   <script type="application/json" data-journal-realms set:html={safeJson(realms)}></script>
 
@@ -220,6 +221,8 @@ const safeJson = (value: unknown) => JSON.stringify(value).replace(/</g, '\\u003
         affinity.textContent = 'não definido';
         ritualLink.textContent = 'realizar ritual →';
       }
+      root.dataset.ready = 'true';
+      root.setAttribute('aria-busy', 'false');
     };
 
     root.querySelectorAll<HTMLTextAreaElement>('[data-journal-note]').forEach((textarea) => {
@@ -312,6 +315,15 @@ const safeJson = (value: unknown) => JSON.stringify(value).replace(/</g, '\\u003
   .journal-privacy strong { color: var(--parchment); font-size: .75rem; font-weight: 500; }
   .journal-privacy small { color: var(--parchment-faint); font-size: .65rem; }
   .journal-summary { display: grid; grid-template-columns: 1fr 1fr 2fr; border: 1px solid rgba(201,163,92,.32); background: var(--codex); }
+  .emberline-journal:not([data-ready]) .journal-summary,
+  .emberline-journal:not([data-ready]) .journal-empty,
+  .emberline-journal:not([data-ready]) .journal-entries,
+  .emberline-journal:not([data-ready]) .journal-fragments ol { visibility: hidden; }
+  .emberline-journal[data-ready] .journal-summary,
+  .emberline-journal[data-ready] .journal-empty,
+  .emberline-journal[data-ready] .journal-entries,
+  .emberline-journal[data-ready] .journal-fragments ol { animation: journal-ready .22s ease both; }
+  @keyframes journal-ready { from { opacity: 0; } to { opacity: 1; } }
   .journal-summary article { display: flex; align-items: center; gap: 1rem; min-height: 118px; padding: 1.5rem; border-right: 1px solid var(--edge); }
   .journal-summary article:last-child { border-right: 0; }
   .journal-summary > article > strong { color: var(--gold); font: 2.8rem var(--font-display); }

@@ -2,6 +2,7 @@
 import { canonLabel } from '../lib/canon.js';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import RealmCard from '../components/RealmCard.astro';
+import FirstCrossing from '../components/FirstCrossing.astro';
 import realms from '../data/realms.json';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -39,6 +40,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         <a class="gate-secondary" href={`${base}/atlas/`} data-exploration-continue>
           <span data-exploration-label>Iniciar pelo Atlas</span>
         </a>
+        <FirstCrossing base={base} />
       </div>
       <p class="entry-memory">
         <strong><span data-exploration-count>0</span>/19</strong>

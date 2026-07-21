@@ -1,0 +1,69 @@
+{
+  "project": "Realm of Crests",
+  "artifact": "site-operational-package",
+  "manifestVersion": "1.2.15",
+  "generatedDate": "2026-07-21",
+  "status": "PHASE_7_PREVIEW_CANDIDATE",
+  "createsCanon": false,
+  "authority": {
+    "loreMaster": "REALM_OF_CRESTS_LORE_MASTER_CANON_v3.0.6.docx",
+    "dossier": "RoC_Dossie_Canonico_Guardioes_19_v2.6.docx",
+    "storyBible": "RoC_Story_Bible_MASTER_CC31_v2.2.html",
+    "registryVersion": "1.2.12",
+    "cc27": "RoC_CC-27_Sistema_Canonico_Marcas_e_Glifos_de_Fervor_v1.3.docx",
+    "cc31": "RoC_CC-31_Matriz_Canonica_de_Fervores_e_Estatuto_do_Legado_v1.0.docx",
+    "cartographyMaster": "RoC_Mapa_Canonico_Continente_MASTER_v1.1.png"
+  },
+  "phase7_0": {
+    "status": "IMPLEMENTED_PENDING_PREVIEW_QA",
+    "atlasEmblems": {
+      "count": 19,
+      "transparentAssets": 19,
+      "botafiaStatus": "APPROVED_PUBLISHED_ASSET_PRESERVED",
+      "replacementAuthorized": false,
+      "verification": "GATE_REQUIRES_19_OF_19"
+    },
+    "realmPanoramas": {
+      "pageSource": "RESPONSIVE_WEBP_DERIVATIVES",
+      "widths": [960, 1536],
+      "pngMastersReferencedByHtml": false
+    },
+    "atlasMinimumMetadataSizeRem": 0.62,
+    "journalColdStateFlash": "BLOCKED_UNTIL_LOCAL_STATE_READ",
+    "artifactAudit": "REFERENCED_IMAGE_SIZE_AND_PNG_MASTER_GATES_ENABLED"
+  },
+  "phase7_1": {
+    "status": "IMPLEMENTED_PENDING_PREVIEW_QA",
+    "firstPassage": {
+      "optional": true,
+      "steps": ["Atlas", "Guardiao", "Fervor", "Diario"],
+      "storage": "LOCAL_ONLY"
+    },
+    "continuity": {
+      "contexts": ["Atlas", "Reino", "Guardiao"],
+      "recommendationsExplained": true,
+      "usesDominantAndSecondaryFervor": true,
+      "fragmentsReappearOutsideJournal": true
+    },
+    "systemDemonstrations": {
+      "fervor": "EXISTING_CODEX_8X5_REUSED",
+      "gravity": "LIGHT_CONCEPTUAL_LENS",
+      "ascension": "LIGHT_FIXED_STATE_LENS",
+      "createsCanon": false,
+      "powerScoring": false
+    }
+  },
+  "canonProtection": {
+    "siteCreatesCanon": false,
+    "userAffinityIsCanon": false,
+    "gamificationPoints": false,
+    "newLoreIntroduced": false
+  },
+  "targetQa": {
+    "desktop1366": "PENDING",
+    "desktop1920": "PENDING",
+    "buildPages": 48,
+    "consoleErrors": "PENDING",
+    "overflow": "PENDING"
+  }
+}
