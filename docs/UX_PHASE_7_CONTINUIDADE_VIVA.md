@@ -1,6 +1,6 @@
 # Fase 7 — Continuidade Viva
 
-Status: implementação em branch de prévia; integração na `main` depende de QA e aprovação.
+Status: Fases 7.0 e 7.1 publicadas; micropatch 7.1.1 validado localmente e pendente de publicação.
 
 ## 7.0 — Saneamento técnico
 
@@ -19,6 +19,16 @@ Rota opcional de quatro passagens: Atlas → Guardião → Fervor → Diário. O
 ### Bússola contextual
 
 Atlas, fólios territoriais e dossiês exibem uma recomendação explicada. A seleção prioriza Reinos ainda não registrados e, quando existe um Crest de Jornada, compara os Fervores dominante e secundário. A interface sempre informa o motivo e mantém a escolha com o visitante.
+
+### Micropatch 7.1.1 — Diversidade de Vestígios
+
+- `roc.guardians.v1` registra apenas Guardiões efetivamente vistos; não transforma a visita em descoberta territorial.
+- **Continuar a travessia** percorre Guardiões ainda não vistos e garante cobertura dos 19 antes de repetir qualquer nome.
+- **Seguir uma ressonância** oferece uma alternativa igualmente inédita, ordenada pelos Fervores do Ritual ou, sem Ritual, pela relação com o Guardião atual.
+- O Guardião atual e os três vestígios mais recentes ficam fora da seleção; ciclos imediatos A ↔ B são proibidos.
+- A ordem oficial dos 19 funciona como desempate circular a partir do Guardião atual, eliminando o viés do primeiro item do cadastro.
+- Após 19/19, o rótulo muda para **Outra ressonância** e a navegação continua sem retorno imediato.
+- A memória permanece local, privada e separada de `roc.exploration.v1`.
 
 ### Fragmentos vivos
 
@@ -40,3 +50,4 @@ Os mesmos quatro fundamentos públicos do Diário reaparecem na bússola após 1
 5. Recomendações com justificativa legível e fallback sem Ritual.
 6. Fragmentos reaparecendo fora do Diário conforme o progresso.
 7. QA desktop em 1366 × 768 e 1920 × 1080, sem overflow, imagem quebrada ou erro de aplicação.
+8. Nenhuma autoindicação, repetição antes de 19/19 ou ciclo de dois Guardiões.

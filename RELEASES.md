@@ -1,5 +1,20 @@
 # Realm of Crests — Registro de versões do site
 
+## v1.2.16 — 2026-07-21
+
+Status: **micropatch 7.1.1 validado localmente; publicação pendente**.
+
+- Separa **Continuar a travessia** de **Seguir uma ressonância** nos ecos contextuais.
+- Registra Guardiões vistos em memória local própria, sem alterar o progresso territorial.
+- Garante descoberta dos 19 Guardiões antes de repetir nomes e elimina ciclos A ↔ B.
+- Exclui o Guardião atual e os três vestígios recentes; após 19/19, ativa o estado **Outra ressonância**.
+- Usa Fervores como ordenação explicada entre candidatos válidos, nunca como destino absoluto.
+- Não altera cânone, dossiês, relações de Fervor, imagens, emblemas ou o asset preservado de Botáfia.
+
+Gate local: **PASS** — 19 pontos de partida × 64 pares de afinidade, cobertura 19/19 sem repetição, sem autoindicação e sem ciclos A ↔ B.
+
+QA navegável: **PASS** — 22/22 verificações em 1366 × 768 e 1920 × 1080; memória de Guardiões, separação territorial, estado pós-cobertura, console e overflow aprovados.
+
 ## v1.2.15 — 2026-07-21
 
 Status: **Fases 7.0 e 7.1 implementadas em candidato de prévia; integração na `main` pendente de QA e aprovação**.
