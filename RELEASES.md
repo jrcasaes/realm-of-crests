@@ -2,7 +2,7 @@
 
 ## v1.2.13 — 2026-07-21
 
-Status: **Fase 6.1 e atualização visual 18/19 do Atlas validadas em prévia pública; integração na `main` pendente**.
+Status: **publicada e verificada em produção; Botáfia permanece como exceção opaca temporária**.
 
 - Integra o Mapa Canônico do Continente v1.1 como errata cartográfica derivada do cânone consolidado.
 - Corrige exclusivamente o verbete Woundlands; geografia, rotas, marcadores e enquadramento permanecem inalterados.
@@ -11,10 +11,13 @@ Status: **Fase 6.1 e atualização visual 18/19 do Atlas validadas em prévia p�
 - Mantém Athlétia exatamente como aprovado e preserva temporariamente o emblema opaco anterior de Botáfia, pendente de reexportação íntegra.
 - Restaura as margens responsivas do herói do Diário.
 - Normaliza referências técnicas para Lore Master v3.0.6, Dossiê v2.6, CC-27 v1.3 e CC-31 v1.0.
+- Corrige o pipeline de produção para Node 22.12.0, requisito do Astro 7.1.1.
 
 Gate local: **PASS** — Fases 0–6, build de 48 páginas e auditoria do artefato aprovados.
 
 Verificação pública dos emblemas transparentes: **PASS** — 19/19 estados carregados corretamente; 18/19 com transparência e Botáfia preservada como exceção opaca declarada.
+
+Verificação pública de produção: **PASS** — PR #8 integrado, deploy nº 35 aprovado, 48/48 URLs do sitemap com HTTP 200, Atlas v1.1 e Diário sem overflow ou imagens quebradas no desktop observado.
 
 ## v1.2.12 — 2026-07-19
 
