@@ -1,0 +1,89 @@
+{
+  "project": "Realm of Crests",
+  "artifact": "site-operational-package",
+  "manifestVersion": "1.2.13",
+  "generatedDate": "2026-07-21",
+  "status": "DERIVED_OPERATIONAL_PREVIEW",
+  "createsCanon": false,
+  "authority": {
+    "loreMaster": "REALM_OF_CRESTS_LORE_MASTER_CANON_v3.0.6.docx",
+    "dossier": "RoC_Dossie_Canonico_Guardioes_19_v2.6.docx",
+    "storyBible": "RoC_Story_Bible_MASTER_CC31_v2.2.html",
+    "registryVersion": "1.2.12",
+    "cc27": "RoC_CC-27_Sistema_Canonico_Marcas_e_Glifos_de_Fervor_v1.3.docx",
+    "cc31": "RoC_CC-31_Matriz_Canonica_de_Fervores_e_Estatuto_do_Legado_v1.0.docx",
+    "cartographyIndex": "RoC_Indice_de_Mapas_Escala_e_Rotas_v1.1",
+    "cartographyMaster": "RoC_Mapa_Canonico_Continente_MASTER_v1.1.png"
+  },
+  "cartographicErratum": {
+    "status": "APPROVED_FOR_PHASE_6_1",
+    "classification": "ERRATA_DERIVED_FROM_CONSOLIDATED_CANON",
+    "target": "WOUNDLANDS_LEGEND_ENTRY",
+    "geographyChanged": false,
+    "webDerivatives": [
+      "public/assets/maps/map_continent.webp",
+      "public/assets/maps/map_continent_2x.webp"
+    ]
+  },
+  "cc28c": {
+    "status": "INCORPORATED_AND_REQUIRED",
+    "realms": 19,
+    "verification": "PASS"
+  },
+  "cc30": {
+    "status": "INCORPORATED_AND_REQUIRED",
+    "closedGapNotes": 3,
+    "verification": "PASS"
+  },
+  "cc31": {
+    "status": "CANONICAL_COMPLEMENTARY_ACTIVE",
+    "legacyClassification": "EXCEPTIONAL_INHERITED_ONTOLOGICAL",
+    "legacyRarityLabel": false,
+    "currentCohort": {
+      "dominant": ["Nego"],
+      "secondary": ["Admiral", "Eldric"]
+    },
+    "verification": "PASS_19_OF_19"
+  },
+  "glyphRasterFullLock": {
+    "scope": "RASTER_8X5_ONLY",
+    "families": 8,
+    "materialsPerFamily": 5,
+    "activeAssets": 40,
+    "verification": "PASS_40_OF_40",
+    "vectorMastersStatus": "DERIVED_TECHNICAL_ACTIVE_V1.0"
+  },
+  "siteData": {
+    "file": "src/data/realms.json",
+    "realmCount": 19,
+    "guardianCount": 19,
+    "visualHotspotCount": 57,
+    "uniqueSlugCount": 19,
+    "verification": "PASS"
+  },
+  "localReleaseGate": {
+    "verifiedDate": "2026-07-21",
+    "productionBuild": "PASS_48_PAGES",
+    "contentValidation": "PHASES_0_TO_6_PASS",
+    "artifactAudit": "PASS_48_CANONICALS_LINKS_AND_ASSETS",
+    "responsiveQa": "PENDING_PUBLIC_PREVIEW"
+  },
+  "discoverability": {
+    "previewRobotsMeta": "NOINDEX_NOFOLLOW",
+    "canonicalLinks": "ENABLED"
+  },
+  "deployment": {
+    "github": "PENDING_PHASE_6_BRANCH_PUSH",
+    "pullRequest": 8,
+    "draft": true,
+    "mainInvolved": false
+  },
+  "publicMetadata": "SANITIZED_NO_PRIVATE_DRIVE_IDS",
+  "publicVerification": {
+    "url": "https://jrcasaes.github.io/realm-of-crests/previews/phase-6/",
+    "lastVerifiedRelease": "1.2.11",
+    "targetRelease": "1.2.13",
+    "targetStatus": "LOCAL_WORK_IN_PROGRESS",
+    "publicVerificationRequiredAfterPush": true
+  }
+}

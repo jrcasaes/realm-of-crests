@@ -30,6 +30,7 @@ const atlas = read('src/components/ImmersiveRealmMap.astro');
 const realmExplorer = read('src/components/RealmAtlasExplorer.astro');
 const explorationHud = read('src/components/ExplorationHUD.astro');
 const journalPage = read('src/pages/diario/index.astro');
+const atlasPage = read('src/pages/atlas.astro');
 const journal = read('src/components/EmberlineJournal.astro');
 const robots = read('src/pages/robots.txt.js');
 const sitemap = read('src/pages/sitemap.xml.js');
@@ -105,6 +106,17 @@ pass(journal.includes('height: auto') && journal.includes('object-fit: contain')
 pass(globalCss.includes('place-items: center') && globalCss.includes('padding-top: 0.08em'), 'A numeração dos pontos de paisagem deve permanecer centralizada.');
 pass(journalPage.includes('fervors_cycle.webp') && !journalPage.includes('journal-orbit'), 'O Diário deve usar o ciclo dos oito Fervores sem girar um glifo estático.');
 pass(journalPage.includes('connection?.saveData') && journalPage.includes("rocMotion === 'serene'"), 'A animação dos Fervores deve respeitar economia de dados e modo Sereno.');
+pass(!journalPage.includes('.journal-hero-content { position: relative; z-index: 1; width: 100%; }'), 'O conteúdo do herói do Diário não pode anular as margens de wide-wrap.');
+pass(atlasPage.includes('mapa canônico do continente v1.1') && atlasPage.includes('errata cartográfica aprovada: 2026-07-21'), 'O Atlas não identifica o master cartográfico v1.1.');
+const mapAssets = ['public/assets/maps/map_continent.webp', 'public/assets/maps/map_continent_2x.webp'];
+pass(mapAssets.every((path) => existsSync(resolve(root, path))), 'Os dois derivados WebP do mapa v1.1 devem existir.');
+pass(mapAssets.every((path) => {
+  const buffer = readFileSync(resolve(root, path));
+  return buffer.length >= 20
+    && buffer.toString('ascii', 0, 4) === 'RIFF'
+    && buffer.toString('ascii', 8, 12) === 'WEBP'
+    && buffer.readUInt32LE(4) + 8 === buffer.length;
+}), 'Há derivado WebP do mapa v1.1 truncado ou inválido.');
 const fervorAnimation = resolve(root, 'public/assets/fervor/fervors_cycle.webp');
 pass(existsSync(fervorAnimation) && statSync(fervorAnimation).size <= 700_000, 'A animação dos Fervores está ausente ou excede o orçamento de 700 kB.');
 

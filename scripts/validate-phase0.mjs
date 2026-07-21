@@ -18,6 +18,10 @@ pass(new Set(realms.map((realm) => realm.guardian)).size === 19, 'Os Guardiões 
 pass(realms.every((realm) => realm.panoramaAsset), 'Há Reino sem panorama público registrado.');
 pass(realms.every((realm) => realm.visualHotspots?.length === 3), 'Cada Reino deve preservar três hotspots visuais nesta fase.');
 pass(sources.authority.registry.version_at_sync === '1.2.12', 'O ponteiro público do registry não está em v1.2.12.');
+pass(sources.authority.loreMaster.version_at_sync === '3.0.6', 'O ponteiro público do Lore Master não está em v3.0.6.');
+pass(sources.authority.guardiansDossier.version_at_sync === '2.6', 'O ponteiro público do Dossiê não está em v2.6.');
+pass(sources.authority.cartography?.version_at_sync === '1.1', 'O ponteiro cartográfico não está no master v1.1.');
+pass(sources.authority.cartography?.geographyChanged === false, 'A errata cartográfica não pode declarar mudança geográfica.');
 pass(JSON.stringify(rootSources) === JSON.stringify(sources), 'Os ponteiros sources.json da raiz e de src/data divergiram.');
 
 const serializedRealms = JSON.stringify(realms);

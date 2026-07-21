@@ -1,8 +1,22 @@
 # Realm of Crests — Registro de versões do site
 
+## v1.2.13 — 2026-07-21
+
+Status: **Fase 6.1 validada em branch; implantação pública pendente**.
+
+- Integra o Mapa Canônico do Continente v1.1 como errata cartográfica derivada do cânone consolidado.
+- Corrige exclusivamente o verbete Woundlands; geografia, rotas, marcadores e enquadramento permanecem inalterados.
+- Regenera apenas os derivados WebP do mapa e preserva panoramas territoriais e emblemas.
+- Restaura as margens responsivas do herói do Diário.
+- Normaliza referências técnicas para Lore Master v3.0.6, Dossiê v2.6, CC-27 v1.3 e CC-31 v1.0.
+
+Gate local: **PASS** — Fases 0–6, build de 48 páginas e auditoria do artefato aprovados.
+
+Verificação pública desktop/mobile: **PENDENTE** — será executada após o push na prévia isolada da Fase 6.
+
 ## v1.2.12 — 2026-07-19
 
-Status: **Fase 0 validada em branch; implantação pública pendente**.
+Status: **superada em preview pela v1.2.13; não integrada à `main`**.
 
 - Ativa os masters SVG, os derivados monocromáticos e os PDFs técnicos v1.0 dos oito Fervores.
 - Sincroniza os dois ponteiros públicos do site com o `roc-source-registry v1.2.12`.

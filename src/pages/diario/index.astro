@@ -60,7 +60,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   .journal-hero::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, transparent 0 8.2%, rgba(201,163,92,.025) 8.3% 8.4%); mask-image: linear-gradient(to bottom, transparent, black 30%, black 75%, transparent); }
   .journal-hero-mark { position: absolute; top: 50%; right: clamp(-9rem, 4vw, 4rem); width: min(58vw, 700px); transform: translateY(-50%); opacity: .28; filter: drop-shadow(0 0 60px rgba(201,163,92,.18)); }
   .journal-hero-mark img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; }
-  .journal-hero-content { position: relative; z-index: 1; width: 100%; }
+  .journal-hero-content { position: relative; z-index: 1; }
   .journal-hero-content .rubric { color: var(--gold); }
   .journal-hero h1 { margin-top: 1rem; color: var(--parchment); font-size: clamp(3.2rem, 9vw, 8.4rem); line-height: .84; letter-spacing: -.045em; }
   .journal-hero h1 i { color: var(--gold); font-size: .34em; font-weight: 400; }

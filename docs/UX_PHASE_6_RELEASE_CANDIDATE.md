@@ -58,3 +58,11 @@ O toolchain do release candidate usa Node 22 e Astro 7.1.1. Astro permanece em `
 - [ ] Metadados `noindex` confirmados na prévia.
 - [ ] Aprovação explícita para integração na `main`.
 - [ ] Tag e ponto de restauração definidos antes do merge.
+
+## Fase 6.1 — errata cartográfica
+
+- O master cartográfico avança para v1.1 por errata textual derivada do cânone já consolidado.
+- A geografia, as rotas, os marcadores, os territórios e o enquadramento permanecem inalterados.
+- O verbete Woundlands deixa de atribuir soberania à Ruína e passa a registrar instabilidade de memória e orientação.
+- Apenas os dois WebP do mapa foram regenerados; panoramas territoriais e emblemas permanecem intactos.
+- O herói do Diário volta a herdar as margens responsivas de `wide-wrap` em desktop e mobile.
