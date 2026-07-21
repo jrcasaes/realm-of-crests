@@ -1,5 +1,19 @@
 # Realm of Crests — Registro de versões do site
 
+## v1.2.18 — 2026-07-21
+
+Status: **micropatch 7.1.3 em validação; publicação pendente**.
+
+- Remove do retrato principal dos 19 dossiês a redução artificial de saturação e brilho.
+- Mantém a cópia ampliada e desfocada exclusivamente como atmosfera de fundo.
+- Restringe o véu escuro à área textual e à transição inferior do herói, liberando rosto e corpo do Guardião.
+- Reforça a presença do retrato em telas compactas sem alterar sua fonte, recorte canônico ou proporção.
+- Preserva galeria, imagens, conteúdo canônico, Fervores, emblemas e memória de navegação.
+
+Gate local: **PASS** — 48 páginas, 48 canonicals, links/assets íntegros e contrato dedicado de nitidez aprovado.
+
+QA visual: **PENDENTE** — comparar no preview Guardiões horizontais e verticais em desktop e tela compacta antes da integração.
+
 ## v1.2.17 — 2026-07-21
 
 Status: **publicada e verificada em produção; fechamento operacional da Fase 7 concluído**.

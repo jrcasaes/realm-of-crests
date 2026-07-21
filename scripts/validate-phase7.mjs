@@ -22,7 +22,7 @@ const gravity = read('src/pages/sistemas/gravity.astro');
 const ascension = read('src/pages/sistemas/ascensao.astro');
 const release = read('scripts/validate-phase6.mjs');
 
-pass(packageJson.version === '1.8.2', 'A Fase 7 com o micropatch 7.1.2 deve identificar o pacote 1.8.2.');
+pass(packageJson.version === '1.8.3', 'A Fase 7 com o micropatch 7.1.3 deve identificar o pacote 1.8.3.');
 pass(packageJson.scripts?.['validate:continuity'] === 'node scripts/validate-phase7.mjs', 'O gate da Fase 7 não está declarado.');
 pass(home.includes('<FirstCrossing base={base} />') && firstCrossing.includes('roc.first-passage.v1'), 'A Primeira Travessia opcional está incompleta.');
 pass(hud.includes('data-first-passage-link') && hud.includes('I · Encontrar um Reino') && hud.includes('IV · Guardar a memória'), 'O HUD não conduz as quatro passagens.');
