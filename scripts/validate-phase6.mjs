@@ -108,6 +108,7 @@ pass(journalPage.includes('fervors_cycle.webp') && !journalPage.includes('journa
 pass(journalPage.includes('connection?.saveData') && journalPage.includes("rocMotion === 'serene'"), 'A animação dos Fervores deve respeitar economia de dados e modo Sereno.');
 pass(!journalPage.includes('.journal-hero-content { position: relative; z-index: 1; width: 100%; }'), 'O conteúdo do herói do Diário não pode anular as margens de wide-wrap.');
 pass(atlasPage.includes('mapa canônico do continente v1.1') && atlasPage.includes('errata cartográfica aprovada: 2026-07-21'), 'O Atlas não identifica o master cartográfico v1.1.');
+pass(atlas.includes('MAPA CANÔNICO DO CONTINENTE · v1.1'), 'O rótulo visível do Atlas não identifica o master cartográfico v1.1.');
 const mapAssets = ['public/assets/maps/map_continent.webp', 'public/assets/maps/map_continent_2x.webp'];
 pass(mapAssets.every((path) => existsSync(resolve(root, path))), 'Os dois derivados WebP do mapa v1.1 devem existir.');
 pass(mapAssets.every((path) => {
