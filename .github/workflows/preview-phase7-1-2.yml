@@ -64,9 +64,10 @@ jobs:
 
       - name: Compor producao e preview isolado
         run: |
-          mkdir -p site/previews/phase-7-1-2
+          mkdir -p site/previews/phase-7-1-2/_qa
           cp -R production/dist/. site/
           cp -R preview/dist/. site/previews/phase-7-1-2/
+          cp preview/.github/preview/phase7-1-2-qa.html site/previews/phase-7-1-2/_qa/index.html
 
       - name: Empacotar GitHub Pages
         uses: actions/upload-pages-artifact@v3
