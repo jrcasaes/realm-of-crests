@@ -1,0 +1,85 @@
+name: Preview visual — Fase 7.1.4
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+    paths:
+      - .github/workflows/preview-phase7-1-4.yml
+      - astro.config.mjs
+      - package.json
+      - package-lock.json
+      - public/**
+      - scripts/**
+      - src/**
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-phase-7-1-4
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'agent/realm-hotspots-7-1-4'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar a producao estavel
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: production
+
+      - name: Baixar a Fase 7.1.4
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          path: preview
+
+      - name: Preparar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.12.0
+          cache: npm
+          cache-dependency-path: |
+            production/package-lock.json
+            preview/package-lock.json
+
+      - name: Construir producao
+        working-directory: production
+        run: npm ci && npm run build
+
+      - name: Validar e construir a Fase 7.1.4
+        working-directory: preview
+        env:
+          ASTRO_BASE: /realm-of-crests/previews/phase-7-1-4
+          PUBLIC_ROBOTS: noindex, nofollow
+        run: npm ci && npm run check
+
+      - name: Verificar bloqueio de indexacao
+        run: grep -R -F 'content="noindex, nofollow"' preview/dist --include='*.html' >/dev/null
+
+      - name: Compor producao e preview isolado
+        run: |
+          mkdir -p site/previews/phase-7-1-4
+          cp -R production/dist/. site/
+          cp -R preview/dist/. site/previews/phase-7-1-4/
+
+      - name: Empacotar GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages-preview
+      url: ${{ steps.deployment.outputs.page_url }}previews/phase-7-1-4/
+    steps:
+      - name: Publicar preview temporario
+        id: deployment
+        uses: actions/deploy-pages@v4
