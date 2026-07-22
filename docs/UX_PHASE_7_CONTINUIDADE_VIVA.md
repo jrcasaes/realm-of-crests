@@ -1,8 +1,8 @@
 # Fase 7 — Continuidade Viva
 
-Status: **Fases 7.0 e 7.1 encerradas em produção; micropatch visual 7.1.3 em validação**. Micropatches 7.1.1 e 7.1.2 publicados em 2026-07-21.
+Status: **concluída e verificada em produção**. Fases 7.0 e 7.1 e micropatches 7.1.1 a 7.1.4 publicados até 2026-07-22.
 
-Implementação de produção: `285bec7` (Fases 7.0–7.1), `c356cae` (7.1.1) e `2870cb1` (7.1.2). Registro operacional consolidado no manifesto v1.2.17.
+Implementação de produção: `285bec7` (Fases 7.0–7.1), `c356cae` (7.1.1), `2870cb1` (7.1.2), `502ea7f` (7.1.3) e `05df695` (7.1.4). Registro operacional consolidado no manifesto v1.2.18.
 
 ## 7.0 — Saneamento técnico
 
@@ -48,6 +48,13 @@ Atlas, fólios territoriais e dossiês exibem uma recomendação explicada. A se
 - Em telas compactas, a opacidade do retrato é reforçada enquanto o gradiente preserva a leitura do conteúdo sobreposto.
 - O patch se aplica ao template comum dos 19 Guardiões e não modifica nenhum arquivo de imagem ou dado canônico.
 
+### Micropatch 7.1.4 — Alinhamento dos Hotspots dos Reinos
+
+- Reposiciona exclusivamente o marcador `03` em nove fólios territoriais para ancorá-lo ao obelisco representado no panorama.
+- Corrige Bahea, Vaskor, Coríntia, Palesterra, Cruzária, Colorado, Flúmen, Coritba e Chapeco.
+- Preserva os marcadores `01` e `02`, a matriz de 19 Reinos × 3 pontos, os panoramas, o mapa continental e todo o conteúdo canônico.
+- Mantém a interação e a leitura dos 57 pontos interpretativos sem introduzir estruturas ou nomenclaturas novas.
+
 ### Fragmentos vivos
 
 Os mesmos quatro fundamentos públicos do Diário reaparecem na bússola após 1, 5, 10 e 19 Reinos. Não há informação exclusiva, prêmio, poder ou pontuação.
@@ -73,12 +80,14 @@ Os mesmos quatro fundamentos públicos do Diário reaparecem na bússola após 1
 10. Fichas territoriais completas em 2 × 2 quando houver duas colunas, sem célula visual vazia.
 11. Arena de Ferro ancorada no edifício circular correto do panorama de Galícia.
 12. Retratos principais dos 19 dossiês sem filtros de brilho, saturação ou desfoque; desfoque permitido somente no fundo atmosférico.
+13. Matriz de 57 hotspots preservada e os nove marcadores `03` corrigidos ancorados aos respectivos obeliscos.
 
 ## Resultado de validação
 
 - Fases 7.0–7.1: **PASS** — 40/40 verificações centrais, 18/18 complementares e smoke público do PR #9.
 - Micropatch 7.1.1: **PASS** — 98/98 verificações navegáveis, cobertura dos 19 Guardiões, migração e persistência aprovadas; smoke público do PR #10.
 - Micropatch 7.1.2: **PASS** — 1024, 1366 e 1920 px e zoom equivalente a 125% e 150%; smoke público do PR #11.
-- Micropatch 7.1.3: **GATE LOCAL PASS** — 48 páginas, 48 canonicals e contrato de nitidez aprovados; QA visual público pendente.
+- Micropatch 7.1.3: **PASS** — contrato de nitidez, Solari, Vulture, Eldric e layout de 390 px aprovados; smoke público do PR #13.
+- Micropatch 7.1.4: **PASS** — nove obeliscos corrigidos, 27/27 hotspots das rotas alteradas e interação do marcador `03` aprovados; smoke público do PR #14.
 - Estado final: 48 páginas e 48 canonicals, sem overflow horizontal, imagens quebradas ou erros JavaScript da aplicação nas rotas auditadas.
 - Escopo preservado: nenhum conteúdo canônico, panorama, emblema ou relação de Fervor foi alterado pelo fechamento operacional.

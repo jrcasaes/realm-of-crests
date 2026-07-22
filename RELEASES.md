@@ -1,18 +1,24 @@
 # Realm of Crests — Registro de versões do site
 
-## v1.2.18 — 2026-07-21
+## v1.2.18 — 2026-07-22
 
-Status: **micropatch 7.1.3 em validação; publicação pendente**.
+Status: **publicada e verificada em produção; micropatches 7.1.3 e 7.1.4 consolidados**.
 
 - Remove do retrato principal dos 19 dossiês a redução artificial de saturação e brilho.
 - Mantém a cópia ampliada e desfocada exclusivamente como atmosfera de fundo.
 - Restringe o véu escuro à área textual e à transição inferior do herói, liberando rosto e corpo do Guardião.
 - Reforça a presença do retrato em telas compactas sem alterar sua fonte, recorte canônico ou proporção.
 - Preserva galeria, imagens, conteúdo canônico, Fervores, emblemas e memória de navegação.
+- Reposiciona nove marcadores `03` sobre os obeliscos correspondentes em Bahea, Vaskor, Coríntia, Palesterra, Cruzária, Colorado, Flúmen, Coritba e Chapeco.
+- Mantém os 19 Reinos, os 57 pontos interpretativos, os marcadores `01` e `02`, os panoramas e o mapa continental inalterados.
 
-Gate local: **PASS** — 48 páginas, 48 canonicals, links/assets íntegros e contrato dedicado de nitidez aprovado.
+Gate local: **PASS** — 48 páginas, 48 canonicals, links/assets íntegros, contrato dedicado de nitidez aprovado e matriz de 19 Reinos × 3 marcadores preservada.
 
-QA visual: **PENDENTE** — comparar no preview Guardiões horizontais e verticais em desktop e tela compacta antes da integração.
+QA visual: **PASS** — Solari, Vulture e Eldric aprovados em formatos horizontal e vertical e em 390 px; os nove obeliscos corrigidos foram confirmados sobre as estruturas correspondentes, com foco em Coríntia, Palesterra, Cruzária e Flúmen.
+
+Verificação pública: **PASS** — PR #13 integrado no commit `502ea7fe9f2f8389845154606645e95d90fb6daa` e PR #14 integrado no commit `05df69597fa07df948b1a59da20fdc36ce288410`; 27/27 hotspots das nove rotas alteradas visíveis, interação do marcador `03` aprovada e zero imagem quebrada, overflow horizontal ou erro JavaScript da aplicação.
+
+Escopo preservado: nenhum conteúdo canônico, arquivo de imagem, panorama, emblema, relação de Fervor ou estado de memória foi alterado.
 
 ## v1.2.17 — 2026-07-21
 

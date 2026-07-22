@@ -1,0 +1,109 @@
+{
+  "project": "Realm of Crests",
+  "artifact": "site-operational-package",
+  "manifestVersion": "1.2.18",
+  "generatedDate": "2026-07-22",
+  "status": "PRODUCTION_VERIFIED",
+  "createsCanon": false,
+  "authority": {
+    "loreMaster": "REALM_OF_CRESTS_LORE_MASTER_CANON_v3.0.6.docx",
+    "dossier": "RoC_Dossie_Canonico_Guardioes_19_v2.6.docx",
+    "storyBible": "RoC_Story_Bible_MASTER_CC31_v2.2.html",
+    "registryVersion": "1.2.12",
+    "cc27": "RoC_CC-27_Sistema_Canonico_Marcas_e_Glifos_de_Fervor_v1.3.docx",
+    "cc31": "RoC_CC-31_Matriz_Canonica_de_Fervores_e_Estatuto_do_Legado_v1.0.docx",
+    "cartographyMaster": "RoC_Mapa_Canonico_Continente_MASTER_v1.1.png"
+  },
+  "release": {
+    "sitePackageVersion": "1.8.3",
+    "productionUrl": "https://jrcasaes.github.io/realm-of-crests/",
+    "verifiedDate": "2026-07-22",
+    "phase7Commit": "285bec7a9d1f7ac69b16a187ac68354e9e52f6b8",
+    "micropatch7_1_1Commit": "c356cae312eab71d0c4db2a613c4185532acec08",
+    "micropatch7_1_2Commit": "2870cb10d0c4707d7d16fbd830ee712321e02306",
+    "micropatch7_1_3Commit": "502ea7fe9f2f8389845154606645e95d90fb6daa",
+    "verifiedImplementationCommit": "05df69597fa07df948b1a59da20fdc36ce288410",
+    "pullRequests": [9, 10, 11, 13, 14],
+    "predecessorManifests": ["1.2.15", "1.2.16", "1.2.17"]
+  },
+  "micropatch7_1_3": {
+    "status": "PRODUCTION_VERIFIED",
+    "scope": "GUARDIAN_DOSSIER_TEMPLATE_19_OF_19",
+    "mainPortraitFilter": "NONE",
+    "atmosphericBackgroundBlur": "PRESERVED_BACKGROUND_ONLY",
+    "desktopTextWash": "RESTRICTED_TO_TEXT_AND_LOWER_TRANSITION",
+    "compactPortraitOpacity": 0.8,
+    "canonChanged": false,
+    "sourceImagesChanged": false
+  },
+  "micropatch7_1_4": {
+    "status": "PRODUCTION_VERIFIED",
+    "realmCount": 19,
+    "hotspotCount": 57,
+    "correctedMarker": "03",
+    "correctedRealmCount": 9,
+    "correctedRealms": [
+      "Bahea",
+      "Vaskor",
+      "Corintia",
+      "Palesterra",
+      "Cruzaria",
+      "Colorado",
+      "Flumen",
+      "Coritba",
+      "Chapeco"
+    ],
+    "coordinates": {
+      "bahea": {"xPercent": 89, "yPercent": 34},
+      "vaskor": {"xPercent": 91, "yPercent": 18},
+      "corintia": {"xPercent": 30, "yPercent": 22},
+      "palesterra": {"xPercent": 65, "yPercent": 50},
+      "cruzaria": {"xPercent": 84, "yPercent": 64},
+      "colorado": {"xPercent": 91, "yPercent": 54},
+      "flumen": {"xPercent": 75, "yPercent": 62},
+      "coritba": {"xPercent": 32, "yPercent": 52},
+      "chapeco": {"xPercent": 82, "yPercent": 55}
+    },
+    "criticalVisualCases": ["Corintia", "Palesterra", "Cruzaria", "Flumen"],
+    "marker01Changed": false,
+    "marker02Changed": false,
+    "panoramasChanged": false,
+    "continentalMapChanged": false,
+    "canonChanged": false
+  },
+  "canonProtection": {
+    "siteCreatesCanon": false,
+    "userAffinityIsCanon": false,
+    "gamificationPoints": false,
+    "newLoreIntroduced": false,
+    "fervorRelationsChanged": false,
+    "sourcePointersChanged": false,
+    "sourceImagesChanged": false,
+    "panoramasChanged": false,
+    "emblemsChanged": false,
+    "memoryStateChanged": false
+  },
+  "qa": {
+    "productionBuild": "PASS_48_PAGES",
+    "canonicalUrls": "PASS_48_UNIQUE",
+    "linksAndAssets": "PASS",
+    "micropatch7_1_3": {
+      "portraitClarityGate": "PASS",
+      "solari": "PASS",
+      "vulture": "PASS",
+      "eldric": "PASS",
+      "compact390": "PASS"
+    },
+    "micropatch7_1_4": {
+      "correctedRealms": "PASS_9_OF_9",
+      "changedRouteHotspots": "PASS_27_OF_27",
+      "totalHotspotsPreserved": "PASS_57_OF_57",
+      "marker03Interaction": "PASS"
+    },
+    "publicSmoke": "PASS_PULL_REQUESTS_13_14",
+    "applicationConsoleErrors": 0,
+    "brokenImages": 0,
+    "horizontalOverflow": false
+  },
+  "publicMetadata": "SANITIZED_NO_PRIVATE_DRIVE_IDS"
+}
