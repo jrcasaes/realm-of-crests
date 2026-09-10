@@ -1,8 +1,19 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, extname, join, relative, resolve, sep } from 'node:path';
+import { loadBook } from './lib/book-package.mjs';
+import { auditBookArtifact } from './lib/book-artifact.mjs';
 
 const root = resolve(import.meta.dirname, '..');
 const dist = resolve(root, 'dist');
+const book = loadBook(root, process.env.ROC_READER_MODE || 'off');
+const realms = JSON.parse(readFileSync(resolve(root, 'src/data/realms.json'), 'utf8'));
+const expectedRoutes = [
+  '/', '/atlas/', '/diario/', '/ritual/', '/reinos/', '/guardioes/', '/sistemas/',
+  '/sistemas/fervor/', '/sistemas/gravity/', '/sistemas/ascensao/',
+  ...realms.map(({ slug }) => `/reinos/${slug}/`),
+  ...realms.map(({ guardian }) => `/guardioes/${guardian.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()}/`),
+  ...(book ? ['/livro/', ...book.chapters.map(({ permalink }) => permalink)] : []),
+];
 const basePath = (process.env.ASTRO_BASE || '/realm-of-crests').replace(/\/$/, '');
 const previewBuild = (process.env.PUBLIC_ROBOTS || '').toLowerCase().includes('noindex');
 const failures = [];
@@ -94,12 +105,17 @@ for (const file of htmlFiles) {
 
 const sitemapPath = resolve(dist, 'sitemap.xml');
 const robotsPath = resolve(dist, 'robots.txt');
-pass(htmlFiles.length === 48, `Esperadas 48 páginas HTML; encontradas ${htmlFiles.length}.`);
+pass(htmlFiles.length === (book ? 73 : 48), `Esperadas ${book ? 73 : 48} páginas HTML; encontradas ${htmlFiles.length}.`);
+const expectedCanonicals = expectedRoutes.map((route) => `https://jrcasaes.github.io${basePath}${route}`);
+pass(JSON.stringify([...canonicalUrls].sort()) === JSON.stringify([...expectedCanonicals].sort()), 'O conjunto de canonicals não corresponde às rotas esperadas.');
+pass(expectedRoutes.every((route) => existsSync(resolve(dist, `.${route}`, 'index.html'))), 'Há rota esperada sem HTML.');
 pass(existsSync(sitemapPath), 'sitemap.xml ausente.');
 pass(existsSync(robotsPath), 'robots.txt ausente.');
 if (existsSync(sitemapPath)) {
   const sitemap = readFileSync(sitemapPath, 'utf8');
-  pass((sitemap.match(/<url>/g) || []).length === 48, 'Sitemap deve conter 48 URLs.');
+  const locations = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
+  pass((sitemap.match(/<url>/g) || []).length === (book ? 73 : 48), `Sitemap deve conter ${book ? 73 : 48} URLs.`);
+  pass(JSON.stringify(locations.sort()) === JSON.stringify([...expectedCanonicals].sort()), 'Sitemap diverge do conjunto exato de rotas (incluindo base path).');
 }
 if (existsSync(robotsPath)) {
   const robots = readFileSync(robotsPath, 'utf8');
@@ -113,6 +129,12 @@ const referencedImageBytes = [...referencedImages].reduce((sum, file) => sum + s
 pass(cssBytes < 300_000, `CSS excede o orçamento de 300 KB (${cssBytes} bytes).`);
 pass(jsBytes < 450_000, `JavaScript excede o orçamento de 450 KB (${jsBytes} bytes).`);
 pass(referencedImageBytes < 20_000_000, `Imagens efetivamente referenciadas excedem 20 MB (${referencedImageBytes} bytes).`);
+
+if (book) {
+  const result = auditBookArtifact(root, book, basePath);
+  failures.push(...result.failures);
+  if (!result.failures.length) console.log(`BOOK_RENDER_GATE: PASS · 24 capítulos · ${result.paragraphs} parágrafos idênticos · quebras de cena preservadas · navegação · isolamento · HTML sem JS`);
+}
 
 if (failures.length) {
   console.error('PHASE_6_ARTIFACT_AUDIT: FAIL');

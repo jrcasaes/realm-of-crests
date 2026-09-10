@@ -1,5 +1,6 @@
 import realms from '../data/realms.json';
 import { guardianRoster } from '../lib/guardians.js';
+import { bookChapters, readerEnabled } from '../lib/book.server.mjs';
 
 export const prerender = true;
 
@@ -29,6 +30,7 @@ export function GET() {
     ...staticRoutes,
     ...realms.map(({ slug }) => `/reinos/${slug}/`),
     ...guardianRoster.map(({ slug }) => `/guardioes/${slug}/`),
+    ...(readerEnabled ? ['/livro/', ...bookChapters.map(({ permalink }) => permalink)] : []),
   ];
   const urls = routes.map((route) => {
     const location = `https://jrcasaes.github.io${base}${route}`;

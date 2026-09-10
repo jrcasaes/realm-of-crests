@@ -1,0 +1,43 @@
+---
+import { getCollection, render } from 'astro:content';
+import ReaderLayout from '../../layouts/ReaderLayout.astro';
+import ChapterIndex from '../../components/reader/ChapterIndex.astro';
+import { bookChapters, readerEnabled } from '../../lib/book.server.mjs';
+
+export async function getStaticPaths() {
+  if (!readerEnabled) return [];
+  const entries = await getCollection('livro');
+  return [{ params: { path: undefined }, props: { entry: null, chapter: null } }, ...bookChapters.map((chapter) => ({
+    params: { path: `${chapter.number}/${chapter.slug}` },
+    props: { chapter, entry: entries.find((entry) => entry.data.chapter === chapter.number) },
+  }))];
+}
+const { entry, chapter } = Astro.props;
+if (chapter && !entry) throw new Error(`Capítulo ${chapter.number} ausente da coleção.`);
+const rendered = entry ? await render(entry) : null;
+const Content = rendered?.Content;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const previous = chapter ? bookChapters[chapter.number - 2] : null;
+const next = chapter ? bookChapters[chapter.number] : null;
+const title = chapter ? `${chapter.roman} — ${chapter.title}` : 'A Pedra Que Mente';
+---
+<ReaderLayout title={title} chapter={chapter?.number ?? 0}>
+  {chapter ? <>
+    <div class="reading-tools"><ChapterIndex current={chapter.number} /><p class="reading-position" data-reading-progress hidden></p></div>
+    <header class="chapter-heading"><p class="reader-eyebrow">A Pedra Que Mente · Livro I</p><h1>{title}</h1></header>
+    <article class="reader-prose" data-prose aria-label={`Texto do capítulo ${chapter.roman}`}>{Content && <Content />}</article>
+    <div class="chapter-end"><span aria-hidden="true">◆</span><p>Fim do capítulo {chapter.roman}</p><button type="button" data-complete hidden>Marcar capítulo como concluído</button></div>
+    <nav class="chapter-pagination" aria-label="Navegação de leitura">
+      {previous ? <a href={`${base}${previous.permalink}`} rel="prev"><small>Anterior</small><span>{previous.roman} — {previous.title}</span></a> : <a href={`${base}/livro/`}><small>Livro I</small><span>Voltar ao índice</span></a>}
+      {next ? <a href={`${base}${next.permalink}`} rel="next" data-next><small>Próximo</small><span>{next.roman} — {next.title}</span></a> : <a href={`${base}/livro/`} data-next><small>Fim do Livro I</small><span>Voltar ao livro</span></a>}
+    </nav>
+  </> : <section class="book-landing">
+    <div class="book-title-page" aria-label="Folha de rosto tipográfica do Livro I">
+      <p class="reader-eyebrow">Realm of Crests</p><p class="book-number">Livro I</p>
+      <h1>A Pedra<br />Que Mente</h1><span class="book-rule" aria-hidden="true"></span>
+      <p class="book-caption">Vinte e quatro capítulos</p>
+    </div>
+    <div class="book-actions"><a class="primary-link" href={`${base}${bookChapters[0].permalink}`}>Começar a leitura <span aria-hidden="true">→</span></a><a class="resume-link" data-resume hidden>Continuar leitura</a><p class="book-progress" data-book-progress hidden></p></div>
+    <ChapterIndex open />
+  </section>}
+</ReaderLayout>
