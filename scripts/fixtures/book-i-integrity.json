@@ -1,0 +1,31 @@
+{
+  "package": "RoC_Livro_I_Site_Content_v0.1_2026-09-10.zip",
+  "zipSha256": "421c2a4da781002f150c78d42362ca55c169c428af981ddd9e8983b3881dbc3e",
+  "files": {
+    "book.json": "6caf81d60e7ef58b83eefdd49c27a022ea6e7a90b72e4023673806b60b206e19",
+    "content/livro-i/01-sob-a-pedra.md": "be1399126838f9e68cb9377b66448bfac30c0e2cccd76d9b5f437a1a79578e95",
+    "content/livro-i/02-o-retorno.md": "b7eef6d335378348c3fd4b60b9ee3679fb1f3d199585c274282cb6ec7021730b",
+    "content/livro-i/03-o-peso-humano.md": "9646ac48e6e4d90762abe80ce553eac3e5cacf43b387ece10d49e665a786df89",
+    "content/livro-i/04-pedra-registro-e-ausencia.md": "c6cde5ac928fb2d5904a2eeea1dd535b307f7a42a7623238bee2d5462918a8c3",
+    "content/livro-i/05-a-fonte-de-aco.md": "2f63f3013a8e7b1ea46422714cad0bcbf955df64ca94046b466ad0a5df143232",
+    "content/livro-i/06-a-corte-fraturada.md": "3e47cf57e362ccce5d9f2c3f39b6025b65a06b3981c0f16029254d801209553f",
+    "content/livro-i/07-a-cobranca-de-bahea.md": "9f832117419554cf11e4eca5a65532f4e067c3084b742eb526a3a86e2d8ac1b8",
+    "content/livro-i/08-a-divisa.md": "b1cfd0e836df64c8a162ff7667362ec957599f2c661ad41f9c4c8b322dfbf495",
+    "content/livro-i/09-o-nome-que-falta.md": "9ac06504de2f2631ea05d807d311092b28b4a213f1a0f7bab5de7ce37357df09",
+    "content/livro-i/10-a-margem-dos-vivos.md": "214081320174ccaca8b6aafd28e7233bfa758ab7c72b9e84c9a4ee360279a604",
+    "content/livro-i/11-a-primeira-fissura.md": "f6e249e241dc2873230ba17d6a812da800223838efe4ed18661a6c50414ec43c",
+    "content/livro-i/12-o-eco-na-brasa.md": "0bf06adb6680d578b5582c31fd5072c426d49ec842a870893b3c366805840401",
+    "content/livro-i/13-a-segunda-prisao.md": "2715afdbcf67d1a167c0ad190a00f1d5c41f3f881f42c35338fa2caf7c8abfc3",
+    "content/livro-i/14-proveniencia.md": "7289c312b10c8c328d62cb26221e24a86b473829d765b55b2420605f2fe1febc",
+    "content/livro-i/15-o-peso-dos-nomes.md": "c2b3a7de8f36e8d07be610ed321cd40856d1c266c4459c0f238cfe35c5fdab99",
+    "content/livro-i/16-a-voz-de-brina.md": "6f04f026c237f38c15b196573baf343ae7087964d82718654bfcd69185c53d6f",
+    "content/livro-i/17-a-carta-das-nervuras.md": "061b962ac5b40801e06043881986c4a67727300c2adc5d91fcc123087f3ed31f",
+    "content/livro-i/18-os-que-ficam.md": "486c425facbc81d2a2c357a48746df550776ee7df0190dd71db40c7e83de7030",
+    "content/livro-i/19-a-hora-do-medo.md": "c90e3e5cd219a9f9ee6dbf3abd8e791b8189fe206f41355410e21739c6c495a8",
+    "content/livro-i/20-a-vigilia.md": "3f1bca0c2eef60e3c7f9a1e42b3b7bee31e934bebb71fa4d27053b2b7a5f7e87",
+    "content/livro-i/21-a-direcao-da-raiva.md": "3d71ea7649c762dce7a7d220c8e807efa618855dc45b4192c97b8d3f2204b360",
+    "content/livro-i/22-o-que-foi-cumprido.md": "ef59a6ec51908b64f183daf6317f9021da2195d41994d15dc00e4a13635a93ec",
+    "content/livro-i/23-a-tira-mais-longa.md": "35832029e3a465a1da9fe44b87b0aecb4ff55f4a46d26a9992fac04d272ff56b",
+    "content/livro-i/24-o-caminho-de-vaskor.md": "8d17ce5cc7a24d8ae01f7c6abf9c200f9925f7189246c8ceb40b3d0e1b3326e4"
+  }
+}

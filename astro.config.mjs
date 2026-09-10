@@ -11,4 +11,6 @@ const BASE = process.env.ASTRO_BASE || '/realm-of-crests';
 export default defineConfig({
     site: SITE,
     base: BASE,
+    // A fonte editorial governa cada aspas, apóstrofo e travessão do romance.
+    markdown: { smartypants: false },
 });

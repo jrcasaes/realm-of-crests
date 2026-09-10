@@ -1,5 +1,15 @@
 # Realm of Crests — Registro de versões do site
 
+## Prompt 03 — 2026-09-10 — leitor MVP em revisão privada, não publicado
+
+- Implementa página do Livro I e 24 capítulos estáticos a partir do ZIP exclusivo autorizado, com navegação, índice, tema e progresso local.
+- Isola layout, CSS e armazenamento do leitor; mantém prosa e navegação sem JavaScript.
+- Verifica bytes do pacote, hashes, 5.778 parágrafos e quebras de cena; desativa a transformação tipográfica que alterava aspas do original.
+- Mantém o leitor desligado no build público e a prosa fora do Git; exige os gates completos no CI e antes de deploy futuro.
+- Depende da fundação do Prompt 02 (PR #16); preserva pacote 1.8.3 e manifesto v1.2.18. Sem merge, deploy ou redesign.
+
+Gates locais: **PASS**, 48 páginas sem livro / 73 na revisão privada. **Gate final pendente:** QA visual/interativo e leitura real em smartphone; a prévia foi bloqueada pelo ambiente. Prova editorial pública também pendente no pacote. [Evidências e limites](docs/prompt-03-reader-mvp-2026-09-10.md).
+
 ## Prompt 02 — 2026-09-10 — sincronização mínima, não publicada
 
 - Atualiza oito pares de Fervores e três Essências conforme Dossiê dos 19 v4.1.

@@ -16,6 +16,14 @@ jobs:
     steps:
       - name: Baixar o código
         uses: actions/checkout@v4
+      - name: Preparar Node para o gate completo
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.12.0
+          cache: npm
+      - run: npm ci
+      - name: Gates obrigatórios antes de publicar
+        run: npm run check
       - name: Build do Astro
         uses: withastro/action@v3
         with:

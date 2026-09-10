@@ -2,3 +2,9 @@ node_modules/
 .astro/
 dist/
 .DS_Store
+
+# Fonte editorial autorizada para revisão local, ainda sem prova pública final.
+/book.json
+/content/livro-i/
+/_editorial/
+/*.zip

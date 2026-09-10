@@ -1,4 +1,5 @@
 ---
+import { readerEnabled } from '../lib/book.server.mjs';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const path = Astro.url.pathname;
 const isRealms = path.includes('/reinos');
@@ -7,12 +8,14 @@ const isAtlas = path.includes('/atlas');
 const isGuardians = path.includes('/guardioes');
 const isRitual = path.includes('/ritual');
 const isJournal = path.includes('/diario');
+const isBook = path.includes('/livro');
 ---
 <header class="site-header">
   <div class="wrap">
     <a class="brand" href={`${base}/`} aria-label="Realm of Crests — início">REALM OF CRESTS</a>
     <nav class="site-nav" aria-label="Navegação principal">
-      <a href={`${base}/`} aria-current={!isRealms && !isSystems && !isAtlas && !isGuardians && !isRitual && !isJournal ? 'page' : undefined}>Manifesto</a>
+      <a href={`${base}/`} aria-current={!isRealms && !isSystems && !isAtlas && !isGuardians && !isRitual && !isJournal && !isBook ? 'page' : undefined}>Manifesto</a>
+      {readerEnabled && <a href={`${base}/livro/`} data-astro-reload aria-current={isBook ? 'page' : undefined}>Livro I</a>}
       <a href={`${base}/reinos/`} aria-current={isRealms ? 'page' : undefined}>Os Dezenove Reinos</a>
       <a href={`${base}/guardioes/`} aria-current={isGuardians ? 'page' : undefined}>Guardiões</a>
       <a href={`${base}/sistemas/`} aria-current={isSystems ? 'page' : undefined}>Sistemas</a>

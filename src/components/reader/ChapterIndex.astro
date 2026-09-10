@@ -1,0 +1,15 @@
+---
+import { bookChapters } from '../../lib/book.server.mjs';
+const { current = 0, open = false } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<details class="chapter-index" open={open}>
+  <summary>Índice <span>24 capítulos</span></summary>
+  <nav aria-label="Capítulos do Livro I">
+    <ol>{bookChapters.map((chapter) => <li>
+      <a href={`${base}${chapter.permalink}`} aria-current={current === chapter.number ? 'page' : undefined} data-chapter-link={chapter.number}>
+        <span class="chapter-roman">{chapter.roman}</span><span>{chapter.title}</span><span class="chapter-completed" data-completed={chapter.number} hidden>Concluído</span>
+      </a>
+    </li>)}</ol>
+  </nav>
+</details>

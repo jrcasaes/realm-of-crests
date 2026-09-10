@@ -1,0 +1,58 @@
+---
+import '../styles/reader.css';
+import { bookManifest, readerMode } from '../lib/book.server.mjs';
+const { title, chapter = 0 } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const description = `Realm of Crests · Livro I — A Pedra Que Mente. ${chapter ? title : 'Leia os 24 capítulos.'}`;
+const socialImage = new URL(`${base}/assets/heroes/hero_victoria_2x.webp`, Astro.site);
+const robots = readerMode === 'review' ? 'noindex, nofollow' : (import.meta.env.PUBLIC_ROBOTS || 'index, follow');
+---
+<!doctype html>
+<html lang="pt-BR" data-reader-theme="dark" data-reader-size="standard">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} — Realm of Crests</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content={robots} />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="color-scheme" content="dark light" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="book" />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:image:alt" content="Victória — Realm of Crests" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
+    <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@type': 'Book', name: 'A Pedra Que Mente', inLanguage: 'pt-BR', url: canonical.href, isPartOf: { '@type': 'CreativeWorkSeries', name: 'Realm of Crests' } })} />
+    <script is:inline>
+      try {
+        const saved = JSON.parse(localStorage.getItem('roc.reader.v1') || 'null');
+        if (saved?.version === 1) {
+          if (['dark', 'light'].includes(saved.theme)) document.documentElement.dataset.readerTheme = saved.theme;
+          if (['standard', 'large'].includes(saved.size)) document.documentElement.dataset.readerSize = saved.size;
+        }
+      } catch { /* A leitura não depende do armazenamento. */ }
+    </script>
+  </head>
+  <body data-reader data-book={bookManifest?.book.id} data-book-hash={bookManifest?.book.sha256} data-chapter={chapter} data-base={base}>
+    <a class="skip-link" href="#conteudo-principal">Ir para a leitura</a>
+    <header class="reader-header">
+      <a class="reader-brand" href={`${base}/`} data-astro-reload>Realm of Crests</a>
+      <a href={`${base}/livro/`}>Livro I</a>
+      <details class="reader-settings" data-reader-controls hidden>
+        <summary>Aparência</summary>
+        <div class="settings-panel">
+          <fieldset><legend>Tema</legend><button type="button" data-theme="dark" aria-pressed="true">Escuro</button><button type="button" data-theme="light" aria-pressed="false">Claro</button></fieldset>
+          <fieldset><legend>Tamanho do texto</legend><button type="button" data-size="standard" aria-pressed="true">Padrão</button><button type="button" data-size="large" aria-pressed="false">Maior</button></fieldset>
+        </div>
+      </details>
+    </header>
+    <main id="conteudo-principal" tabindex="-1"><slot /></main>
+    <footer class="reader-footer"><a href={`${base}/livro/`}>A Pedra Que Mente</a><span>Realm of Crests · Livro I</span></footer>
+    <p class="reader-notice" data-storage-notice role="status" hidden>O navegador não permite salvar a leitura. Você pode continuar lendo normalmente.</p>
+    <script src="../scripts/reader.ts" />
+  </body>
+</html>
