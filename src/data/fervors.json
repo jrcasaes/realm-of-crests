@@ -48,7 +48,7 @@
     "id": "pride",
     "name": "PRIDE",
     "pt": "orgulho",
-    "classification": "Variante de Faith",
+    "classification": "Fervor autônomo · afinidade com Fé",
     "concept": "Disciplina aristocrática, dinastia e recusa à submissão.",
     "signature": "Postura alongada e leitura visual de coroa ou crista.",
     "accent": "#b98e3f"
@@ -57,7 +57,7 @@
     "id": "unity",
     "name": "UNITY",
     "pt": "unidade",
-    "classification": "Variante de Faith",
+    "classification": "Fervor autônomo · afinidade com Fé",
     "concept": "Coesão do Povo, vínculo e sacrifício compartilhado.",
     "signature": "Padrões conectados que tornam muitas vontades uma única forma.",
     "accent": "#9aa27a"

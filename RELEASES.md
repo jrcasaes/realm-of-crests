@@ -1,5 +1,15 @@
 # Realm of Crests — Registro de versões do site
 
+## Prompt 02 — 2026-09-10 — sincronização mínima, não publicada
+
+- Atualiza oito pares de Fervores e três Essências conforme Dossiê dos 19 v4.1.
+- Corrige a autonomia de Orgulho/Unidade, a distribuição de Legado e a relação entre corrupção e Ruína.
+- Distingue fontes vigentes, revisão parcial e proveniência histórica; preserva mapa v1.1 e todo o acervo visual.
+- Atualiza contratos superados sem remover gates e acrescenta regressão exata dos 19 registros.
+- Preserva pacote 1.8.3, rotas e manifests históricos. Sem leitor, redesign, merge ou deploy.
+
+Gate local: **PASS** — `npm run check`, 48 páginas/canonicals, 19 × 64 afinidades, links/assets e budgets preservados. [Escopo e pendências](docs/prompt-02-foundation-sync-2026-09-10.md).
+
 ## v1.2.18 — 2026-07-22
 
 Status: **publicada e verificada em produção; micropatches 7.1.3 e 7.1.4 consolidados**.

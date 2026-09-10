@@ -1,18 +1,14 @@
-// Fonte única das versões canônicas exibidas no site.
-// Os valores vêm de src/data/sources.json — o ponteiro de governança.
-// Para atualizar o site após uma nova versão do cânone, edite APENAS o sources.json.
-// Nunca escreva um número de versão direto num template.
+// Versões públicas centralizadas; atualizar o ponteiro não revalida conteúdo.
+// Sincronizações materiais também exigem dados, escopo e contratos coerentes.
 import sources from '../data/sources.json';
 
 const a = sources.authority;
-
-export const LORE_MASTER = a.loreMaster.version_at_sync;        // ex.: "3.0.6"
-export const DOSSIER = a.guardiansDossier.version_at_sync;      // ex.: "2.6"
-
-// Rótulos prontos, em minúsculas (registro editorial das rubricas)
-export const canonLabel = `canon v${LORE_MASTER}`;              // "canon v3.0.6"
-export const loreMasterLabel = `lore master canon v${LORE_MASTER}`;
+export const LORE_MASTER = a.loreMaster.version_at_sync;
+export const DOSSIER = a.guardiansDossier.version_at_sync;
+export const SYNC_DATE = sources.lastSync;
+export const canonLabel = `referência lore v${LORE_MASTER} · revisão parcial`;
+export const loreMasterLabel = `lore master v${LORE_MASTER}`;
 export const dossierLabel = `dossiê dos guardiões v${DOSSIER}`;
-
-// Rótulo do rodapé, em caixa alta
-export const footerStamp = `LORE MASTER · CANON v${LORE_MASTER}`;
+export const footerStamp = `LORE v${LORE_MASTER} · SINCRONIZAÇÃO PARCIAL`;
+export const historicalLoreLabel = `base histórica: lore v${sources.historicalReferences.loreMaster.version_at_sync} · revisão pendente`;
+export const legacyCohort = sources.contentCompliance.guardianFervors.currentCohort;

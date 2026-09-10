@@ -24,7 +24,8 @@ pass(realms.length === 19, `Esperados 19 Guardiões territoriais; encontrados ${
 pass(new Set(guardianNames).size === 19, 'Há nome de Guardião duplicado no roster territorial.');
 pass(new Set(realmSlugs).size === 19, 'Há vínculo territorial duplicado entre Guardiões.');
 pass(portraits.length === 19, `Esperados 19 retratos web derivados; encontrados ${portraits.length}.`);
-pass(dominantFervors.size === 8, `Esperadas 8 famílias dominantes de Fervor; encontradas ${dominantFervors.size}.`);
+// Dossiê v4.1: sete dominantes na coorte; Unidade permanece um dos oito tipos universais.
+pass(JSON.stringify([...dominantFervors].sort()) === JSON.stringify(['Esperança', 'Fé', 'Legado', 'Luto', 'Orgulho', 'Raiva', 'Vingança']), `Conjunto dominante divergente do Dossiê v4.1: ${[...dominantFervors].join(', ')}.`);
 pass(JSON.stringify([...gravityStates].sort()) === JSON.stringify(['catalytic', 'constructive']), 'Os estados públicos atuais de Gravity devem ser Constructive e Catalytic.');
 pass(publicDetails.length === 2, 'A camada narrativa detalhada pública deve permanecer restrita aos dois dossiês atualmente aprovados.');
 
@@ -63,4 +64,4 @@ if (failures.length) {
 }
 
 console.log('PHASE_3_GUARDIANS_GATE: PASS');
-console.log('19 Guardiões · 19 retratos · 8 Fervores · 2 Gravity · busca · filtros · comparação 2/2 · dossiês progressivos');
+console.log('19 Guardiões · 19 retratos · 7 dominantes na coorte / 8 tipos universais · 2 Gravity · busca · filtros · comparação 2/2 · dossiês progressivos');
