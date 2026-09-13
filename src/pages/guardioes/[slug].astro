@@ -87,7 +87,7 @@ const publicSections = g.sections.length ? g.sections : [
           <h2>A PRESENÇA SOBERANA</h2>
           {!g.sections.length && <p>Este Guardião possui vínculos sistêmicos públicos, mas não uma biografia editorial detalhada. O silêncio também é uma fronteira do cânone.</p>}
         </header>
-        {g.slug === 'nego' && <div class="nego-scene"><LivingScene asset="nego-presenca" title="Nego" width={810} height={1080} /></div>}
+        {g.slug === 'nego' && <div class="nego-scene"><LivingScene asset="nego-presenca" title="Nego" width={810} height={1080} enabled /></div>}
         <div class="presence-path">
           {publicSections.map((section, index) => (
             <article data-dossier-reveal>
