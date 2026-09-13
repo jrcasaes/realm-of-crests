@@ -1,5 +1,6 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { foundationFailures } from './lib/foundation-contract.mjs';
 
 const root = resolve(import.meta.dirname, '..');
 const readJson = (path) => JSON.parse(readFileSync(resolve(root, path), 'utf8'));
@@ -17,12 +18,15 @@ pass(new Set(realms.map((realm) => realm.slug)).size === 19, 'Os slugs dos Reino
 pass(new Set(realms.map((realm) => realm.guardian)).size === 19, 'Os Guardiões vinculados aos Reinos não são únicos.');
 pass(realms.every((realm) => realm.panoramaAsset), 'Há Reino sem panorama público registrado.');
 pass(realms.every((realm) => realm.visualHotspots?.length === 3), 'Cada Reino deve preservar três hotspots visuais nesta fase.');
-pass(sources.authority.registry.version_at_sync === '1.2.12', 'O ponteiro público do registry não está em v1.2.12.');
-pass(sources.authority.loreMaster.version_at_sync === '3.0.6', 'O ponteiro público do Lore Master não está em v3.0.6.');
-pass(sources.authority.guardiansDossier.version_at_sync === '2.6', 'O ponteiro público do Dossiê não está em v2.6.');
+pass(sources.authority.registry.version_at_sync === '2.20.3', 'O ponteiro público do registry não está em v2.20.3.');
+pass(sources.authority.loreMaster.version_at_sync === '4.0', 'O ponteiro público do Lore Master não está em v4.0.');
+pass(sources.authority.guardiansDossier.version_at_sync === '4.1', 'O ponteiro público do Dossiê não está em v4.1.');
 pass(sources.authority.cartography?.version_at_sync === '1.1', 'O ponteiro cartográfico não está no master v1.1.');
 pass(sources.authority.cartography?.geographyChanged === false, 'A errata cartográfica não pode declarar mudança geográfica.');
 pass(JSON.stringify(rootSources) === JSON.stringify(sources), 'Os ponteiros sources.json da raiz e de src/data divergiram.');
+
+for (const failure of foundationFailures({ realms, sources, fervors: readJson('src/data/fervors.json') })) pass(false, failure);
+pass(sources.authority.storyBible.version_at_sync === '2.2' && sources.authority.storyBible.title.includes('versão limpa'), 'A Story Bible deve apontar à linha limpa v2.2, não ao HTML CC-31.');
 
 const serializedRealms = JSON.stringify(realms);
 for (const value of sources.contentCompliance.cc28c.prohibitedActiveLayerValues) {
@@ -37,8 +41,8 @@ const legacySecondary = realms
   .map((realm) => realm.guardian)
   .sort();
 
-pass(JSON.stringify(legacyDominant) === JSON.stringify(['Nego']), `Legado dominante divergente: ${legacyDominant.join(', ') || 'nenhum'}.`);
-pass(JSON.stringify(legacySecondary) === JSON.stringify(['Admiral', 'Eldric']), `Legado secundário divergente: ${legacySecondary.join(', ') || 'nenhum'}.`);
+pass(JSON.stringify(legacyDominant) === JSON.stringify(['Nego', 'Paollo', 'Eldric', 'Solari']), `Legado dominante divergente: ${legacyDominant.join(', ') || 'nenhum'}.`);
+pass(JSON.stringify(legacySecondary) === JSON.stringify(['Admiral', 'Florius', 'Tuskar', 'Villa']), `Legado secundário divergente: ${legacySecondary.join(', ') || 'nenhum'}.`);
 
 const vectorRoot = resolve(root, 'public/assets/fervor/vector');
 const expectedVectorCounts = {
@@ -61,4 +65,4 @@ if (failures.length) {
 }
 
 console.log('PHASE_0_GATE: PASS');
-console.log('19 Reinos · 19 Guardiões · 57 hotspots · CC-28C limpa · CC-31 íntegra · vetores 8/8 por família técnica');
+console.log('19 Reinos · 19 Guardiões · 57 hotspots · CC-28C limpa · Dossiê v4.1 íntegro · sincronização parcial explícita · vetores 8/8 por família técnica');

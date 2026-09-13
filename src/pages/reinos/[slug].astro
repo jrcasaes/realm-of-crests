@@ -1,5 +1,5 @@
 ---
-import { canonLabel, loreMasterLabel, dossierLabel } from '../../lib/canon.js';
+import { canonLabel, dossierLabel } from '../../lib/canon.js';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import RealmPanorama from '../../components/RealmPanorama.astro';
 import realms from '../../data/realms.json';
@@ -116,7 +116,7 @@ const next = realms[(idx + 1) % realms.length];
             <p><span class="temple-name">{realm.temple}</span> — {realm.templeDesc}.</p>
           </section>
 
-          <p class="source-line rubric">{`fontes: ${dossierLabel} · ${loreMasterLabel} · cc-26 — revisão canônica: ${realm.lastCanonReview}`}</p>
+          <p class="source-line rubric">{`essência e fervores: ${dossierLabel} · revisão: ${realm.lastCanonReview} · demais campos preservados, revisão pendente`}</p>
 
           <nav class="realm-nav" aria-label="Navegação entre reinos">
             <a href={`${base}/reinos/${prev.slug}/`}>← {prev.realm}</a>

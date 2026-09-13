@@ -1,5 +1,5 @@
 ---
-import { loreMasterLabel } from '../../lib/canon.js';
+import { loreMasterLabel, dossierLabel, SYNC_DATE, legacyCohort } from '../../lib/canon.js';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SystemsRail from '../../components/SystemsRail.astro';
 import OrnamentDivider from '../../components/OrnamentDivider.astro';
@@ -69,11 +69,11 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       </div>
       <div class="ruin-note">
         <span class="tag">REGISTRO DE RUÍNA</span>
-        <p>Quando a corrupção atinge massa crítica, nasce a <strong>Ruína</strong> — a ameaça anti-estrutural do Realm, a força que apodrece o que o Fervor sustenta. Guardiões consumidos pela corrupção do próprio Fervor continuam lutando, mas deformados e instáveis: são manifestações corrompidas, nunca Essências corrompidas.</p>
+        <p>A <strong>Ruína</strong> é uma força antissoberana que deforma vínculos e compromete a continuidade. Ela se infiltra por relações feridas na Memória, no Fervor, na ancoragem e na Linha de Brasas. A vulnerabilidade, por si só, não prova a atuação da Ruína.</p>
       </div>
       <div class="law">
         <span class="tag">LEI ABSOLUTA</span>
-        <p>A Ruína nasce do excesso sem equilíbrio, onde o Fervor apodrece.</p>
+        <p>Corrupção de Fervor não cria um novo tipo de Fervor nem implica automaticamente a atuação da Ruína.</p>
       </div>
     </section>
 
@@ -82,14 +82,14 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       <div class="prose">
         <p>O Fervor circula: por sacrifícios, invasões e heranças — e roubá-lo nunca é neutro; sempre deixa cicatriz. Ele é herdado não pelo sangue, mas pela <strong>linha da memória contínua</strong>: cantos de devoção, traumas, Colisões épicas. Os Temples atuam como <strong>Legacy Reservoirs</strong>, preservando energia ancestral nas pedras da Arena. Temples nunca estão vazios.</p>
         <p>Existe um Fervor excepcional e herdado: o <strong>Legacy Fervor</strong>, nascido da convergência entre memória, identidade, Emberline e pertencimento. Sua excepcionalidade é ontológica — ele não pode ser fabricado — e não representa superioridade automática nem uma classe universal de raridade.</p>
-        <p>No ciclo atual dos dezenove Guardiões, o Legado manifesta-se como dominante apenas em <strong>Nego</strong> e como secundário em <strong>Admiral</strong> e <strong>Eldric</strong>.</p>
+        <p>Nos dezenove registros atuais, o Legado é dominante em <strong>{legacyCohort.dominant.join(', ')}</strong> e secundário em <strong>{legacyCohort.secondary.join(', ')}</strong>. Essa distribuição não estabelece uma quota universal.</p>
       </div>
       <div class="law">
         <span class="tag">LEI ABSOLUTA</span>
         <p>Legacy Fervor não pode ser fabricado. Só herdado.</p>
       </div>
 
-      <p class="source-line rubric">{`fontes: ${loreMasterLabel} · livro ii — fervor · cc-27 v1.3 · cc-31 v1.0 · matriz raster 8 × 5 full lock · source registry v1.2.12`}</p>
+      <p class="source-line rubric">{`revisão parcial: ${SYNC_DATE} · autonomia dos fervores, legado e ruína: ${loreMasterLabel}, seção 3 e leis 8.1/8.5 · distribuição: ${dossierLabel} · demais trechos preservados, revisão pendente · matriz raster 8 × 5 preservada`}</p>
 
       <nav class="realm-nav" aria-label="Navegação entre sistemas">
         <a href={`${base}/sistemas/`}>← sistemas</a>

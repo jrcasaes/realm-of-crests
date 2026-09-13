@@ -1,25 +1,27 @@
 {
-  "_comment": "Ponteiro público sanitizado das versões canônicas consumidas pelo site. Não contém IDs, caminhos privados ou conteúdo integral das fontes internas.",
+  "_comment": "Ponteiros públicos sanitizados. Versão vigente não certifica revisão integral do site; consultar syncScope e pendingReview. Sem IDs privados nem conteúdo integral das fontes.",
   "project": "Realm of Crests",
   "siteCreatesCanon": false,
   "authority": {
     "registry": {
-      "title": "roc-source-registry",
-      "version_at_sync": "1.2.12"
+      "title": "Fontes Ativas para Produção",
+      "version_at_sync": "2.20.3",
+      "scope": "Identificação de fontes por competência; não governa o texto do Livro I."
     },
     "loreMaster": {
-      "title": "REALM_OF_CRESTS_LORE_MASTER_CANON",
-      "version_at_sync": "3.0.6",
-      "mutability": "CONSTITUTIONAL_FROZEN_BY_VERSION"
+      "title": "Realm of Crests — Lore Master Canon — versão limpa",
+      "version_at_sync": "4.0",
+      "scope": "Autonomia de Orgulho e Unidade; ontologia do Legado; relação entre corrupção e Ruína."
     },
     "guardiansDossier": {
-      "title": "RoC_Dossie_Canonico_Guardioes_19",
-      "version_at_sync": "2.6"
+      "title": "Realm of Crests — Dossiê Canônico dos 19 Guardiões — versão limpa",
+      "version_at_sync": "4.1",
+      "scope": "Essência e Fervores dominante/secundário dos 19 registros públicos."
     },
     "storyBible": {
-      "title": "RoC_Story_Bible_MASTER_CC31_v2.2.html",
+      "title": "Realm of Crests — Story Bible — versão limpa",
       "version_at_sync": "2.2",
-      "mutability": "DERIVED_REFERENCE_CC31"
+      "scope": "Ponteiro vigente de identidade dramática; não confundir com o HTML CC-31 v2.2 histórico. Nenhuma nova prosa importada."
     },
     "cartography": {
       "title": "RoC_Mapa_Canonico_Continente_MASTER",
@@ -64,16 +66,26 @@
         "palesterra.guardianVulgo": "O Senhor das Presas"
       }
     },
-    "cc31": {
-      "rule": "A matriz dominante/secundária dos dezenove e o estatuto ontológico do Legado são vinculantes.",
-      "legacy": "Excepcional e herdado; não é uma classe universal de raridade nem superioridade automática.",
+    "guardianFervors": {
+      "rule": "Distribuição atual conforme Dossiê dos 19 v4.1; a coorte não determina quotas universais.",
+      "legacy": "Excepcional pela formação e herdado; sem quota de raridade nem superioridade automática (Lore Master v4.0, lei 3.13).",
       "currentCohort": {
-        "dominant": ["Nego"],
-        "secondary": ["Admiral", "Eldric"]
+        "dominant": [
+          "Nego",
+          "Paollo",
+          "Solari",
+          "Eldric"
+        ],
+        "secondary": [
+          "Admiral",
+          "Tuskar",
+          "Villa",
+          "Florius"
+        ]
       }
     }
   },
-  "lastSync": "2026-07-21",
+  "lastSync": "2026-09-10",
   "glyphRasterFullLock": {
     "scope": "RASTER_8X5_ONLY",
     "families": 8,
@@ -89,5 +101,45 @@
       "basis": "CC-27 v1.3 + Guia de Produção Digital v1.2"
     },
     "note": "Os masters vetoriais v1.0 codificam a topologia-base e não substituem nem ampliam o FULL LOCK da matriz raster 8 × 5."
-  }
+  },
+  "syncScope": {
+    "kind": "MINIMAL_FOUNDATION",
+    "fullSiteReview": false,
+    "realmFields": [
+      "essence",
+      "fervor"
+    ],
+    "fervorTopics": [
+      "Autonomia de Orgulho e Unidade",
+      "Legado na coorte atual",
+      "Ruína não nasce automaticamente da corrupção de Fervor"
+    ]
+  },
+  "historicalReferences": {
+    "loreMaster": {
+      "version_at_sync": "3.0.6",
+      "status": "HISTORICAL_NOT_ACTIVE",
+      "scope": "Texto preservado de Gravity, Ascensão e trechos de Fervor ainda não revalidados."
+    },
+    "guardiansDossier": {
+      "version_at_sync": "2.6",
+      "status": "HISTORICAL_NOT_ACTIVE",
+      "scope": "Proveniência anterior dos campos territoriais e narrativos não revisados."
+    },
+    "storyBible": {
+      "title": "RoC_Story_Bible_MASTER_CC31_v2.2.html",
+      "version_at_sync": "2.2",
+      "status": "HISTORICAL_NOT_ACTIVE"
+    },
+    "cc31": {
+      "version_at_sync": "1.0",
+      "status": "HISTORICAL_NOT_ACTIVE",
+      "scope": "A distribuição antiga de Legado foi substituída pelo Dossiê v4.1."
+    }
+  },
+  "pendingReview": [
+    "Gravity e estados de Ascensão: sem substituição dirigida confirmada; conteúdo preservado, não certificado pela nova Lore.",
+    "Demais trechos de Fervor, narrativas detalhadas, geografia, templos e camadas de nomeação: fora da revisão mínima.",
+    "Assets e Visual Locks preservados; não revalidados por esta sincronização textual."
+  ]
 }

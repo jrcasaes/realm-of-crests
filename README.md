@@ -1,11 +1,11 @@
 # Realm of Crests — Site Oficial
 
 Site estático em **Astro** com estética **Dark Codex**, publicado via **GitHub Pages**.
-Conteúdo rastreável ao **LORE_MASTER_CANON v3.0.6**, ao **Dossiê Canônico dos 19 Guardiões v2.6**, à **Story Bible v2.2 CC-31 APPROVED** e ao **roc-source-registry v1.2.12**. As decisões CC-28C, CC-30 e CC-31 já estão incorporadas nessas fontes ativas.
+Sincronização mínima de 10/09/2026: **Lore Master v4.0 limpa**, **Dossiê dos 19 v4.1** e ponteiros de **Story Bible v2.2 limpa** / **Fontes Ativas v2.20.3**. A revisão cobre Essência e Fervores dos 19 registros, autonomia de Orgulho/Unidade e a relação entre corrupção e Ruína. Não certifica revisão integral do portal.
 
-Status: **produção verificada**, pacote 1.8.3 e manifesto operacional **v1.2.18**. O site é um derivado de apresentação e não cria cânone. O `roc-source-registry v1.2.12` continua sendo o ponteiro das fontes canônicas; a numeração do manifesto acompanha somente as entregas operacionais do site.
+Status desta entrega: **Prompt 02 — sincronização mínima para revisão em PR, sem publicação**. Baseline publicado: pacote 1.8.3 e manifesto operacional **v1.2.18**, preservados. O site é derivado e não cria cânone. Versão de pacote, fechamento operacional e versão de fonte são eixos distintos.
 
-A correção **CC-28C** permanece obrigatória em `src/data/realms.json`: as seis camadas transferidas ao Apêndice Não Canônico não podem reaparecer como dados canônicos ativos. O `nego-dossier-v1` continua restrito a Nego, Victória e direção visual de personagem, sem autoridade constitucional. O FULL LOCK VISUAL dos glifos permanece na matriz raster 8 × 5, com PASS 40/40; os masters vetoriais v1.0 são derivados técnicos de topologia-base.
+A correção **CC-28C** permanece obrigatória em `src/data/realms.json`: as seis camadas transferidas ao Apêndice Não Canônico não podem reaparecer como dados canônicos ativos. As referências antigas nos dossiês detalhados são proveniência histórica, não autoridade produtiva; esses textos e os Visual Locks não foram revalidados nesta etapa. O FULL LOCK VISUAL dos glifos permanece na matriz raster 8 × 5, com PASS 40/40; os masters vetoriais v1.0 são derivados técnicos de topologia-base.
 
 ---
 
@@ -22,7 +22,8 @@ A correção **CC-28C** permanece obrigatória em `src/data/realms.json`: as sei
 ## Estrutura
 
 ```
-src/data/realms.json      ← dados dos 19 reinos (fontes: Lore Master v3.0.6 + Dossiê v2.6 + Story Bible v2.2; decisões CC-28C/CC-30/CC-31 incorporadas)
+src/data/realms.json      ← Essência/Fervores: Dossiê v4.1; demais campos preservados, revisão pendente
+src/data/sources.json     ← versões vigentes, escopo parcial e referências históricas (espelho na raiz)
 src/pages/                ← páginas de Reinos, Guardiões, Atlas, Sistemas, Ritual e Diário
 src/components/           ← componentes da experiência e continuidade
 src/lib/                  ← seleção de rotas, Fervor e utilitários compartilhados
@@ -50,4 +51,10 @@ Antes de abrir um PR, execute o gate completo:
 npm run check
 ```
 
-Esse comando valida o conteúdo e os contratos das Fases 0–7.1.3, gera as 48 páginas e audita canonicals, links, assets e orçamento visual. A publicação ocorre somente após integração revisada na `main`; o workflow `.github/workflows/deploy.yml` preserva o endereço oficial em https://jrcasaes.github.io/realm-of-crests/.
+Esse comando valida o conteúdo e os contratos das Fases 0–7.1.3, incluindo a matriz exata de Essência/Fervores do Dossiê v4.1, gera as 48 páginas e audita canonicals, links, assets e orçamento visual. A publicação ocorre somente após integração revisada na `main`; o workflow `.github/workflows/deploy.yml` preserva o endereço oficial em https://jrcasaes.github.io/realm-of-crests/.
+
+## Limites da sincronização
+
+`canonReviewScope` restringe a nova revisão a `essence` e `fervor`; `historicalSourceRefs` e `previousCanonReview` preservam a proveniência anterior. O rodapé identifica a sincronização como parcial. Gravity e Ascensão conservam a referência histórica, explicitamente pendente, sem receber um selo cosmético de Lore v4.0.
+
+Detalhamento, gates, pendências e ponto de parada: [entrega do Prompt 02](docs/prompt-02-foundation-sync-2026-09-10.md). O leitor não foi implementado. A etapa termina em PR, sem merge; Prompt 03 exige autorização explícita.
