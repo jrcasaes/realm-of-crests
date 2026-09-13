@@ -4,6 +4,7 @@ import { guardianRoster } from '../../lib/guardians.js';
 import { fervorSignature, fervorVectorAsset } from '../../lib/fervor.js';
 import realms from '../../data/realms.json';
 import ContinuityEcho from '../../components/ContinuityEcho.astro';
+import LivingScene from '../../components/LivingScene.astro';
 
 export function getStaticPaths() {
   return guardianRoster.map((guardian) => ({ params: { slug: guardian.slug }, props: { guardian } }));
@@ -86,6 +87,7 @@ const publicSections = g.sections.length ? g.sections : [
           <h2>A PRESENÇA SOBERANA</h2>
           {!g.sections.length && <p>Este Guardião possui vínculos sistêmicos públicos, mas não uma biografia editorial detalhada. O silêncio também é uma fronteira do cânone.</p>}
         </header>
+        {g.slug === 'nego' && <div class="nego-scene"><LivingScene asset="nego-presenca" title="Nego" width={810} height={1080} /></div>}
         <div class="presence-path">
           {publicSections.map((section, index) => (
             <article data-dossier-reveal>
@@ -201,6 +203,7 @@ const publicSections = g.sections.length ? g.sections : [
 </script>
 
 <style>
+  .nego-scene { max-width: 540px; margin-inline: auto; }
   .living-dossier { background: radial-gradient(circle at 70% 15%, var(--guardian-soft), transparent 24%), var(--ink); }
   .dossier-hero { position: relative; display: grid; min-height: calc(100svh - 74px); align-items: center; overflow: hidden; isolation: isolate; border-bottom: 1px solid color-mix(in srgb, var(--guardian-accent) 40%, var(--edge)); }
   .dossier-hero-image { position: absolute; z-index: -4; inset: -6%; background: var(--guardian-image) center 20% / cover; filter: blur(26px) saturate(.6) brightness(.4); transform: scale(1.08); }

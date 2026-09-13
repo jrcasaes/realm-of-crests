@@ -5,6 +5,7 @@ import RealmPanorama from '../../components/RealmPanorama.astro';
 import realms from '../../data/realms.json';
 import { fervorSignature, parseFervorField } from '../../lib/fervor.js';
 import ContinuityEcho from '../../components/ContinuityEcho.astro';
+import LivingScene from '../../components/LivingScene.astro';
 
 export function getStaticPaths() {
   return realms.map((realm) => ({
@@ -32,6 +33,13 @@ const next = realms[(idx + 1) % realms.length];
       </nav>
 
       <RealmPanorama realm={realm} />
+
+      {realm.slug === 'victoria' && (
+        <section class="victoria-scenes" aria-label="Cenas de Victória">
+          <LivingScene asset="victoria-encostas" title="Vida nas encostas" width={1280} height={720} />
+          <LivingScene asset="victoria-flamula" title="Flâmula de Victória" width={1280} height={720} />
+        </section>
+      )}
 
       <div class="realm-layout">
         <figure class="emblem-frame" style="margin: 0;">
@@ -119,3 +127,8 @@ const next = realms[(idx + 1) % realms.length];
     </div>
   </article>
 </BaseLayout>
+
+<style>
+  .victoria-scenes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+  @media (max-width: 760px) { .victoria-scenes { grid-template-columns: 1fr; gap: 0; } }
+</style>
